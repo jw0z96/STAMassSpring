@@ -23,6 +23,11 @@ NGLScene::NGLScene( QWidget *_parent ) : QOpenGLWidget( _parent )
 	m_timer.start();
 	// initialize the scene
 	initScene();
+
+	m_drawMassPoints = true;
+	m_drawStructuralSprings = false;
+	m_drawShearSprings = false;
+	m_drawBendSprings = false;
 }
 
 NGLScene::~NGLScene()
@@ -49,6 +54,7 @@ void NGLScene::initScene()
 	ngl::Vec3 span = topRight - bottomLeft;
 	ngl::Vec3 step = span / ngl::Vec3(sx, sy, sz);
 
+	// populate the array of masses
 	for (int i = 0; i < sx; ++i)
 	{
 		for (int j = 0; j < sy; ++j)
@@ -56,6 +62,25 @@ void NGLScene::initScene()
 			for (int k = 0; k < sz; ++k)
 			{
 				m_massPts.push_back(ngl::Vec3(i, j, k) * step + bottomLeft);
+			}
+		}
+	}
+
+	// populate the array of structural springs
+	for (int i = 0; i < sx; ++i)
+	{
+		for (int j = 0; j < sy; ++j)
+		{
+			for (int k = 0; k < sz; ++k)
+			{
+				// get the array index of the starting point
+				int startIndex = (k * sx * sy) + (j * sx) + i;
+				if ((i + 1) < sx) // connect (i,j,k) to (i+1, j, k)
+					m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + (j * sx) + (i + 1)));
+				if ((j +1) < sy) // connect (i,j,k) to (i, j+1, k)
+					m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 1) * sx) + i));
+				if ((k +1) < sz) // connect (i,j,k) to (i, j, k+1)
+					m_structuralSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + (j * sx) + i));
 			}
 		}
 	}
@@ -86,10 +111,10 @@ void NGLScene::initializeGL()
 	glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
 	// glDisable(GL_BLEND);
 
-	ngl::Vec3 from(2.0, 2.0, 2.0);
+	ngl::Vec3 from(1.0, 1.0, 1.0);
 	ngl::Vec3 to(0.0, 0.0, 0.0);
 	ngl::Vec3 up(0.0, 1.0, 0.0);
-	m_cam.set(from,to,up);
+	m_cam.set(from, to, up);
 	// set the shape using FOV 45 Aspect Ratio based on Width and Height
 	// The final two are near and far clipping planes of 0.5 and 10
 	m_cam.setProjection(50,(float)1024/720,1.0f,800.0f);
@@ -158,13 +183,31 @@ void NGLScene::paintGL()
 		m_cam.move(xDirection,yDirection,m_deltaTime);
 	}
 
-	for(size_t i=0; i<m_massPts.size(); ++i)
+	if (m_drawMassPoints)
 	{
-		m_transform.setPosition(m_massPts[i]);
-		m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
-		loadMatricesToShader();
-		prim->draw("cube");
+		for(size_t i=0; i<m_massPts.size(); ++i)
+		{
+			m_transform.setPosition(m_massPts[i]);
+			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
+			loadMatricesToShader();
+			prim->draw("cube");
+		}
 	}
+
+	if (m_drawStructuralSprings)
+	{
+		for(size_t i=0; i<m_structuralSprings.size(); ++i)
+		{
+			ngl::Vec3 start = m_massPts[m_structuralSprings[i].startPoint];
+			ngl::Vec3 end = m_massPts[m_structuralSprings[i].endPoint];
+			ngl::Vec3 midPoint = start + ((end - start) / 2.0);
+			m_transform.setPosition(midPoint);
+			m_transform.setScale(ngl::Vec3(0.05, 0.05, 0.05));
+			loadMatricesToShader();
+			prim->draw("cube");
+		}
+	}
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------

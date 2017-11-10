@@ -10,6 +10,8 @@
 #include <vector>
 #include <memory>
 
+#include "Spring.h"
+
 //----------------------------------------------------------------------------------------------------------------------
 /// @file NGLScene.h
 /// @brief this class inherits from the Qt QOpenGLWidget and allows us to use NGL to draw OpenGL
@@ -49,7 +51,13 @@ class NGLScene : public QOpenGLWidget
 	/// @brief this is called everytime we resize
 	//----------------------------------------------------------------------------------------------------------------------
 	void resizeGL(int _w, int _h) override;
-	// public slots:
+
+	public slots:
+
+	void toggleMassPoints(){m_drawMassPoints = !m_drawMassPoints; update();};
+	void toggleStructuralSpring(){m_drawStructuralSprings = !m_drawStructuralSprings; update();};
+	void toggleShearSpring(){m_drawShearSprings = !m_drawShearSprings; update();};
+	void toggleBendSpring(){m_drawBendSprings = !m_drawBendSprings; update();};
 
 	private:
 	//----------------------------------------------------------------------------------------------------------------------
@@ -95,11 +103,22 @@ class NGLScene : public QOpenGLWidget
 	//----------------------------------------------------------------------------------------------------------------------
 	std::vector<ngl::Vec3> m_massPts;
 	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief an array of springs to represent our structural springs
+	//----------------------------------------------------------------------------------------------------------------------
+	std::vector<Spring> m_structuralSprings;
+	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief method to load transform matrices to the shader
 	//----------------------------------------------------------------------------------------------------------------------
 	void initScene();
 	//----------------------------------------------------------------------------------------------------------------------
 	/* RENDER HELPER FUNCTIONS */
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief bools to toggle the drawing of physics elements
+	//----------------------------------------------------------------------------------------------------------------------
+	bool m_drawMassPoints;
+	bool m_drawStructuralSprings;
+	bool m_drawShearSprings;
+	bool m_drawBendSprings;
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief method to load transform matrices to the shader
 	//----------------------------------------------------------------------------------------------------------------------

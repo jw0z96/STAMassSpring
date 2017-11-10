@@ -25,6 +25,7 @@ SOURCES+= $$PWD/src/MainWindow.cpp \
 HEADERS+= $$PWD/include/MainWindow.h   \
           $$PWD/include/ui_MainWindow.h   \
           $$PWD/include/NGLScene.h   \
+          $$PWD/include/Spring.h   \
           $$PWD/include/WindowParams.h \
           $$PWD/include/FirstPersonCamera.h
 
