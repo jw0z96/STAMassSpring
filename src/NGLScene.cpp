@@ -28,6 +28,8 @@ NGLScene::NGLScene( QWidget *_parent ) : QOpenGLWidget( _parent )
 	m_drawStructuralSprings = false;
 	m_drawShearSprings = false;
 	m_drawBendSprings = false;
+
+	startSimTimer();
 }
 
 NGLScene::~NGLScene()
@@ -311,7 +313,7 @@ void NGLScene::paintGL()
 				prim->draw("sphere");
 			}
 		}
-		simulateJello();
+		// simulateJello();
 	}
 }
 
@@ -319,7 +321,7 @@ void NGLScene::paintGL()
 
 void NGLScene::simulateJello()
 {
-	// Specify stiffness, time step, and mass
+	/*// Specify stiffness, time step, and mass
 	float ks = 100000.0;
 	double dt = 0.0001;
 	float m = 1.0;
@@ -427,7 +429,7 @@ void NGLScene::simulateJello()
 	}
 
 	// this works
-	m_massPts = massPtsCurr;
+	m_massPts = massPtsCurr;*/
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -462,4 +464,20 @@ void NGLScene::keyReleaseEvent( QKeyEvent *_event	)
 {
 	// remove from our key set any keys that have been released
 	m_keysPressed -= static_cast<Qt::Key>(_event->key());
+}
+
+void NGLScene::timerEvent( QTimerEvent *)
+{
+	update();
+}
+
+void NGLScene::startSimTimer()
+{
+	startTimer(10); // 10ms
+	// m_timerStart = startTimer(m_timerValue);
+}
+
+void NGLScene::stopSimTimer()
+{
+	// killTimer(m_timerStart);
 }
