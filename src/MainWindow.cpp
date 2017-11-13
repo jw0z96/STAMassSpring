@@ -5,8 +5,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	m_ui(new Ui::MainWindow)
 {
+	m_jelloCube = new JelloCube();
 	m_ui->setupUi(this);
-	m_gl = new NGLScene(this);
+	m_gl = new NGLScene(this, m_jelloCube);
 	m_ui->s_mainWindowGridLayout->addWidget(m_gl,0,0,2,1);
 
 	connect(m_ui->displayMassesCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleMassPoints()));
@@ -19,4 +20,5 @@ MainWindow::~MainWindow()
 {
 	delete m_ui;
 	delete m_gl;
+	delete m_jelloCube;
 }

@@ -14,7 +14,7 @@
 
 //----------------------------------------------------------------------------------------------------------------------
 
-NGLScene::NGLScene( QWidget *_parent ) : QOpenGLWidget( _parent )
+NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent), m_jelloCube(_cube)
 {
 	// set this widget to have the initial keyboard focus
 	setFocusPolicy (Qt::StrongFocus);
@@ -22,7 +22,7 @@ NGLScene::NGLScene( QWidget *_parent ) : QOpenGLWidget( _parent )
 	this->resize(_parent->size());
 	m_timer.start();
 	// initialize the scene
-	initScene();
+	// initScene();
 
 	m_drawMassPoints = true;
 	m_drawStructuralSprings = false;
@@ -44,96 +44,96 @@ void NGLScene::resizeGL( int _w, int _h )
 	m_win.height = static_cast<int>(_h * devicePixelRatio());
 }
 
-void NGLScene::initScene()
-{
-	int sx = 5;
-	int sy = 5;
-	int sz = 5;
+// void NGLScene::initScene()
+// {
+	// int sx = 5;
+	// int sy = 5;
+	// int sz = 5;
 
-	ngl::Vec3 topRight = ngl::Vec3(1.0, 1.0, 1.0);
-	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 0.0, 0.0);
+	// ngl::Vec3 topRight = ngl::Vec3(1.0, 1.0, 1.0);
+	// ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 0.0, 0.0);
 
-	ngl::Vec3 span = topRight - bottomLeft;
-	ngl::Vec3 step = span / ngl::Vec3(sx, sy, sz);
+	// ngl::Vec3 span = topRight - bottomLeft;
+	// ngl::Vec3 step = span / ngl::Vec3(sx, sy, sz);
 
-	// populate the array of masses
-	for (int i = 0; i < sx; ++i)
-	{
-		for (int j = 0; j < sy; ++j)
-		{
-			for (int k = 0; k < sz; ++k)
-			{
-				m_massPts.push_back(ngl::Vec3(i, j, k) * step + bottomLeft);
-			}
-		}
-	}
+	// // populate the array of masses
+	// for (int i = 0; i < sx; ++i)
+	// {
+	// 	for (int j = 0; j < sy; ++j)
+	// 	{
+	// 		for (int k = 0; k < sz; ++k)
+	// 		{
+	// 			m_massPts.push_back(ngl::Vec3(i, j, k) * step + bottomLeft);
+	// 		}
+	// 	}
+	// }
 
-	// populate the arrays of springs
-	for (int i = 0; i < sx; ++i)
-	{
-		for (int j = 0; j < sy; ++j)
-		{
-			for (int k = 0; k < sz; ++k)
-			{
-				// get the array index of the starting point
-				int startIndex = (k * sx * sy) + (j * sx) + i;
+	// // populate the arrays of springs
+	// for (int i = 0; i < sx; ++i)
+	// {
+	// 	for (int j = 0; j < sy; ++j)
+	// 	{
+	// 		for (int k = 0; k < sz; ++k)
+	// 		{
+	// 			// get the array index of the starting point
+	// 			int startIndex = (k * sx * sy) + (j * sx) + i;
 
-				// create structural springs
-				if ((i + 1) < sx) // connect (i,j,k) to (i+1, j, k)
-					m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + (j * sx) + (i + 1)));
-				if ((j +1) < sy) // connect (i,j,k) to (i, j+1, k)
-					m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 1) * sx) + i));
-				if ((k +1) < sz) // connect (i,j,k) to (i, j, k+1)
-					m_structuralSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + (j * sx) + i));
+	// 			// create structural springs
+	// 			if ((i + 1) < sx) // connect (i,j,k) to (i+1, j, k)
+	// 				m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + (j * sx) + (i + 1)));
+	// 			if ((j +1) < sy) // connect (i,j,k) to (i, j+1, k)
+	// 				m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 1) * sx) + i));
+	// 			if ((k +1) < sz) // connect (i,j,k) to (i, j, k+1)
+	// 				m_structuralSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + (j * sx) + i));
 
-				// create bend springs
-				if ((i + 2) < sx) // connect (i,j,k) to (i+2, j, k)
-					m_bendSprings.push_back(Spring(startIndex,(k * sx * sy) + (j * sx) + (i + 2)));
-				if ((j +2) < sy) // connect (i,j,k) to (i, j+2, k)
-					m_bendSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 2) * sx) + i));
-				if ((k +2) < sz) // connect (i,j,k) to (i, j, k+2)
-					m_bendSprings.push_back(Spring(startIndex,((k + 2) * sx * sy) + (j * sx) + i));
+	// 			// create bend springs
+	// 			if ((i + 2) < sx) // connect (i,j,k) to (i+2, j, k)
+	// 				m_bendSprings.push_back(Spring(startIndex,(k * sx * sy) + (j * sx) + (i + 2)));
+	// 			if ((j +2) < sy) // connect (i,j,k) to (i, j+2, k)
+	// 				m_bendSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 2) * sx) + i));
+	// 			if ((k +2) < sz) // connect (i,j,k) to (i, j, k+2)
+	// 				m_bendSprings.push_back(Spring(startIndex,((k + 2) * sx * sy) + (j * sx) + i));
 
-				// create shear springs
-				if ((i + 1) < sx && (j + 1) < sy)
-					m_shearSprings.push_back(Spring(startIndex,((k) * sx * sy) + ((j + 1) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j+1,k)
+	// 			// create shear springs
+	// 			if ((i + 1) < sx && (j + 1) < sy)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k) * sx * sy) + ((j + 1) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j+1,k)
 
-				if ((i + 1) < sx && (k + 1) < sz)
-					m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j,k+1)
+	// 			if ((i + 1) < sx && (k + 1) < sz)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j,k+1)
 
-				if ((i + 1) < sx && k > 0)
-					m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j,k-1)
+	// 			if ((i + 1) < sx && k > 0)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j,k-1)
 
-				if ((i + 1) < sx && j > 0)
-					m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j - 1) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j-1,k)
+	// 			if ((i + 1) < sx && j > 0)
+	// 				m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j - 1) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j-1,k)
 
-				if ((j + 1) < sy && (k + 1) < sz)
-					m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j + 1) * sx) + (i))); // connect (i,j,k) to (i,j+1,k+1)
+	// 			if ((j + 1) < sy && (k + 1) < sz)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j + 1) * sx) + (i))); // connect (i,j,k) to (i,j+1,k+1)
 
-				if ((j + 1) < sy && k > 0)
-					m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j + 1) * sx) + (i))); // connect (i,j,k) to (i,j+1,k-1)
+	// 			if ((j + 1) < sy && k > 0)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j + 1) * sx) + (i))); // connect (i,j,k) to (i,j+1,k-1)
 
-				if (j > 0 && (k + 1) < sz)
-					m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j - 1) * sx) + (i))); // connect (i,j,k) to (i,j-1,k+1)
+	// 			if (j > 0 && (k + 1) < sz)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j - 1) * sx) + (i))); // connect (i,j,k) to (i,j-1,k+1)
 
-				if (j > 0 && k > 0)
-					m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j - 1) * sx) + (i))); // connect (i,j,k) to (i,j-1,k-1)
+	// 			if (j > 0 && k > 0)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j - 1) * sx) + (i))); // connect (i,j,k) to (i,j-1,k-1)
 
-				if (i > 0 && (j + 1) < sy)
-					m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 1) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j+1,k)
+	// 			if (i > 0 && (j + 1) < sy)
+	// 				m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 1) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j+1,k)
 
-				if (i > 0 && (k + 1) < sz)
-					m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j,k+1)
+	// 			if (i > 0 && (k + 1) < sz)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j,k+1)
 
-				if (i > 0 && k > 0)
-					m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j,k-1)
+	// 			if (i > 0 && k > 0)
+	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j,k-1)
 
-				if (i > 0 && j > 0)
-					m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j - 1) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j-1,k)
-			}
-		}
-	}
-}
+	// 			if (i > 0 && j > 0)
+	// 				m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j - 1) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j-1,k)
+	// 		}
+	// 	}
+	// }
+// }
 
 void NGLScene::initializeGL()
 {
@@ -207,7 +207,7 @@ void NGLScene::paintGL()
 	shader->use("testShader");
 
 	float currentFrame = m_timer.elapsed()*0.001f;
-	std::cout<<"Current Frame "<<currentFrame<<'\n';
+	// std::cout<<"Current Frame "<<currentFrame<<'\n';
 	m_deltaTime = currentFrame - m_lastFrame;
 	m_lastFrame = currentFrame;
 	/// first we reset the movement values
@@ -237,11 +237,13 @@ void NGLScene::paintGL()
 
 	m_transform.reset();
 
+	auto massPoints = m_jelloCube->getMassPoints();
+
 	if (m_drawMassPoints)
 	{
-		for(auto point : m_massPts)
+		for(auto point : massPoints)
 		{
-			m_transform.setPosition(point);
+			m_transform.setPosition(*point);
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			loadMatricesToShader();
 			prim->draw("cube");
@@ -250,22 +252,18 @@ void NGLScene::paintGL()
 
 	if (m_drawStructuralSprings)
 	{
-		for(auto spring : m_structuralSprings)
+		std::vector<Spring> & springsRef = *(m_jelloCube->getStructuralSprings());
+		for (size_t i = 0; i < springsRef.size(); ++i)
 		{
-			ngl::Vec3 start = m_massPts[spring.startPoint];
-			ngl::Vec3 end = m_massPts[spring.endPoint];
-			// ngl::Vec3 midPoint = start + ((end - start) * 0.5);
-			// m_transform.setPosition(midPoint);
-			// m_transform.setScale(ngl::Vec3(0.05, 0.05, 0.05));
-			// loadMatricesToShader();
-			// prim->draw("cube");
+			ngl::Vec3 start = *(springsRef[i].getStartPoint());
+			ngl::Vec3 end = *(springsRef[i].getEndPoint());
 			ngl::Vec3 diff = (end - start);
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
-			for (int i = buffer; i < (count - buffer); ++i)
+			for (int j = buffer; j < (count - buffer); ++j)
 			{
-				m_transform.setPosition(start + ((float(i)/float(count)) * diff));
+				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
 				loadMatricesToShader();
 				prim->draw("sphere");
 			}
@@ -274,22 +272,18 @@ void NGLScene::paintGL()
 
 	if (m_drawBendSprings)
 	{
-		for(auto spring : m_bendSprings)
+		std::vector<Spring> & springsRef = *(m_jelloCube->getBendSprings());
+		for (size_t i = 0; i < springsRef.size(); ++i)
 		{
-			ngl::Vec3 start = m_massPts[spring.startPoint];
-			ngl::Vec3 end = m_massPts[spring.endPoint];
-			// ngl::Vec3 midPoint = start + ((end - start) * 0.5);
-			// m_transform.setPosition(midPoint);
-			// m_transform.setScale(ngl::Vec3(0.05, 0.05, 0.05));
-			// loadMatricesToShader();
-			// prim->draw("cube");
+			ngl::Vec3 start = *(springsRef[i].getStartPoint());
+			ngl::Vec3 end = *(springsRef[i].getEndPoint());
 			ngl::Vec3 diff = (end - start);
-			m_transform.setScale(ngl::Vec3(0.2, 0.2, 0.2));
-			int count = 8;
-			int buffer = 1;
-			for (int i = buffer; i < (count - buffer); ++i)
+			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
+			int count = 20;
+			int buffer = count / 5;
+			for (int j = buffer; j < (count - buffer); ++j)
 			{
-				m_transform.setPosition(start + ((float(i)/float(count)) * diff));
+				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
 				loadMatricesToShader();
 				prim->draw("sphere");
 			}
@@ -298,29 +292,29 @@ void NGLScene::paintGL()
 
 	if (m_drawShearSprings)
 	{
-		for(auto spring : m_shearSprings)
+		std::vector<Spring> & springsRef = *(m_jelloCube->getShearSprings());
+		for (size_t i = 0; i < springsRef.size(); ++i)
 		{
-			ngl::Vec3 start = m_massPts[spring.startPoint];
-			ngl::Vec3 end = m_massPts[spring.endPoint];
+			ngl::Vec3 start = *(springsRef[i].getStartPoint());
+			ngl::Vec3 end = *(springsRef[i].getEndPoint());
 			ngl::Vec3 diff = (end - start);
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
-			for (int i = buffer; i < (count - buffer); ++i)
+			for (int j = buffer; j < (count - buffer); ++j)
 			{
-				m_transform.setPosition(start + ((float(i)/float(count)) * diff));
+				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
 				loadMatricesToShader();
 				prim->draw("sphere");
 			}
 		}
-		// simulateJello();
 	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void NGLScene::simulateJello()
-{
+// void NGLScene::simulateJello()
+// {
 	/*// Specify stiffness, time step, and mass
 	float ks = 100000.0;
 	double dt = 0.0001;
@@ -430,7 +424,7 @@ void NGLScene::simulateJello()
 
 	// this works
 	m_massPts = massPtsCurr;*/
-}
+// }
 
 //----------------------------------------------------------------------------------------------------------------------
 

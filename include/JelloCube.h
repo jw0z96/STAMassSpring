@@ -1,38 +1,49 @@
-#ifndef SPRING_H
-#define SPRING_H
+#ifndef JELLOCUBE_H
+#define JELLOCUBE_H
 
 #include <ngl/Vec3.h>
+#include <vector>
 #include <memory>
 
-class Spring
+#include "Spring.h"
+
+class JelloCube
 {
 	public:
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief Constructor for spring
+	/// @brief Constructor for GLWindow
 	//----------------------------------------------------------------------------------------------------------------------
-	Spring(std::shared_ptr<ngl::Vec3> _s, std::shared_ptr<ngl::Vec3> _e);
+	JelloCube();
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief Destructor for spring
+	/// @brief Destructor for GLWindow
 	//----------------------------------------------------------------------------------------------------------------------
-	~Spring();
+	~JelloCube();
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief Destructor for spring
+	/// @brief get our mass points (for drawing)
 	//----------------------------------------------------------------------------------------------------------------------
-	inline std::shared_ptr<ngl::Vec3> getStartPoint(){return m_startPoint;};
+	inline std::vector<std::shared_ptr<ngl::Vec3>> getMassPoints(){return m_massPoints;};
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief Destructor for spring
+	/// @brief get our springs (for drawing)
 	//----------------------------------------------------------------------------------------------------------------------
-	inline std::shared_ptr<ngl::Vec3> getEndPoint(){return m_endPoint;};
+	inline std::vector<Spring>* getStructuralSprings(){return &m_structuralSprings;};
+	inline std::vector<Spring>* getBendSprings(){return &m_bendSprings;};
+	inline std::vector<Spring>* getShearSprings(){return &m_shearSprings;};
 
 	private:
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief a pointer to our start point
+	/// @brief build our arrays
 	//----------------------------------------------------------------------------------------------------------------------
-	std::shared_ptr<ngl::Vec3> m_startPoint;
+	void generate();
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief a pointer to our end point
+	/// @brief array of points that make up our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
-	std::shared_ptr<ngl::Vec3> m_endPoint;
+	std::vector<std::shared_ptr<ngl::Vec3>> m_massPoints;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief array of springs that connect our jello cube
+	//----------------------------------------------------------------------------------------------------------------------
+	std::vector<Spring> m_structuralSprings;
+	std::vector<Spring> m_bendSprings;
+	std::vector<Spring> m_shearSprings;
 };
 
-#endif // SPRING_H
+#endif // JELLOCUBE_H

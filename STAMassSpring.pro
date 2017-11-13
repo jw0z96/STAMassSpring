@@ -20,6 +20,8 @@ SOURCES+= $$PWD/src/MainWindow.cpp \
             $$PWD/src/NGLScene.cpp   \
             $$PWD/src/NGLSceneMouseControls.cpp \
             $$PWD/src/FirstPersonCamera.cpp \
+            $$PWD/src/JelloCube.cpp \
+            $$PWD/src/Spring.cpp \
             $$PWD/src/main.cpp
 # same for the .h files
 HEADERS+= $$PWD/include/MainWindow.h   \
@@ -27,6 +29,7 @@ HEADERS+= $$PWD/include/MainWindow.h   \
           $$PWD/include/NGLScene.h   \
           $$PWD/include/Spring.h   \
           $$PWD/include/WindowParams.h \
+          $$PWD/include/JelloCube.h \
           $$PWD/include/FirstPersonCamera.h
 
 # and add the include dir into the search path for Qt and make
