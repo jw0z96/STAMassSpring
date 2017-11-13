@@ -230,12 +230,14 @@ void NGLScene::paintGL()
 	}
 	// if the set is non zero size we can update the ship movement
 	// then tell openGL to re-draw
-	if(m_keysPressed.size() !=0)
+	if (m_keysPressed.size() !=0)
 	{
 		m_cam.move(xDirection,yDirection,m_deltaTime);
 	}
 
 	m_transform.reset();
+
+	m_jelloCube->update();
 
 	auto massPoints = m_jelloCube->getMassPoints();
 

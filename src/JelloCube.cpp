@@ -109,3 +109,11 @@ void JelloCube::generate()
 		}
 	}
 }
+
+void JelloCube::update()
+{
+	for (size_t i = 0; i < m_massPoints.size(); ++i)
+	{
+		*(m_massPoints[i]) += ngl::Vec3(0.0, 0.0001 * sin(i), 0.0);
+	}
+}
