@@ -171,10 +171,10 @@ void JelloCube::update()
 		m_bendSprings[i].integrate(m_t, m_timestep);
 	}
 
-	// for (size_t i = 0; i < m_shearSprings.size(); ++i)
-	// {
-	// 	m_shearSprings[i].integrate(m_t, m_timestep);
-	// }
+	for (size_t i = 0; i < m_shearSprings.size(); ++i)
+	{
+		m_shearSprings[i].integrate(m_t, m_timestep);
+	}
 
 	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
 	{
@@ -186,10 +186,10 @@ void JelloCube::update()
 		m_bendSprings[i].update();
 	}
 
-	// for (size_t i = 0; i < m_shearSprings.size(); ++i)
-	// {
-	// 	m_shearSprings[i].update();
-	// }
+	for (size_t i = 0; i < m_shearSprings.size(); ++i)
+	{
+		m_shearSprings[i].update();
+	}
 
 	// update the timestep for the next time
 	m_t += m_timestep;
@@ -198,8 +198,10 @@ void JelloCube::update()
 	// for (size_t i = 0; i < m_massPoints.size(); ++i)
 	// {
 	// 	*(m_massPoints[i]) += ngl::Vec3(-0.001 * sin(m_t + i), 0.001 * sin(m_t + i), 0.001 * cos(m_t + i));
+	// 	// *(m_massPoints[i]) += ngl::Vec3(0.0);
 	// }
 
-	*(m_massPoints[124]) += ngl::Vec3(0.0, 0.1 * sin(m_t), 0.0);
+	float intensity = 0.01;
+	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));
 
 }
