@@ -160,7 +160,7 @@ void NGLScene::initializeGL()
 	glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
 	// glDisable(GL_BLEND);
 
-	ngl::Vec3 from(1.0, 1.0, 1.0);
+	ngl::Vec3 from(0.0, 1.0, 4.0);
 	ngl::Vec3 to(0.0, 0.0, 0.0);
 	ngl::Vec3 up(0.0, 1.0, 0.0);
 	m_cam.set(from, to, up);
@@ -188,9 +188,9 @@ void NGLScene::loadMatricesToShader()
 
 	normalMatrix = MV;
 	normalMatrix.inverse().transpose();
-	shader->setUniform( "MVP", MVP );
-	shader->setUniform( "normalMatrix", normalMatrix );
-	shader->setUniform( "M", M );
+	shader->setUniform("MVP", MVP);
+	shader->setUniform("normalMatrix", normalMatrix);
+	shader->setUniform("M", M);
 	shader->setUniform("camPos",m_cam.getEye());
 }
 
@@ -237,8 +237,6 @@ void NGLScene::paintGL()
 
 	m_transform.reset();
 
-	m_jelloCube->update();
-
 	auto massPoints = m_jelloCube->getMassPoints();
 
 	if (m_drawMassPoints)
@@ -258,8 +256,7 @@ void NGLScene::paintGL()
 		for (size_t i = 0; i < springsRef.size(); ++i)
 		{
 			ngl::Vec3 start = *(springsRef[i].getStartPoint());
-			ngl::Vec3 end = *(springsRef[i].getEndPoint());
-			ngl::Vec3 diff = (end - start);
+			ngl::Vec3 diff = (*(springsRef[i].getEndPoint()) - start);
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
@@ -278,8 +275,7 @@ void NGLScene::paintGL()
 		for (size_t i = 0; i < springsRef.size(); ++i)
 		{
 			ngl::Vec3 start = *(springsRef[i].getStartPoint());
-			ngl::Vec3 end = *(springsRef[i].getEndPoint());
-			ngl::Vec3 diff = (end - start);
+			ngl::Vec3 diff = (*(springsRef[i].getEndPoint()) - start);
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
@@ -298,8 +294,7 @@ void NGLScene::paintGL()
 		for (size_t i = 0; i < springsRef.size(); ++i)
 		{
 			ngl::Vec3 start = *(springsRef[i].getStartPoint());
-			ngl::Vec3 end = *(springsRef[i].getEndPoint());
-			ngl::Vec3 diff = (end - start);
+			ngl::Vec3 diff = (*(springsRef[i].getEndPoint()) - start);
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
@@ -464,6 +459,7 @@ void NGLScene::keyReleaseEvent( QKeyEvent *_event	)
 
 void NGLScene::timerEvent( QTimerEvent *)
 {
+	m_jelloCube->update();
 	update();
 }
 

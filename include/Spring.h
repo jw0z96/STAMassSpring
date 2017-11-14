@@ -4,6 +4,33 @@
 #include <ngl/Vec3.h>
 #include <memory>
 
+/// @brief a simple class to hold State values for the integrator, this is used for
+/// the derivitives as well as the initial state
+/// @note this class is based on the tutorials here
+/// http://gafferongames.com/game-physics/
+class State
+{
+	public :
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief the position of the state
+	//----------------------------------------------------------------------------------------------------------------------
+	ngl::Vec3 m_position;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief the velocity of the state
+	//----------------------------------------------------------------------------------------------------------------------
+	ngl::Vec3 m_velocity;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief ctor
+	/// @brief[in] _pos initial position
+	/// @brief[in] _vel initial velocity
+	//----------------------------------------------------------------------------------------------------------------------
+	inline State(ngl::Vec3 _pos, ngl::Vec3 _vel) : m_position(_pos), m_velocity(_vel){;};
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief default ctor
+	//----------------------------------------------------------------------------------------------------------------------
+	inline State(){;}
+};
+
 class Spring
 {
 	public:
@@ -23,8 +50,39 @@ class Spring
 	/// @brief Destructor for spring
 	//----------------------------------------------------------------------------------------------------------------------
 	inline std::shared_ptr<ngl::Vec3> getEndPoint(){return m_endPoint;};
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief method to evaluate the state given initial value and time step
+	/// @param[in] _initial the initial state
+	/// @param[in] _t the current time step value
+	/// @param[in] _dt the delta time step for integration
+	//----------------------------------------------------------------------------------------------------------------------
+	void integrate(float _t, float _dt);
+
+	void update();
 
 	private:
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief the actual function we need to implement for the integration this can be anything
+	/// this is a pure virtual method an needs to be implemented in the class inheriting this
+	/// @param[in] _state the state we wish to calculate the motion function for
+	/// @param[in] _t the current time step to integrate for
+	//----------------------------------------------------------------------------------------------------------------------
+	ngl::Vec3 motionFunction(const State &_state,float _t);
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief method to evaluate the state given initial value and time step
+	/// @param[in] _initial the initial state
+	/// @param[in] _t the current time step value
+	//----------------------------------------------------------------------------------------------------------------------
+	State evaluate(const State &_initial, float _t);
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief method to evaluate the state given initial value and time step
+	/// @param[in] _initial the initial state
+	/// @param[in] _t the current time step value
+	/// @param[in] _dt the delta time step for integration
+	/// @param[in] _d the derivative for the integration step
+	//----------------------------------------------------------------------------------------------------------------------
+	State evaluate(const State &_initial,float _t, float _dt, const State &_d);
+
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief a pointer to our start point
 	//----------------------------------------------------------------------------------------------------------------------
@@ -33,6 +91,22 @@ class Spring
 	/// @brief a pointer to our end point
 	//----------------------------------------------------------------------------------------------------------------------
 	std::shared_ptr<ngl::Vec3> m_endPoint;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief the length of the spring (distance of seperation) at rest
+	//----------------------------------------------------------------------------------------------------------------------
+	float m_restingLength;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief the spring constant from Hooke's Law
+	//----------------------------------------------------------------------------------------------------------------------
+	float m_k;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief a damping force for the spring
+	//----------------------------------------------------------------------------------------------------------------------
+	float m_damping;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief the state value
+	//----------------------------------------------------------------------------------------------------------------------
+	State m_state;
 };
 
 #endif // SPRING_H

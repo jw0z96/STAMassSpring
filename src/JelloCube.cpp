@@ -7,6 +7,8 @@
 JelloCube::JelloCube()
 {
 	std::cout<<"creating jello cube!\n";
+	m_timestep = 0.1;
+	m_t = 0.0;
 	generate();
 }
 
@@ -21,8 +23,8 @@ void JelloCube::generate()
 	int sy = 5;
 	int sz = 5;
 
-	ngl::Vec3 topRight = ngl::Vec3(1.0, 1.0, 1.0);
-	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 0.0, 0.0);
+	ngl::Vec3 topRight = ngl::Vec3(0.5, 0.5, 0.5);
+	ngl::Vec3 bottomLeft = ngl::Vec3(-0.5, -0.5, -0.5);
 
 	ngl::Vec3 span = topRight - bottomLeft;
 	ngl::Vec3 step = span / ngl::Vec3(sx, sy, sz);
@@ -112,8 +114,23 @@ void JelloCube::generate()
 
 void JelloCube::update()
 {
-	for (size_t i = 0; i < m_massPoints.size(); ++i)
+
+	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
 	{
-		*(m_massPoints[i]) += ngl::Vec3(0.0, 0.0001 * sin(i), 0.0);
+		m_structuralSprings[i].integrate(m_t, m_timestep);
 	}
+
+	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
+	{
+		m_structuralSprings[i].update();
+	}
+
+	// update the timestep for the next time
+	m_t += m_timestep;
+
+
+	// for (size_t i = 0; i < m_massPoints.size(); ++i)
+	// {
+	// 	*(m_massPoints[i]) += ngl::Vec3(-0.0001 * sin(2*i), 0.0001 * sin(i), 0.0001 * cos(5*i));
+	// }
 }
