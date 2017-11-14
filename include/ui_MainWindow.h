@@ -14,11 +14,15 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
@@ -38,6 +42,14 @@ public:
     QCheckBox *displayStructuralSpringsCheckBox;
     QCheckBox *displayBendSpringsCheckBox;
     QCheckBox *displayMassesCheckBox;
+    QGroupBox *physicsControlsGB;
+    QGridLayout *gridLayout_3;
+    QFormLayout *formLayout;
+    QDoubleSpinBox *springConstantSpinBox;
+    QDoubleSpinBox *dampingConstantSpinBox;
+    QLabel *springConstantLabel;
+    QLabel *dampingConstantLabel;
+    QPushButton *resetJelloPushButton;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
     QMenuBar *menubar;
@@ -47,7 +59,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(972, 649);
+        MainWindow->resize(1135, 741);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         s_mainWindowGridLayout = new QGridLayout(centralwidget);
@@ -82,6 +94,45 @@ public:
 
         verticalLayout->addWidget(displayControlsGB);
 
+        physicsControlsGB = new QGroupBox(centralwidget);
+        physicsControlsGB->setObjectName(QStringLiteral("physicsControlsGB"));
+        gridLayout_3 = new QGridLayout(physicsControlsGB);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        formLayout = new QFormLayout();
+        formLayout->setObjectName(QStringLiteral("formLayout"));
+        springConstantSpinBox = new QDoubleSpinBox(physicsControlsGB);
+        springConstantSpinBox->setObjectName(QStringLiteral("springConstantSpinBox"));
+        springConstantSpinBox->setValue(5);
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, springConstantSpinBox);
+
+        dampingConstantSpinBox = new QDoubleSpinBox(physicsControlsGB);
+        dampingConstantSpinBox->setObjectName(QStringLiteral("dampingConstantSpinBox"));
+        dampingConstantSpinBox->setValue(2);
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, dampingConstantSpinBox);
+
+        springConstantLabel = new QLabel(physicsControlsGB);
+        springConstantLabel->setObjectName(QStringLiteral("springConstantLabel"));
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, springConstantLabel);
+
+        dampingConstantLabel = new QLabel(physicsControlsGB);
+        dampingConstantLabel->setObjectName(QStringLiteral("dampingConstantLabel"));
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, dampingConstantLabel);
+
+
+        gridLayout_3->addLayout(formLayout, 0, 0, 1, 1);
+
+        resetJelloPushButton = new QPushButton(physicsControlsGB);
+        resetJelloPushButton->setObjectName(QStringLiteral("resetJelloPushButton"));
+
+        gridLayout_3->addWidget(resetJelloPushButton, 6, 0, 1, 1);
+
+
+        verticalLayout->addWidget(physicsControlsGB);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -96,7 +147,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 972, 23));
+        menubar->setGeometry(QRect(0, 0, 1135, 23));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -115,6 +166,10 @@ public:
         displayStructuralSpringsCheckBox->setText(QApplication::translate("MainWindow", "Structural Springs", Q_NULLPTR));
         displayBendSpringsCheckBox->setText(QApplication::translate("MainWindow", "Bend Springs", Q_NULLPTR));
         displayMassesCheckBox->setText(QApplication::translate("MainWindow", "Masses", Q_NULLPTR));
+        physicsControlsGB->setTitle(QApplication::translate("MainWindow", "Controls", Q_NULLPTR));
+        springConstantLabel->setText(QApplication::translate("MainWindow", "Spring", Q_NULLPTR));
+        dampingConstantLabel->setText(QApplication::translate("MainWindow", "Damping", Q_NULLPTR));
+        resetJelloPushButton->setText(QApplication::translate("MainWindow", "Reset", Q_NULLPTR));
     } // retranslateUi
 
 };

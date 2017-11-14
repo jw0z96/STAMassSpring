@@ -4,18 +4,16 @@
 
 //----------------------------------------------------------------------------------------------------------------------
 
-Spring::Spring(std::shared_ptr<ngl::Vec3> _s, std::shared_ptr<ngl::Vec3> _e) :
+Spring::Spring(std::shared_ptr<ngl::Vec3> _s, std::shared_ptr<ngl::Vec3> _e, double _k, double _damping) :
 	m_startPoint(_s),
-	m_endPoint(_e)
+	m_endPoint(_e),
+	m_k(_k),
+	m_damping(_damping)
 {
-	// set the spring constant and damping coefficient
-	m_k = 2.0;
-	m_damping = 1.0;
-
 	// set resting length
 	ngl::Vec3 distance = *(m_endPoint) - *(m_startPoint);
-	// m_restingLength = distance.length();
-	m_restingLength = 0.5;
+	m_restingLength = distance.length();
+	// m_restingLength = distance.length() * 1.5;
 	std::cout<<"constructed spring of length "<<m_restingLength<<"\n";
 
 	m_state.m_position = distance;
@@ -37,7 +35,6 @@ void Spring::update()
 
 State Spring::evaluate(const State &_initial, float _t)
 {
-
 	State output;
 	output.m_position=_initial.m_velocity;
 	output.m_velocity=motionFunction(_initial, _t);
@@ -48,7 +45,6 @@ State Spring::evaluate(const State &_initial, float _t)
 
 State Spring::evaluate(const State &_initial, float _t,float _dt, const State &_d)
 {
-
 	State state;
 	state.m_position = _initial.m_position + _d.m_position*_dt;
 	state.m_velocity = _initial.m_velocity + _d.m_velocity*_dt;
