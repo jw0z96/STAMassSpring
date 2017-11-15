@@ -21,8 +21,6 @@ NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent),
 	// re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
 	this->resize(_parent->size());
 	m_timer.start();
-	// initialize the scene
-	// initScene();
 
 	m_drawMassPoints = true;
 	m_drawStructuralSprings = false;
@@ -43,97 +41,6 @@ void NGLScene::resizeGL( int _w, int _h )
 	m_win.width  = static_cast<int>(_w * devicePixelRatio());
 	m_win.height = static_cast<int>(_h * devicePixelRatio());
 }
-
-// void NGLScene::initScene()
-// {
-	// int sx = 5;
-	// int sy = 5;
-	// int sz = 5;
-
-	// ngl::Vec3 topRight = ngl::Vec3(1.0, 1.0, 1.0);
-	// ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 0.0, 0.0);
-
-	// ngl::Vec3 span = topRight - bottomLeft;
-	// ngl::Vec3 step = span / ngl::Vec3(sx, sy, sz);
-
-	// // populate the array of masses
-	// for (int i = 0; i < sx; ++i)
-	// {
-	// 	for (int j = 0; j < sy; ++j)
-	// 	{
-	// 		for (int k = 0; k < sz; ++k)
-	// 		{
-	// 			m_massPts.push_back(ngl::Vec3(i, j, k) * step + bottomLeft);
-	// 		}
-	// 	}
-	// }
-
-	// // populate the arrays of springs
-	// for (int i = 0; i < sx; ++i)
-	// {
-	// 	for (int j = 0; j < sy; ++j)
-	// 	{
-	// 		for (int k = 0; k < sz; ++k)
-	// 		{
-	// 			// get the array index of the starting point
-	// 			int startIndex = (k * sx * sy) + (j * sx) + i;
-
-	// 			// create structural springs
-	// 			if ((i + 1) < sx) // connect (i,j,k) to (i+1, j, k)
-	// 				m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + (j * sx) + (i + 1)));
-	// 			if ((j +1) < sy) // connect (i,j,k) to (i, j+1, k)
-	// 				m_structuralSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 1) * sx) + i));
-	// 			if ((k +1) < sz) // connect (i,j,k) to (i, j, k+1)
-	// 				m_structuralSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + (j * sx) + i));
-
-	// 			// create bend springs
-	// 			if ((i + 2) < sx) // connect (i,j,k) to (i+2, j, k)
-	// 				m_bendSprings.push_back(Spring(startIndex,(k * sx * sy) + (j * sx) + (i + 2)));
-	// 			if ((j +2) < sy) // connect (i,j,k) to (i, j+2, k)
-	// 				m_bendSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 2) * sx) + i));
-	// 			if ((k +2) < sz) // connect (i,j,k) to (i, j, k+2)
-	// 				m_bendSprings.push_back(Spring(startIndex,((k + 2) * sx * sy) + (j * sx) + i));
-
-	// 			// create shear springs
-	// 			if ((i + 1) < sx && (j + 1) < sy)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k) * sx * sy) + ((j + 1) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j+1,k)
-
-	// 			if ((i + 1) < sx && (k + 1) < sz)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j,k+1)
-
-	// 			if ((i + 1) < sx && k > 0)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j,k-1)
-
-	// 			if ((i + 1) < sx && j > 0)
-	// 				m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j - 1) * sx) + (i + 1))); // connect (i,j,k) to (i+1,j-1,k)
-
-	// 			if ((j + 1) < sy && (k + 1) < sz)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j + 1) * sx) + (i))); // connect (i,j,k) to (i,j+1,k+1)
-
-	// 			if ((j + 1) < sy && k > 0)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j + 1) * sx) + (i))); // connect (i,j,k) to (i,j+1,k-1)
-
-	// 			if (j > 0 && (k + 1) < sz)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j - 1) * sx) + (i))); // connect (i,j,k) to (i,j-1,k+1)
-
-	// 			if (j > 0 && k > 0)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j - 1) * sx) + (i))); // connect (i,j,k) to (i,j-1,k-1)
-
-	// 			if (i > 0 && (j + 1) < sy)
-	// 				m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j + 1) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j+1,k)
-
-	// 			if (i > 0 && (k + 1) < sz)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k + 1) * sx * sy) + ((j) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j,k+1)
-
-	// 			if (i > 0 && k > 0)
-	// 				m_shearSprings.push_back(Spring(startIndex,((k - 1) * sx * sy) + ((j) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j,k-1)
-
-	// 			if (i > 0 && j > 0)
-	// 				m_shearSprings.push_back(Spring(startIndex,(k * sx * sy) + ((j - 1) * sx) + (i - 1))); // connect (i,j,k) to (i-1,j-1,k)
-	// 		}
-	// 	}
-	// }
-// }
 
 void NGLScene::initializeGL()
 {
@@ -250,6 +157,8 @@ void NGLScene::paintGL()
 		}
 	}
 
+	(*shader)[ngl::nglColourShader]->use();
+
 	if (m_drawStructuralSprings)
 	{
 		std::vector<Spring> & springsRef = *(m_jelloCube->getStructuralSprings());
@@ -260,6 +169,9 @@ void NGLScene::paintGL()
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
+			//set colour to highlight stress
+			float stretchFactor = diff.length() - springsRef[i].getRestingLength();
+			shader->setUniform("Colour", 10.0 * abs(stretchFactor), 0.0f, 0.0f, 1.0f);
 			for (int j = buffer; j < (count - buffer); ++j)
 			{
 				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
@@ -279,6 +191,9 @@ void NGLScene::paintGL()
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
+			//set colour to highlight stress
+			float stretchFactor = diff.length() - springsRef[i].getRestingLength();
+			shader->setUniform("Colour", 10.0 * abs(stretchFactor), 0.0f, 0.0f, 1.0f);
 			for (int j = buffer; j < (count - buffer); ++j)
 			{
 				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
@@ -298,6 +213,9 @@ void NGLScene::paintGL()
 			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 			int count = 20;
 			int buffer = count / 5;
+			//set colour to highlight stress
+			float stretchFactor = diff.length() - springsRef[i].getRestingLength();
+			shader->setUniform("Colour", 10.0 * abs(stretchFactor), 0.0f, 0.0f, 1.0f);
 			for (int j = buffer; j < (count - buffer); ++j)
 			{
 				m_transform.setPosition(start + ((float(j)/float(count)) * diff));

@@ -69,8 +69,8 @@ void JelloCube::generate()
 	int sy = 5;
 	int sz = 5;
 
-	ngl::Vec3 topRight = ngl::Vec3(0.5, 0.5, 0.5);
-	ngl::Vec3 bottomLeft = ngl::Vec3(-0.5, -0.5, -0.5);
+	ngl::Vec3 topRight = ngl::Vec3(1.0, 1.0, 1.0);
+	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 0.0, 0.0);
 
 	ngl::Vec3 span = topRight - bottomLeft;
 	ngl::Vec3 step = span / ngl::Vec3(sx, sy, sz);
@@ -160,7 +160,6 @@ void JelloCube::generate()
 
 void JelloCube::update()
 {
-
 	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
 	{
 		m_structuralSprings[i].integrate(m_t, m_timestep);
@@ -201,7 +200,6 @@ void JelloCube::update()
 	// 	// *(m_massPoints[i]) += ngl::Vec3(0.0);
 	// }
 
-	float intensity = 0.01;
+	float intensity = 0.1;
 	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));
-
 }
