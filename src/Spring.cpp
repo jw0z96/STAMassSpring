@@ -13,7 +13,7 @@ Spring::Spring(std::shared_ptr<ngl::Vec3> _s, std::shared_ptr<ngl::Vec3> _e, dou
 	// set resting length
 	ngl::Vec3 distance = *(m_endPoint) - *(m_startPoint);
 	m_restingLength = distance.length();
-	// m_restingLength = distance.length() * 1.5;
+	// m_restingLength = distance.length() * 2.0;
 	std::cout<<"constructed spring of length "<<m_restingLength<<"\n";
 
 	m_state.m_position = distance;

@@ -200,6 +200,6 @@ void JelloCube::update()
 	// 	// *(m_massPoints[i]) += ngl::Vec3(0.0);
 	// }
 
-	float intensity = 0.1;
+	float intensity = 0.01;
 	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));
 }
