@@ -30,13 +30,21 @@ class JelloCube : public QObject
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief get our mass points (for drawing)
 	//----------------------------------------------------------------------------------------------------------------------
-	inline std::vector<std::shared_ptr<ngl::Vec3>> getMassPoints(){return m_massPoints;};
+	// inline std::vector<std::shared_ptr<ngl::Vec3>> getMassPoints(){return m_massPoints;};
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief get our springs (for drawing)
 	//----------------------------------------------------------------------------------------------------------------------
-	inline std::vector<Spring>* getStructuralSprings(){return &m_structuralSprings;};
-	inline std::vector<Spring>* getBendSprings(){return &m_bendSprings;};
-	inline std::vector<Spring>* getShearSprings(){return &m_shearSprings;};
+	// inline std::vector<Spring>* getStructuralSprings(){return &m_structuralSprings;};
+	// inline std::vector<Spring>* getBendSprings(){return &m_bendSprings;};
+	// inline std::vector<Spring>* getShearSprings(){return &m_shearSprings;};
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief helper function for generating 1D textures
+	//----------------------------------------------------------------------------------------------------------------------
+	void gen1DTexture(unsigned int &texId, unsigned int size, GLenum internalFormat, GLenum format, GLenum type, const GLvoid* data);
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief helper function for initializing the textures and compute shaders
+	//----------------------------------------------------------------------------------------------------------------------
+	void initializeShaders();
 
 	public slots:
 	//----------------------------------------------------------------------------------------------------------------------
@@ -51,6 +59,10 @@ class JelloCube : public QObject
 	/// @brief set the damping constant for all of the springs
 	//----------------------------------------------------------------------------------------------------------------------
 	void setDamping(double _damping);
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief draw the jello cube
+	//----------------------------------------------------------------------------------------------------------------------
+	void draw();
 
 	private:
 	//----------------------------------------------------------------------------------------------------------------------
@@ -60,13 +72,14 @@ class JelloCube : public QObject
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief array of points that make up our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
-	std::vector<std::shared_ptr<ngl::Vec3>> m_massPoints;
+	// std::vector<std::shared_ptr<ngl::Vec3>> m_massPoints;
+	GLuint m_massPointsPositionTex;
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief array of springs that connect our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
-	std::vector<Spring> m_structuralSprings;
-	std::vector<Spring> m_bendSprings;
-	std::vector<Spring> m_shearSprings;
+	// std::vector<Spring> m_structuralSprings;
+	// std::vector<Spring> m_bendSprings;
+	// std::vector<Spring> m_shearSprings;
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief the time step used for update default 0.1
 	//----------------------------------------------------------------------------------------------------------------------
@@ -83,6 +96,10 @@ class JelloCube : public QObject
 	/// @brief the damping constant to be used for all of the springs
 	//----------------------------------------------------------------------------------------------------------------------
 	float m_damping;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief the dimensions of our jello cube
+	//----------------------------------------------------------------------------------------------------------------------
+	unsigned int m_sizeX, m_sizeY, m_sizeZ;
 };
 
 #endif // JELLOCUBE_H

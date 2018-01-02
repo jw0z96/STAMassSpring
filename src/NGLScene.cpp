@@ -55,6 +55,7 @@ void NGLScene::initializeGL()
 		"shaders/test_vert.glsl",
 		"shaders/test_frag.glsl");
 	shader->use("testShader");
+	shader->setUniform("massPointsPositionTex", 0);
 
 	// Grey Background
 	glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
@@ -80,6 +81,8 @@ void NGLScene::initializeGL()
 
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
 	prim->createSphere("sphere",0.1f,1);
+
+	m_jelloCube->initializeShaders();
 }
 
 void NGLScene::loadMatricesToShader()
@@ -143,7 +146,12 @@ void NGLScene::paintGL()
 	}
 
 	m_transform.reset();
+	// m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
+	loadMatricesToShader();
 
+	m_jelloCube->draw();
+
+	/*
 	auto massPoints = m_jelloCube->getMassPoints();
 
 	if (m_drawMassPoints)
@@ -224,6 +232,7 @@ void NGLScene::paintGL()
 			}
 		}
 	}
+	*/
 }
 
 //----------------------------------------------------------------------------------------------------------------------

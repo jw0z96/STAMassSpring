@@ -15,16 +15,27 @@ uniform mat4 MVP;
 uniform mat3 normalMatrix;
 uniform mat4 M;
 
+uniform int u_index;
+
+uniform sampler1D massPointsPositionTex;
+
 void main()
 {
 	TexCoords = inUV;
 
+	// access texture to get position of mass point
+	vec3 massPos = texelFetch(massPointsPositionTex, u_index, 0).xyz;
+
+	// add the position to our vert position (and scale the cube down a bit...)
+	float cubeScale = 0.1;
+	vec3 pos = (cubeScale * inVert) + massPos;
+
 	// pass worldspace position to fragment shader
-	WorldPos = vec3(M * vec4(inVert, 1.0f));
+	WorldPos = vec3(M * vec4(pos, 1.0f));
 
 	// pass worldspace normal to fragment shader
 	Normal = inNormal;
 
 	// transform input vertex
-	gl_Position = MVP * vec4(inVert,1.0);
+	gl_Position = MVP * vec4(pos,1.0);
 }

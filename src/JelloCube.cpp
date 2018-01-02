@@ -1,5 +1,8 @@
 #include "JelloCube.h"
 
+#include <ngl/NGLInit.h>
+#include <ngl/ShaderLib.h>
+
 #include <iostream>
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -9,7 +12,11 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	std::cout<<"creating jello cube!\n";
 	m_timestep = 0.1;
 	m_t = 0.0;
-	generate();
+	m_sizeX = 5;
+	m_sizeY = 5;
+	m_sizeZ = 5;
+	// generate();
+	// initializeShaders();
 }
 
 JelloCube::~JelloCube()
@@ -17,21 +24,39 @@ JelloCube::~JelloCube()
 	std::cout<<"bye!\n";
 }
 
+void JelloCube::initializeShaders()
+{
+	ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+
+	// create the texture to store the positions of the mass points
+	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
+	gen1DTexture(m_massPointsPositionTex, numMasses, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
+
+	// create the compute shader program for initializing the textures (setting up springs & mass positions)
+	shader->createShaderProgram("jelloCubeInitPass");
+	shader->attachShader("jelloCubeInitPassComp", ngl::ShaderType::COMPUTE );
+	shader->loadShaderSource("jelloCubeInitPassComp", "shaders/jelloCubeInitComp.glsl" );
+	shader->compileShader("jelloCubeInitPassComp");
+	shader->attachShaderToProgram("jelloCubeInitPass", "jelloCubeInitPassComp");
+	shader->linkProgramObject("jelloCubeInitPass");
+
+	generate();
+}
+
 void JelloCube::reset()
 {
 	m_t = 0.0;
-	m_massPoints.clear();
+/*	m_massPoints.clear();
 	m_structuralSprings.clear();
 	m_bendSprings.clear();
 	m_shearSprings.clear();
-	generate();
+	generate();*/
 }
 
 void JelloCube::setK(double _k)
 {
 	m_k = _k;
-
-	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
+/*	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
 	{
 		m_structuralSprings[i].setK(_k);
 	}
@@ -42,14 +67,13 @@ void JelloCube::setK(double _k)
 	for (size_t i = 0; i < m_shearSprings.size(); ++i)
 	{
 		m_structuralSprings[i].setK(_k);
-	}
+	}*/
 }
 
 void JelloCube::setDamping(double _damping)
 {
 	m_damping = _damping;
-
-	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
+/*	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
 	{
 		m_structuralSprings[i].setDamping(_damping);
 	}
@@ -60,21 +84,35 @@ void JelloCube::setDamping(double _damping)
 	for (size_t i = 0; i < m_shearSprings.size(); ++i)
 	{
 		m_structuralSprings[i].setDamping(_damping);
-	}
+	}*/
 }
 
 void JelloCube::generate()
 {
-	int sx = 5;
-	int sy = 5;
-	int sz = 5;
+	// get singleton instances
+	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
+	shader->use("jelloCubeInitPass");
 
 	ngl::Vec3 topRight = ngl::Vec3(1.0, 1.0, 1.0);
 	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 0.0, 0.0);
-
 	ngl::Vec3 span = topRight - bottomLeft;
-	ngl::Vec3 step = span / ngl::Vec3(sx, sy, sz);
+	ngl::Vec3 step = span / ngl::Vec3(m_sizeX, m_sizeY, m_sizeZ);
 
+	shader->setUniform("u_sizeX", GLint(m_sizeX));
+	shader->setUniform("u_sizeY", GLint(m_sizeY));
+	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
+
+	shader->setUniform("u_bottomLeft", bottomLeft);
+	shader->setUniform("u_step", step);
+
+	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
+	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA8);
+
+	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
+	glBindTexture(GL_TEXTURE_1D, 0);
+
+
+	/*
 	// populate the array of masses
 	for (int i = 0; i < sx; ++i)
 	{
@@ -155,12 +193,12 @@ void JelloCube::generate()
 				// 	m_shearSprings.emplace_back(m_massPoints[currentIndex], m_massPoints[getIndex(i - 1, j - 1, k, sx, sy)]);
 			}
 		}
-	}
+	}*/
 }
 
 void JelloCube::update()
 {
-	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
+	/*for (size_t i = 0; i < m_structuralSprings.size(); ++i)
 	{
 		m_structuralSprings[i].integrate(m_t, m_timestep);
 	}
@@ -189,17 +227,16 @@ void JelloCube::update()
 	{
 		m_shearSprings[i].update();
 	}
-
+*/
 	// update the timestep for the next time
 	m_t += m_timestep;
 
-
-	// for (size_t i = 0; i < m_massPoints.size(); ++i)
+/*	// for (size_t i = 0; i < m_massPoints.size(); ++i)
 	// {
 	// 	*(m_massPoints[i]) += ngl::Vec3(-0.001 * sin(m_t + i), 0.001 * sin(m_t + i), 0.001 * cos(m_t + i));
 	// 	// *(m_massPoints[i]) += ngl::Vec3(0.0);
 	// }
 
 	float intensity = 0.01;
-	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));
+	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));*/
 }
