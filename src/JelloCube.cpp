@@ -22,6 +22,11 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 JelloCube::~JelloCube()
 {
 	std::cout<<"bye!\n";
+	glDeleteTextures(1, &m_massPointsPositionTex);
+	glDeleteTextures(1, &m_springsRestingLengthTex);
+	glDeleteTextures(1, &m_springsStatePositionTex);
+	glDeleteTextures(1, &m_springsStateVelocityTex);
+	glDeleteTextures(1, &m_springsStartEndIndexTex);
 }
 
 void JelloCube::initializeShaders()
@@ -105,12 +110,57 @@ void JelloCube::generate()
 	shader->setUniform("u_bottomLeft", bottomLeft);
 	shader->setUniform("u_step", step);
 
+	// create an atomic counter to get the number of required springs
+	GLuint springCounter;
+	genAtomicCounter(springCounter);
+	// bind the atomic counter
+	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
 	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
-	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA8);
-
+	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA8);
+	// set to only count the number of springs
+	shader->setUniform("u_springWrite", false);
+	// dispatch compute shader
 	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
-	glBindTexture(GL_TEXTURE_1D, 0);
+	// read the atomic counter value
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, springCounter);
+	GLuint *count;
+	count = (GLuint*)glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER,
+		0,
+		sizeof(GLuint),
+		GL_MAP_READ_BIT);
+	std::cout<<"spring count: "<<count[0]<<"\n";
+	m_springCount = count[0];
+	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+	// delete the atomic counter
+	glDeleteBuffers(1, &springCounter);
 
+	// generate textures to store spring info
+	// spring resting length
+	gen1DTexture(m_springsRestingLengthTex, m_springCount, GL_R16F, GL_RED, GL_FLOAT, NULL);
+	glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
+	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_R16F);
+	// spring state position
+	gen1DTexture(m_springsStatePositionTex, m_springCount, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
+	glBindTexture(GL_TEXTURE_1D, m_springsStatePositionTex);
+	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	// spring state velocity
+	gen1DTexture(m_springsStateVelocityTex, m_springCount, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
+	glBindTexture(GL_TEXTURE_1D, m_springsStateVelocityTex);
+	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	// spring start and end indices
+	gen1DTexture(m_springsStartEndIndexTex, m_springCount, GL_RG8UI, GL_RG, GL_UNSIGNED_INT, NULL);
+	glBindTexture(GL_TEXTURE_1D, m_springsStartEndIndexTex);
+	glBindImageTexture(4, m_springsStartEndIndexTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RG8UI);
+
+	// set to write the contents of springs
+	shader->setUniform("u_springWrite", true);
+
+	// dispatch compute shader (this time to store springs)
+	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
+
+	// unbind textures
+	glBindTexture(GL_TEXTURE_1D, 0);
 
 	/*
 	// populate the array of masses

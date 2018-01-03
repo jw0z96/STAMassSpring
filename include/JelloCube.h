@@ -42,6 +42,10 @@ class JelloCube : public QObject
 	//----------------------------------------------------------------------------------------------------------------------
 	void gen1DTexture(unsigned int &texId, unsigned int size, GLenum internalFormat, GLenum format, GLenum type, const GLvoid* data);
 	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief helper function for generating an atomic counter
+	//----------------------------------------------------------------------------------------------------------------------
+	void genAtomicCounter(unsigned int &buffer);
+	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief helper function for initializing the textures and compute shaders
 	//----------------------------------------------------------------------------------------------------------------------
 	void initializeShaders();
@@ -77,6 +81,11 @@ class JelloCube : public QObject
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief array of springs that connect our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
+	unsigned int m_springCount;
+	GLuint m_springsRestingLengthTex;
+	GLuint m_springsStatePositionTex;
+	GLuint m_springsStateVelocityTex;
+	GLuint m_springsStartEndIndexTex;
 	// std::vector<Spring> m_structuralSprings;
 	// std::vector<Spring> m_bendSprings;
 	// std::vector<Spring> m_shearSprings;

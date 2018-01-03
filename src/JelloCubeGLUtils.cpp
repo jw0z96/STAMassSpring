@@ -23,6 +23,24 @@ void JelloCube::gen1DTexture(unsigned int &texId, unsigned int size, GLenum inte
 
 //----------------------------------------------------------------------------------------------------------------------
 
+void JelloCube::genAtomicCounter(unsigned int &buffer)
+{
+	if (buffer)
+		glDeleteBuffers(1, &buffer);
+
+	// initial value
+	GLuint initVal = 0;
+	// declare and generate a buffer object name
+	glGenBuffers(1, &buffer);
+	// bind the buffer and define its initial storage capacity
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, buffer);
+	glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(GLuint), &initVal, GL_DYNAMIC_DRAW);
+	// unbind the buffer
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 void JelloCube::draw()
 {
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
