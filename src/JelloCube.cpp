@@ -35,10 +35,6 @@ void JelloCube::initializeShaders()
 {
 	ngl::ShaderLib *shader=ngl::ShaderLib::instance();
 
-	// create the texture to store the positions of the mass points
-	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
-	gen1DTexture(m_massPointsPositionTex, numMasses, GL_RGBA32F, GL_RGBA, GL_FLOAT, NULL);
-
 	// create the compute shader program for initializing the textures (setting up springs & mass positions)
 	shader->createShaderProgram("jelloCubeInitPass");
 	shader->attachShader("jelloCubeInitPassComp", ngl::ShaderType::COMPUTE );
@@ -73,45 +69,17 @@ void JelloCube::initializeShaders()
 void JelloCube::reset()
 {
 	m_t = 0.0;
-/*	m_massPoints.clear();
-	m_structuralSprings.clear();
-	m_bendSprings.clear();
-	m_shearSprings.clear();
-	generate();*/
+	generate();
 }
 
 void JelloCube::setK(double _k)
 {
 	m_k = _k;
-/*	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
-	{
-		m_structuralSprings[i].setK(_k);
-	}
-	for (size_t i = 0; i < m_bendSprings.size(); ++i)
-	{
-		m_structuralSprings[i].setK(_k);
-	}
-	for (size_t i = 0; i < m_shearSprings.size(); ++i)
-	{
-		m_structuralSprings[i].setK(_k);
-	}*/
 }
 
 void JelloCube::setDamping(double _damping)
 {
 	m_damping = _damping;
-/*	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
-	{
-		m_structuralSprings[i].setDamping(_damping);
-	}
-	for (size_t i = 0; i < m_bendSprings.size(); ++i)
-	{
-		m_structuralSprings[i].setDamping(_damping);
-	}
-	for (size_t i = 0; i < m_shearSprings.size(); ++i)
-	{
-		m_structuralSprings[i].setDamping(_damping);
-	}*/
 }
 
 void JelloCube::generate()
@@ -137,6 +105,10 @@ void JelloCube::generate()
 	genAtomicCounter(springCounter);
 	// bind the atomic counter
 	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
+
+	// create the texture to store the positions of the mass points
+	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
+	gen1DTexture(m_massPointsPositionTex, numMasses, GL_RGBA32F, GL_RGBA, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
 	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA32F);
 	// set to only count the number of springs
@@ -165,13 +137,13 @@ void JelloCube::generate()
 	glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
 	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R16F);
 	// spring state position
-	gen1DTexture(m_springsStatePositionTex, m_springCount, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
+	gen1DTexture(m_springsStatePositionTex, m_springCount, GL_RGBA32F, GL_RGBA, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsStatePositionTex);
-	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 	// spring state velocity
-	gen1DTexture(m_springsStateVelocityTex, m_springCount, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
+	gen1DTexture(m_springsStateVelocityTex, m_springCount, GL_RGBA32F, GL_RGBA, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsStateVelocityTex);
-	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 	// spring start and end indices
 	gen1DTexture(m_springsStartIndexTex, m_springCount, GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
@@ -204,22 +176,6 @@ void JelloCube::generate()
 	glDeleteBuffers(1, &springCounter);
 
 	/*
-	// populate the array of masses
-	for (int i = 0; i < sx; ++i)
-	{
-		for (int j = 0; j < sy; ++j)
-		{
-			for (int k = 0; k < sz; ++k)
-			{
-				ngl::Vec3 pt = ngl::Vec3(i, j, k) * step + bottomLeft;
-				m_massPoints.emplace_back(new ngl::Vec3(pt));
-			}
-		}
-	}
-
-	// helper lambda to get the index into a 3d grid
-	auto getIndex = [](int x, int y, int z, int tx, int ty) {return (z * tx * ty) + (y * tx) + x;};
-
 	// populate the arrays of springs
 	for (int i = 0; i < sx; ++i)
 	{
@@ -305,55 +261,30 @@ void JelloCube::update()
 	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16F);
 	// spring state position
 	glBindTexture(GL_TEXTURE_1D, m_springsStatePositionTex);
-	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 	// spring state velocity
 	glBindTexture(GL_TEXTURE_1D, m_springsStateVelocityTex);
-	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 	// spring start and end indices
 	glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
 	glBindImageTexture(4, m_springsStartIndexTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R16UI);
 	glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
 	glBindImageTexture(5, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R16UI);
 
+	shader->setUniform("u_springCount", GLint(m_springCount));
+	shader->setUniform("u_writeMode", false);
+
 	// dispatch compute shader to integrate springs
-	// glDispatchCompute(1, 1, 1);
 	glDispatchCompute(m_springCount, 1, 1);
 
-	/*for (size_t i = 0; i < m_structuralSprings.size(); ++i)
-	{
-		m_structuralSprings[i].integrate(m_t, m_timestep);
-	}
+	// dispatch compute shader to update springs
+	shader->setUniform("u_writeMode", true);
+	glDispatchCompute(1, 1, 1);
 
-	for (size_t i = 0; i < m_bendSprings.size(); ++i)
-	{
-		m_bendSprings[i].integrate(m_t, m_timestep);
-	}
-
-	for (size_t i = 0; i < m_shearSprings.size(); ++i)
-	{
-		m_shearSprings[i].integrate(m_t, m_timestep);
-	}
-
-	for (size_t i = 0; i < m_structuralSprings.size(); ++i)
-	{
-		m_structuralSprings[i].update();
-	}
-
-	for (size_t i = 0; i < m_bendSprings.size(); ++i)
-	{
-		m_bendSprings[i].update();
-	}
-
-	for (size_t i = 0; i < m_shearSprings.size(); ++i)
-	{
-		m_shearSprings[i].update();
-	}
-*/
 	// update the timestep for the next time
 	m_t += m_timestep;
 
 	glBindTexture(GL_TEXTURE_1D, 0);
-
 
 /*	// for (size_t i = 0; i < m_massPoints.size(); ++i)
 	// {

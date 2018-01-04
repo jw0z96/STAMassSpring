@@ -6,8 +6,8 @@ layout (binding = 0, offset = 0) uniform atomic_uint springCount;
 
 layout (binding = 0, rgba8) uniform image1D u_massPointsPositionTex;
 layout (binding = 1, r16f) uniform writeonly image1D u_springsRestingLengthTex;
-layout (binding = 2, rgba8) uniform writeonly image1D u_springsStatePositionTex;
-layout (binding = 3, rgba8) uniform writeonly image1D u_springsStateVelocityTex;
+layout (binding = 2, rgba32f) uniform writeonly image1D u_springsStatePositionTex;
+layout (binding = 3, rgba32f) uniform writeonly image1D u_springsStateVelocityTex;
 layout (binding = 4, r16ui) uniform uimage1D u_springsStartIndexTex;
 layout (binding = 5, r16ui) uniform uimage1D u_springsEndIndexTex;
 
