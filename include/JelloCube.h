@@ -85,7 +85,8 @@ class JelloCube : public QObject
 	GLuint m_springsRestingLengthTex;
 	GLuint m_springsStatePositionTex;
 	GLuint m_springsStateVelocityTex;
-	GLuint m_springsStartEndIndexTex;
+	GLuint m_springsStartIndexTex;
+	GLuint m_springsEndIndexTex;
 	// std::vector<Spring> m_structuralSprings;
 	// std::vector<Spring> m_bendSprings;
 	// std::vector<Spring> m_shearSprings;

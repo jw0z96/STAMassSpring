@@ -26,7 +26,8 @@ JelloCube::~JelloCube()
 	glDeleteTextures(1, &m_springsRestingLengthTex);
 	glDeleteTextures(1, &m_springsStatePositionTex);
 	glDeleteTextures(1, &m_springsStateVelocityTex);
-	glDeleteTextures(1, &m_springsStartEndIndexTex);
+	glDeleteTextures(1, &m_springsStartIndexTex);
+	glDeleteTextures(1, &m_springsEndIndexTex);
 }
 
 void JelloCube::initializeShaders()
@@ -35,7 +36,7 @@ void JelloCube::initializeShaders()
 
 	// create the texture to store the positions of the mass points
 	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
-	gen1DTexture(m_massPointsPositionTex, numMasses, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
+	gen1DTexture(m_massPointsPositionTex, numMasses, GL_RGBA32F, GL_RGBA, GL_FLOAT, NULL);
 
 	// create the compute shader program for initializing the textures (setting up springs & mass positions)
 	shader->createShaderProgram("jelloCubeInitPass");
@@ -44,6 +45,14 @@ void JelloCube::initializeShaders()
 	shader->compileShader("jelloCubeInitPassComp");
 	shader->attachShaderToProgram("jelloCubeInitPass", "jelloCubeInitPassComp");
 	shader->linkProgramObject("jelloCubeInitPass");
+
+	// create the compute shader program for initializing the textures (setting up springs & mass positions)
+	shader->createShaderProgram("jelloCubeSpringPass");
+	shader->attachShader("jelloCubeSpringPassComp", ngl::ShaderType::COMPUTE );
+	shader->loadShaderSource("jelloCubeSpringPassComp", "shaders/jelloCubeSpringComp.glsl" );
+	shader->compileShader("jelloCubeSpringPassComp");
+	shader->attachShaderToProgram("jelloCubeSpringPass", "jelloCubeSpringPassComp");
+	shader->linkProgramObject("jelloCubeSpringPass");
 
 	generate();
 }
@@ -116,7 +125,7 @@ void JelloCube::generate()
 	// bind the atomic counter
 	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
 	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
-	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA8);
+	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA32F);
 	// set to only count the number of springs
 	shader->setUniform("u_springWrite", false);
 	// dispatch compute shader
@@ -130,28 +139,33 @@ void JelloCube::generate()
 		GL_MAP_READ_BIT);
 	std::cout<<"spring count: "<<count[0]<<"\n";
 	m_springCount = count[0];
+	// reset the counter to 0
+	memset(count, 0, sizeof(GLuint));
 	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
-	// delete the atomic counter
-	glDeleteBuffers(1, &springCounter);
 
+	// bind the atomic counter
+	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
 	// generate textures to store spring info
 	// spring resting length
 	gen1DTexture(m_springsRestingLengthTex, m_springCount, GL_R16F, GL_RED, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
-	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_R16F);
+	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R16F);
 	// spring state position
 	gen1DTexture(m_springsStatePositionTex, m_springCount, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsStatePositionTex);
-	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
 	// spring state velocity
 	gen1DTexture(m_springsStateVelocityTex, m_springCount, GL_RGBA8, GL_RGBA, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsStateVelocityTex);
-	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
 	// spring start and end indices
-	gen1DTexture(m_springsStartEndIndexTex, m_springCount, GL_RG8UI, GL_RG, GL_UNSIGNED_INT, NULL);
-	glBindTexture(GL_TEXTURE_1D, m_springsStartEndIndexTex);
-	glBindImageTexture(4, m_springsStartEndIndexTex, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RG8UI);
+	gen1DTexture(m_springsStartIndexTex, m_springCount, GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+	glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
+	glBindImageTexture(4, m_springsStartIndexTex, 0, GL_TRUE, 0, GL_READ_WRITE, GL_R16UI);
+	gen1DTexture(m_springsEndIndexTex, m_springCount, GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+	glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
+	glBindImageTexture(5, m_springsEndIndexTex, 0, GL_TRUE, 0, GL_READ_WRITE, GL_R16UI);
 
 	// set to write the contents of springs
 	shader->setUniform("u_springWrite", true);
@@ -161,6 +175,20 @@ void JelloCube::generate()
 
 	// unbind textures
 	glBindTexture(GL_TEXTURE_1D, 0);
+
+	// read the atomic counter value
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, springCounter);
+	*count;
+	count = (GLuint*)glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER,
+		0,
+		sizeof(GLuint),
+		GL_MAP_READ_BIT);
+	std::cout<<"spring count (the second time around): "<<count[0]<<"\n";
+	m_springCount = count[0];
+	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+	// delete the atomic counter
+	glDeleteBuffers(1, &springCounter);
 
 	/*
 	// populate the array of masses
@@ -248,6 +276,35 @@ void JelloCube::generate()
 
 void JelloCube::update()
 {
+	// std::cout<<"updating springs\n";
+	// get singleton instances
+	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
+	shader->use("jelloCubeSpringPass");
+
+	shader->setUniform("u_currentTime", m_t);
+	shader->setUniform("u_timeStep", m_timestep);
+
+	// mass point positions
+	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
+	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+	// spring resting length
+	glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
+	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16F);
+	// spring state position
+	glBindTexture(GL_TEXTURE_1D, m_springsStatePositionTex);
+	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+	// spring state velocity
+	glBindTexture(GL_TEXTURE_1D, m_springsStateVelocityTex);
+	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+	// spring start and end indices
+	glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
+	glBindImageTexture(4, m_springsStartIndexTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R16UI);
+	glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
+	glBindImageTexture(5, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R16UI);
+
+	// dispatch compute shader to integrate springs
+	glDispatchCompute(m_springCount, 1, 1);
+
 	/*for (size_t i = 0; i < m_structuralSprings.size(); ++i)
 	{
 		m_structuralSprings[i].integrate(m_t, m_timestep);
@@ -281,11 +338,15 @@ void JelloCube::update()
 	// update the timestep for the next time
 	m_t += m_timestep;
 
+	glBindTexture(GL_TEXTURE_1D, 0);
+
+
 /*	// for (size_t i = 0; i < m_massPoints.size(); ++i)
 	// {
 	// 	*(m_massPoints[i]) += ngl::Vec3(-0.001 * sin(m_t + i), 0.001 * sin(m_t + i), 0.001 * cos(m_t + i));
 	// 	// *(m_massPoints[i]) += ngl::Vec3(0.0);
 	// }
+
 
 	float intensity = 0.01;
 	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));*/
