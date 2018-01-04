@@ -28,6 +28,7 @@ JelloCube::~JelloCube()
 	glDeleteTextures(1, &m_springsStateVelocityTex);
 	glDeleteTextures(1, &m_springsStartIndexTex);
 	glDeleteTextures(1, &m_springsEndIndexTex);
+	glDeleteVertexArrays(1, &m_emptyVAO);
 }
 
 void JelloCube::initializeShaders()
@@ -54,7 +55,19 @@ void JelloCube::initializeShaders()
 	shader->attachShaderToProgram("jelloCubeSpringPass", "jelloCubeSpringPassComp");
 	shader->linkProgramObject("jelloCubeSpringPass");
 
+	// create the spring geometry shader program
+	shader->loadShader("springShader",
+		"shaders/spring_vert.glsl",
+		"shaders/spring_frag.glsl");
+	shader->use("springShader");
+	shader->setUniform("massPointsPositionTex", 0);
+
 	generate();
+
+	// create empty vao for procedural geometry
+	glGenVertexArrays(1, &m_emptyVAO); // Create our Vertex Array Object
+	glBindVertexArray(m_emptyVAO); // Bind our Vertex Array Object so we can use it
+	glBindVertexArray(0);
 }
 
 void JelloCube::reset()
@@ -303,6 +316,7 @@ void JelloCube::update()
 	glBindImageTexture(5, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R16UI);
 
 	// dispatch compute shader to integrate springs
+	// glDispatchCompute(1, 1, 1);
 	glDispatchCompute(m_springCount, 1, 1);
 
 	/*for (size_t i = 0; i < m_structuralSprings.size(); ++i)

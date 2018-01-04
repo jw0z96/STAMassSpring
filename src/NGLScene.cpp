@@ -149,90 +149,12 @@ void NGLScene::paintGL()
 	// m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 	loadMatricesToShader();
 
-	m_jelloCube->draw();
+	m_jelloCube->drawMasses();
 
-	/*
-	auto massPoints = m_jelloCube->getMassPoints();
+	shader->use("springShader");
+	loadMatricesToShader();
 
-	if (m_drawMassPoints)
-	{
-		for(auto point : massPoints)
-		{
-			m_transform.setPosition(*point);
-			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
-			loadMatricesToShader();
-			prim->draw("cube");
-		}
-	}
-
-	(*shader)[ngl::nglColourShader]->use();
-
-	if (m_drawStructuralSprings)
-	{
-		std::vector<Spring> & springsRef = *(m_jelloCube->getStructuralSprings());
-		for (size_t i = 0; i < springsRef.size(); ++i)
-		{
-			ngl::Vec3 start = *(springsRef[i].getStartPoint());
-			ngl::Vec3 diff = (*(springsRef[i].getEndPoint()) - start);
-			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
-			int count = 20;
-			int buffer = count / 5;
-			//set colour to highlight stress
-			float stretchFactor = diff.length() - springsRef[i].getRestingLength();
-			shader->setUniform("Colour", 10.0 * abs(stretchFactor), 0.0f, 0.0f, 1.0f);
-			for (int j = buffer; j < (count - buffer); ++j)
-			{
-				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
-				loadMatricesToShader();
-				prim->draw("sphere");
-			}
-		}
-	}
-
-	if (m_drawBendSprings)
-	{
-		std::vector<Spring> & springsRef = *(m_jelloCube->getBendSprings());
-		for (size_t i = 0; i < springsRef.size(); ++i)
-		{
-			ngl::Vec3 start = *(springsRef[i].getStartPoint());
-			ngl::Vec3 diff = (*(springsRef[i].getEndPoint()) - start);
-			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
-			int count = 20;
-			int buffer = count / 5;
-			//set colour to highlight stress
-			float stretchFactor = diff.length() - springsRef[i].getRestingLength();
-			shader->setUniform("Colour", 10.0 * abs(stretchFactor), 0.0f, 0.0f, 1.0f);
-			for (int j = buffer; j < (count - buffer); ++j)
-			{
-				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
-				loadMatricesToShader();
-				prim->draw("sphere");
-			}
-		}
-	}
-
-	if (m_drawShearSprings)
-	{
-		std::vector<Spring> & springsRef = *(m_jelloCube->getShearSprings());
-		for (size_t i = 0; i < springsRef.size(); ++i)
-		{
-			ngl::Vec3 start = *(springsRef[i].getStartPoint());
-			ngl::Vec3 diff = (*(springsRef[i].getEndPoint()) - start);
-			m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
-			int count = 20;
-			int buffer = count / 5;
-			//set colour to highlight stress
-			float stretchFactor = diff.length() - springsRef[i].getRestingLength();
-			shader->setUniform("Colour", 10.0 * abs(stretchFactor), 0.0f, 0.0f, 1.0f);
-			for (int j = buffer; j < (count - buffer); ++j)
-			{
-				m_transform.setPosition(start + ((float(j)/float(count)) * diff));
-				loadMatricesToShader();
-				prim->draw("sphere");
-			}
-		}
-	}
-	*/
+	m_jelloCube->drawSprings();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

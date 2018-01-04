@@ -25,6 +25,7 @@ void _check_gl_error(int _line)
 		err=glGetError();
 	}
 }
+
 //----------------------------------------------------------------------------------------------------------------------
 
 void JelloCube::gen1DTexture(unsigned int &texId, unsigned int size, GLenum internalFormat, GLenum format, GLenum type, const GLvoid* data)
@@ -63,7 +64,7 @@ void JelloCube::genAtomicCounter(unsigned int &buffer)
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void JelloCube::draw()
+void JelloCube::drawMasses()
 {
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
@@ -85,4 +86,29 @@ void JelloCube::draw()
 		prim->draw("cube");
 	}
 	// std::cout<<"hello!!!!!!\n";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void JelloCube::drawSprings()
+{
+	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
+	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
+
+	glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
+	glBindImageTexture(0, m_springsStartIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
+	glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
+	glBindImageTexture(1, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
+
+	glBindVertexArray(m_emptyVAO);
+
+	// glEnable(GL_LINE_SMOOTH);
+	glLineWidth(2.5);
+	glDrawArrays(GL_LINES, 0, m_springCount * 2);
+
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_1D, 0);
 }
