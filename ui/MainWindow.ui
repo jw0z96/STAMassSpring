@@ -63,26 +63,32 @@
          <string>Controls</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
+         <item row="6" column="0">
+          <widget class="QPushButton" name="resetJelloPushButton">
+           <property name="text">
+            <string>Reset</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" rowspan="2">
           <layout class="QFormLayout" name="formLayout">
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="springConstantSpinBox">
-             <property name="value">
-              <double>5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="dampingConstantSpinBox">
-             <property name="value">
-              <double>2.000000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="springConstantLabel">
              <property name="text">
               <string>Spring</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="springConstantSpinBox">
+             <property name="decimals">
+              <number>3</number>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -93,14 +99,40 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="dampingConstantSpinBox">
+             <property name="decimals">
+              <number>3</number>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="timeStepSpinBox">
+             <property name="decimals">
+              <number>3</number>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="timeStepLabel">
+             <property name="text">
+              <string>Timestep</string>
+             </property>
+            </widget>
+           </item>
           </layout>
-         </item>
-         <item row="6" column="0">
-          <widget class="QPushButton" name="resetJelloPushButton">
-           <property name="text">
-            <string>Reset</string>
-           </property>
-          </widget>
          </item>
         </layout>
        </widget>
@@ -144,7 +176,7 @@
      <x>0</x>
      <y>0</y>
      <width>1135</width>
-     <height>23</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

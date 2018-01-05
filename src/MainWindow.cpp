@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(m_ui->springConstantSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setK(double)));
 	connect(m_ui->dampingConstantSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setDamping(double)));
+	connect(m_ui->timeStepSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setTimeStep(double)));
 	connect(m_ui->resetJelloPushButton, SIGNAL(released()), m_jelloCube, SLOT(reset()));
 }
 

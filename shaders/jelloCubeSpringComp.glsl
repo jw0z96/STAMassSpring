@@ -3,11 +3,11 @@
 layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 layout (binding = 0, rgba32f) uniform image1D u_massPointsPositionTex;
-layout (binding = 1, r16f) uniform readonly image1D u_springsRestingLengthTex;
+layout (binding = 1, r32f) uniform readonly image1D u_springsRestingLengthTex;
 layout (binding = 2, rgba32f) uniform image1D u_springsStatePositionTex;
 layout (binding = 3, rgba32f) uniform image1D u_springsStateVelocityTex;
-layout (binding = 4, r16ui) coherent uniform uimage1D u_springsStartIndexTex;
-layout (binding = 5, r16ui) coherent uniform uimage1D u_springsEndIndexTex;
+layout (binding = 4, r16ui) coherent uniform readonly uimage1D u_springsStartIndexTex;
+layout (binding = 5, r16ui) coherent uniform readonly uimage1D u_springsEndIndexTex;
 
 uniform float u_currentTime;
 uniform float u_timeStep;
@@ -98,15 +98,11 @@ void main()
 			uint endIndex = imageLoad(u_springsEndIndexTex, int(i)).x;
 			vec3 stateVelocity = imageLoad(u_springsStateVelocityTex, int(i)).xyz;
 
-			vec3 diff = 0.001 * vec3(0.0, 1.0, 0.0);
-
 			vec3 startPos = imageLoad(u_massPointsPositionTex, int(startIndex)).xyz;
 			imageStore(u_massPointsPositionTex, int(startIndex), vec4(startPos - stateVelocity, 1.0));
-			// imageStore(u_mas/sPointsPositionTex, int(startIndex), vec4(startPos - diff, 1.0));
 
 			vec3 endPos = imageLoad(u_massPointsPositionTex, int(endIndex)).xyz;
 			imageStore(u_massPointsPositionTex, int(endIndex), vec4(endPos + stateVelocity, 1.0));
-			// imageStore(u_massPointsPositionTex, int(endIndex), vec4(endPos + diff, 1.0));
 		}
 	}
 }

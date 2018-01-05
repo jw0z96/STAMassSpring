@@ -82,6 +82,11 @@ void JelloCube::setDamping(double _damping)
 	m_damping = _damping;
 }
 
+void JelloCube::setTimeStep(double _t)
+{
+	m_timestep = _t;
+}
+
 void JelloCube::generate()
 {
 	// get singleton instances
@@ -133,9 +138,9 @@ void JelloCube::generate()
 	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
 	// generate textures to store spring info
 	// spring resting length
-	gen1DTexture(m_springsRestingLengthTex, m_springCount, GL_R16F, GL_RED, GL_FLOAT, NULL);
+	gen1DTexture(m_springsRestingLengthTex, m_springCount, GL_R32F, GL_RED, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
-	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R16F);
+	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32F);
 	// spring state position
 	gen1DTexture(m_springsStatePositionTex, m_springCount, GL_RGBA32F, GL_RGBA, GL_FLOAT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsStatePositionTex);
@@ -260,7 +265,7 @@ void JelloCube::update()
 	glBindImageTexture(0, m_massPointsPositionTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 	// spring resting length
 	glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
-	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16F);
+	glBindImageTexture(1, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32F);
 	// spring state position
 	glBindTexture(GL_TEXTURE_1D, m_springsStatePositionTex);
 	glBindImageTexture(2, m_springsStatePositionTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
@@ -269,9 +274,9 @@ void JelloCube::update()
 	glBindImageTexture(3, m_springsStateVelocityTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 	// spring start and end indices
 	glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
-	glBindImageTexture(4, m_springsStartIndexTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R16UI);
+	glBindImageTexture(4, m_springsStartIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
 	glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
-	glBindImageTexture(5, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R16UI);
+	glBindImageTexture(5, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
 
 	shader->setUniform("u_springCount", GLint(m_springCount));
 	shader->setUniform("u_writeMode", false);
