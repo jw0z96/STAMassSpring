@@ -252,6 +252,8 @@ void JelloCube::update()
 
 	shader->setUniform("u_currentTime", m_t);
 	shader->setUniform("u_timeStep", m_timestep);
+	shader->setUniform("u_k", m_k);
+	shader->setUniform("u_damping", m_damping);
 
 	// mass point positions
 	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);

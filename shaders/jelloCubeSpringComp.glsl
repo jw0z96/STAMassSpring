@@ -12,8 +12,8 @@ layout (binding = 5, r16ui) coherent uniform uimage1D u_springsEndIndexTex;
 uniform float u_currentTime;
 uniform float u_timeStep;
 
-const float m_k = 1.0;
-const float m_damping = 2.0;
+uniform float u_k;
+uniform float u_damping;
 
 uniform bool u_writeMode;
 uniform int u_springCount;
@@ -34,7 +34,7 @@ vec3 motionFunction(State _state, float _t)
 	vec3 distance = endPos - startPos;
 	float length = length(distance);
 	float restingLength = imageLoad(u_springsRestingLengthTex, int(computeIndex)).x;
-	return -m_k*(length-restingLength)*(distance/length)-m_damping*_state.velocity;
+	return -u_k*(length-restingLength)*(distance/length)-u_damping*_state.velocity;
 }
 
 State evaluate(State _state, float _t)
@@ -98,11 +98,15 @@ void main()
 			uint endIndex = imageLoad(u_springsEndIndexTex, int(i)).x;
 			vec3 stateVelocity = imageLoad(u_springsStateVelocityTex, int(i)).xyz;
 
+			vec3 diff = 0.001 * vec3(0.0, 1.0, 0.0);
+
 			vec3 startPos = imageLoad(u_massPointsPositionTex, int(startIndex)).xyz;
 			imageStore(u_massPointsPositionTex, int(startIndex), vec4(startPos - stateVelocity, 1.0));
+			// imageStore(u_mas/sPointsPositionTex, int(startIndex), vec4(startPos - diff, 1.0));
 
 			vec3 endPos = imageLoad(u_massPointsPositionTex, int(endIndex)).xyz;
 			imageStore(u_massPointsPositionTex, int(endIndex), vec4(endPos + stateVelocity, 1.0));
+			// imageStore(u_massPointsPositionTex, int(endIndex), vec4(endPos + diff, 1.0));
 		}
 	}
 }

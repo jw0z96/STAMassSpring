@@ -76,25 +76,25 @@ void main()
 	if ((writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i, j, k+1)
 		addSpring(writePos, writePos + ivec3(0, 0, 1));
 
-	// create / count bend springs
-	if ((writePos.x + 2) < u_sizeX) // connect (i,j,k) to (i+2, j, k)
-		addSpring(writePos, writePos + ivec3(2, 0, 0));
-	if ((writePos.y + 2) < u_sizeY) // connect (i,j,k) to (i, j+2, k)
-		addSpring(writePos, writePos + ivec3(0, 2, 0));
-	if ((writePos.z + 2) < u_sizeZ) // connect (i,j,k) to (i, j, k+2)
-		addSpring(writePos, writePos + ivec3(0, 0, 2));
+	// // create / count bend springs
+	// if ((writePos.x + 2) < u_sizeX) // connect (i,j,k) to (i+2, j, k)
+	// 	addSpring(writePos, writePos + ivec3(2, 0, 0));
+	// if ((writePos.y + 2) < u_sizeY) // connect (i,j,k) to (i, j+2, k)
+	// 	addSpring(writePos, writePos + ivec3(0, 2, 0));
+	// if ((writePos.z + 2) < u_sizeZ) // connect (i,j,k) to (i, j, k+2)
+	// 	addSpring(writePos, writePos + ivec3(0, 0, 2));
 
-	// create / count shear springs
-	if ((writePos.x + 1) < u_sizeX && (writePos.y + 1) < u_sizeY) // connect (i,j,k) to (i+1,j+1,k)
-		addSpring(writePos, writePos + ivec3(1, 1, 0));
-	if ((writePos.x + 1) < u_sizeX && (writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i+1,j,k+1)
-		addSpring(writePos, writePos + ivec3(1, 0, 1));
-	if ((writePos.x + 1) < u_sizeX && writePos.z > 0) // connect (i,j,k) to (i+1,j,k-1)
-		addSpring(writePos, writePos + ivec3(1, 0, -1));
-	if ((writePos.x + 1) < u_sizeX && writePos.y > 0) // connect (i,j,k) to (i+1,j-1,k)
-		addSpring(writePos, writePos + ivec3(1, -1, 0));
-	if ((writePos.y + 1) < u_sizeY && (writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i,j+1,k+1)
-		addSpring(writePos, writePos + ivec3(0, 1, 1));
-	if ((writePos.y + 1) < u_sizeY && writePos.z > 0) // connect (i,j,k) to (i,j+1,k-1)
-		addSpring(writePos, writePos + ivec3(0, 1, -1));
+	// // create / count shear springs
+	// if ((writePos.x + 1) < u_sizeX && (writePos.y + 1) < u_sizeY) // connect (i,j,k) to (i+1,j+1,k)
+	// 	addSpring(writePos, writePos + ivec3(1, 1, 0));
+	// if ((writePos.x + 1) < u_sizeX && (writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i+1,j,k+1)
+	// 	addSpring(writePos, writePos + ivec3(1, 0, 1));
+	// if ((writePos.x + 1) < u_sizeX && writePos.z > 0) // connect (i,j,k) to (i+1,j,k-1)
+	// 	addSpring(writePos, writePos + ivec3(1, 0, -1));
+	// if ((writePos.x + 1) < u_sizeX && writePos.y > 0) // connect (i,j,k) to (i+1,j-1,k)
+	// 	addSpring(writePos, writePos + ivec3(1, -1, 0));
+	// if ((writePos.y + 1) < u_sizeY && (writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i,j+1,k+1)
+	// 	addSpring(writePos, writePos + ivec3(0, 1, 1));
+	// if ((writePos.y + 1) < u_sizeY && writePos.z > 0) // connect (i,j,k) to (i,j+1,k-1)
+	// 	addSpring(writePos, writePos + ivec3(0, 1, -1));
 }
