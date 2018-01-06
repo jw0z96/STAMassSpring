@@ -58,7 +58,7 @@ void NGLScene::initializeGL()
 	shader->setUniform("massPointsPositionTex", 0);
 
 	// Grey Background
-	glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	// enable depth testing for drawing
 	glEnable(GL_DEPTH_TEST);
 	// enable multisampling for smoother drawing
@@ -114,12 +114,12 @@ void NGLScene::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glViewport(0,0,m_win.width,m_win.height);
 
-	shader->use("testShader");
 
 	float currentFrame = m_timer.elapsed()*0.001f;
-	// std::cout<<"Current Frame "<<currentFrame<<'\n';
+	std::cout<<"FPS: "<<1.0f / m_deltaTime<<'\n';
 	m_deltaTime = currentFrame - m_lastFrame;
 	m_lastFrame = currentFrame;
+
 	/// first we reset the movement values
 	float xDirection=0.0;
 	float yDirection=0.0;
@@ -147,9 +147,13 @@ void NGLScene::paintGL()
 
 	m_transform.reset();
 	// m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
-	loadMatricesToShader();
 
-	m_jelloCube->drawMasses();
+	if (m_drawMassPoints)
+	{
+		shader->use("testShader");
+		loadMatricesToShader();
+		m_jelloCube->drawMasses();
+	}
 
 	shader->use("springShader");
 	loadMatricesToShader();

@@ -99,6 +99,8 @@ void JelloCube::drawSprings()
 	glBindImageTexture(0, m_springsStartIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
 	glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
 	glBindImageTexture(1, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
+	glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
+	glBindImageTexture(2, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32F);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
