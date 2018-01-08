@@ -71,24 +71,15 @@ void JelloCube::drawMasses()
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
 
-	// glActiveTexture(GL_TEXTURE0);
-	// glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
-	// glActiveTexture(GL_TEXTURE1);
-	// glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
-	// glActiveTexture(GL_TEXTURE2);
-	// glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
-
 	shader->setUniform("u_sizeX", GLint(m_sizeX));
 	shader->setUniform("u_sizeY", GLint(m_sizeY));
 	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
 
-	// for (int i = 0; i < (m_sizeX * m_sizeY * m_sizeZ); ++i)
 	for (int i = 0; i < (m_sizeX * m_sizeY * m_sizeZ); ++i)
 	{
 		shader->setUniform("u_index", GLint(i));
 		prim->draw("cube");
 	}
-	// std::cout<<"hello!!!!!!\n";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -97,16 +88,6 @@ void JelloCube::drawSprings()
 {
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
-
-	// glBindTexture(GL_TEXTURE_1D, m_springsStartIndexTex);
-	// glBindImageTexture(0, m_springsStartIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
-	// glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
-	// glBindImageTexture(1, m_springsEndIndexTex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16UI);
-	// glBindTexture(GL_TEXTURE_1D, m_springsRestingLengthTex);
-	// glBindImageTexture(2, m_springsRestingLengthTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32F);
-
-	// glActiveTexture(GL_TEXTURE0);
-	// glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);

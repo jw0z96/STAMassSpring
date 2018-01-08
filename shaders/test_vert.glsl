@@ -7,6 +7,7 @@ layout (location = 2) in vec3 inNormal;
 /// @brief the in uv
 layout (location = 1) in vec2 inUV;
 
+// TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
 struct State
 {
 	vec4 position;
@@ -28,8 +29,6 @@ uniform mat4 M;
 
 uniform int u_index;
 uniform float u_time;
-// uniform sampler1D massPointsPositionTex;
-
 
 void main()
 {

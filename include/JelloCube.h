@@ -42,16 +42,6 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------
 	void update();
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief get our mass points (for drawing)
-	//----------------------------------------------------------------------------------------------------------------------
-	// inline std::vector<std::shared_ptr<ngl::Vec3>> getMassPoints(){return m_massPoints;};
-	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief get our springs (for drawing)
-	//----------------------------------------------------------------------------------------------------------------------
-	// inline std::vector<Spring>* getStructuralSprings(){return &m_structuralSprings;};
-	// inline std::vector<Spring>* getBendSprings(){return &m_bendSprings;};
-	// inline std::vector<Spring>* getShearSprings(){return &m_shearSprings;};
-	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief helper function for generating 1D textures
 	//----------------------------------------------------------------------------------------------------------------------
 	void gen1DTexture(unsigned int &texId, unsigned int size, GLenum internalFormat, GLenum format, GLenum type, const GLvoid* data);
@@ -82,7 +72,7 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------
 	void setTimeStep(double _t);
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief draw the jello cube
+	/// @brief draw the jello cube or masses individually
 	//----------------------------------------------------------------------------------------------------------------------
 	void drawMasses();
 	void drawSprings();
@@ -93,24 +83,17 @@ private:
 	//----------------------------------------------------------------------------------------------------------------------
 	void generate();
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief array of points that make up our jello cube
+	/// @brief the number of springs currently in our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
-	// std::vector<std::shared_ptr<ngl::Vec3>> m_massPoints;
-	// GLuint m_massPointsPositionTex;
+	unsigned int m_springCount;
+	//----------------------------------------------------------------------------------------------------------------------
+	/// @brief array of masses that make up our jello cube
+	//----------------------------------------------------------------------------------------------------------------------
+	GLuint m_massBufferId;
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief array of springs that connect our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
-	unsigned int m_springCount;
-	GLuint m_massBufferId;
 	GLuint m_springBufferId;
-	// GLuint m_springsRestingLengthTex;
-	// GLuint m_springsStatePositionTex;
-	// GLuint m_springsStateVelocityTex;
-	// GLuint m_springsStartIndexTex;
-	// GLuint m_springsEndIndexTex;
-	// std::vector<Spring> m_structuralSprings;
-	// std::vector<Spring> m_bendSprings;
-	// std::vector<Spring> m_shearSprings;
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief the time step used for update default 0.1
 	//----------------------------------------------------------------------------------------------------------------------
