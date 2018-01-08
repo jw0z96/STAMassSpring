@@ -12,9 +12,9 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	std::cout<<"creating jello cube!\n";
 	m_timestep = 0.1;
 	m_t = 0.0;
-	m_sizeX = 10;
-	m_sizeY = 10;
-	m_sizeZ = 10;
+	m_sizeX = 20;
+	m_sizeY = 20;
+	m_sizeZ = 20;
 }
 
 JelloCube::~JelloCube()
@@ -28,6 +28,8 @@ JelloCube::~JelloCube()
 void JelloCube::initializeShaders()
 {
 	ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+
+	glEnable(GL_NV_shader_atomic_float);
 
 	// create the compute shader program for initializing the textures (setting up springs & mass positions)
 	shader->createShaderProgram("jelloCubeInitPass");
@@ -188,6 +190,7 @@ void JelloCube::update()
 	shader->setUniform("u_writeMode", false);
 
 	// dispatch compute shader to integrate springs
+	// glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
 	glDispatchCompute(m_springCount, 1, 1);
 
 
@@ -196,8 +199,9 @@ void JelloCube::update()
 
 	// dispatch compute shader to update springs
 	shader->setUniform("u_writeMode", true);
-	glDispatchCompute(1, 1, 1);
-	// glDispatchCompute(m_springCount, 1, 1);
+	// glDispatchCompute(1, 1, 1);
+	// glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
+	glDispatchCompute(m_springCount, 1, 1);
 
 	// update the timestep for the next time
 	m_t += m_timestep;

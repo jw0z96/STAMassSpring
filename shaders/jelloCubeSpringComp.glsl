@@ -1,5 +1,7 @@
 #version 430
 
+#extension GL_NV_shader_atomic_float : enable
+
 layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
@@ -95,12 +97,15 @@ void main()
 	}
 	else
 	{
-		for (uint i = 0; i < u_springCount; ++i)
-		{
-			uint startIndex = springs[i].start;
-			uint endIndex = springs[i].end;
-			masses[startIndex].position.xyz -= springs[i].state.velocity.xyz;
-			masses[endIndex].position.xyz += springs[i].state.velocity.xyz;
-		}
+		uint startIndex = springs[computeIndex].start;
+		uint endIndex = springs[computeIndex].end;
+
+		atomicAdd(masses[startIndex].position.x, -springs[computeIndex].state.velocity.x);
+		atomicAdd(masses[startIndex].position.y, -springs[computeIndex].state.velocity.y);
+		atomicAdd(masses[startIndex].position.z, -springs[computeIndex].state.velocity.z);
+
+		atomicAdd(masses[endIndex].position.x, springs[computeIndex].state.velocity.x);
+		atomicAdd(masses[endIndex].position.y, springs[computeIndex].state.velocity.y);
+		atomicAdd(masses[endIndex].position.z, springs[computeIndex].state.velocity.z);
 	}
 }
