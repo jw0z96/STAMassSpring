@@ -2,7 +2,7 @@
 
 #extension GL_NV_shader_atomic_float : enable
 
-layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
 struct State
@@ -89,6 +89,9 @@ State integrate(State _currentState)
 void main()
 {
 	uint computeIndex = gl_GlobalInvocationID.x;
+
+	if (computeIndex >= u_springCount)
+		return;
 
 	if (!u_writeMode)
 	{

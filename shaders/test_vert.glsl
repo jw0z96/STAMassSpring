@@ -28,7 +28,6 @@ uniform mat3 normalMatrix;
 uniform mat4 M;
 
 uniform int u_index;
-uniform float u_time;
 
 void main()
 {
