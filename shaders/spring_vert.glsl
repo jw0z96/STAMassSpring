@@ -2,11 +2,29 @@
 
 uniform mat4 MVP;
 
-uniform sampler1D massPointsPositionTex;
+struct State
+{
+	vec4 position;
+	vec4 velocity;
+};
 
-layout (binding = 0, r16ui) coherent uniform readonly uimage1D u_springsStartIndexTex;
-layout (binding = 1, r16ui) coherent uniform readonly uimage1D u_springsEndIndexTex;
-layout (binding = 2, r32f) uniform readonly image1D u_springsRestingLengthTex;
+struct Spring
+{
+	State state;
+	uint start;
+	uint end;
+	float restingLength;
+};
+
+layout (std430, binding = 0) buffer massPointsBuffer
+{
+	State masses[];
+};
+
+layout (std430, binding = 1) buffer springsBuffer
+{
+	Spring springs[];
+};
 
 out float strain;
 
@@ -14,11 +32,16 @@ void main()
 {
 	int springId = int(floor((gl_VertexID / 2.0)));
 
-	uint startIndex = imageLoad(u_springsStartIndexTex, springId).x;
-	vec3 startPos = texelFetch(massPointsPositionTex, int(startIndex), 0).xyz;
-	uint endIndex = imageLoad(u_springsEndIndexTex, springId).x;
-	vec3 endPos = texelFetch(massPointsPositionTex, int(endIndex), 0).xyz;
-	float restingLength = imageLoad(u_springsRestingLengthTex, springId).x;
+	// uint startIndex = imageLoad(u_springsStartIndexTex, springId).x;
+	uint startIndex = springs[springId].start;
+	// vec3 startPos = texelFetch(massPointsPositionTex, int(startIndex), 0).xyz;
+	vec3 startPos = masses[startIndex].position.xyz;
+	// uint endIndex = imageLoad(u_springsEndIndexTex, springId).x;
+	uint endIndex = springs[springId].end;
+	// vec3 endPos = texelFetch(massPointsPositionTex, int(endIndex), 0).xyz;
+	vec3 endPos = masses[endIndex].position.xyz;
+	// float restingLength = imageLoad(u_springsRestingLengthTex, springId).x;
+	float restingLength = springs[springId].restingLength;
 
 	strain = distance(startPos, endPos) - restingLength;
 

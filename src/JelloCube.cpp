@@ -12,9 +12,9 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	std::cout<<"creating jello cube!\n";
 	m_timestep = 0.1;
 	m_t = 0.0;
-	m_sizeX = 5;
-	m_sizeY = 5;
-	m_sizeZ = 5;
+	m_sizeX = 10;
+	m_sizeY = 10;
+	m_sizeZ = 10;
 	// generate();
 	// initializeShaders();
 }
@@ -89,6 +89,10 @@ void JelloCube::setTimeStep(double _t)
 
 void JelloCube::generate()
 {
+	// std::cout<<"size of GLfloat: "<<sizeof(GLfloat)<<"\n";
+	// std::cout<<"size of GLuint: "<<sizeof(GLuint)<<"\n";
+
+
 	// get singleton instances
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
 	shader->use("jelloCubeInitPass");
@@ -123,15 +127,15 @@ void JelloCube::generate()
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_massBufferId);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, numMasses * sizeof(SSBO_State), &massPointsArray[0].m_position.m_x, GL_DYNAMIC_COPY);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
-	// glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
 
 	// set to only count the number of springs
 	shader->setUniform("u_springWrite", false);
 	// dispatch compute shader
 	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+	// glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
+	// glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
 
 	// read the atomic counter value
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, springCounter);
@@ -147,6 +151,15 @@ void JelloCube::generate()
 	memset(count, 0, sizeof(GLuint));
 	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+
+	std::vector<SSBO_Spring> springsArray(m_springCount);
+
+	glGenBuffers(1, &m_springBufferId);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_springBufferId);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, m_springCount * sizeof(SSBO_Spring), &springsArray[0].m_start, GL_DYNAMIC_COPY);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
+
 	/*
 	// bind the atomic counter
 	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
@@ -170,7 +183,7 @@ void JelloCube::generate()
 	gen1DTexture(m_springsEndIndexTex, m_springCount, GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
 	glBindTexture(GL_TEXTURE_1D, m_springsEndIndexTex);
 	glBindImageTexture(5, m_springsEndIndexTex, 0, GL_TRUE, 0, GL_READ_WRITE, GL_R16UI);
-
+	*/
 	// set to write the contents of springs
 	shader->setUniform("u_springWrite", true);
 
@@ -178,7 +191,7 @@ void JelloCube::generate()
 	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
 
 	// unbind textures
-	glBindTexture(GL_TEXTURE_1D, 0);
+	// glBindTexture(GL_TEXTURE_1D, 0);
 
 	// read the atomic counter value
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, springCounter);
@@ -274,6 +287,9 @@ void JelloCube::update()
 	shader->setUniform("u_k", m_k);
 	shader->setUniform("u_damping", m_damping);
 
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
+
 	// // mass point positions
 	// glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
 	// glBindImageTexture(0, m_massPointsPositionTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
@@ -298,14 +314,19 @@ void JelloCube::update()
 	// dispatch compute shader to integrate springs
 	glDispatchCompute(m_springCount, 1, 1);
 
+
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
+
 	// dispatch compute shader to update springs
 	shader->setUniform("u_writeMode", true);
 	glDispatchCompute(1, 1, 1);
+	// glDispatchCompute(m_springCount, 1, 1);
 
 	// update the timestep for the next time
 	m_t += m_timestep;
 
-	glBindTexture(GL_TEXTURE_1D, 0);
+	// glBindTexture(GL_TEXTURE_1D, 0);
 
 /*	// for (size_t i = 0; i < m_massPoints.size(); ++i)
 	// {

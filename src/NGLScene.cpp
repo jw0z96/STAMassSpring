@@ -151,14 +151,15 @@ void NGLScene::paintGL()
 	if (m_drawMassPoints)
 	{
 		shader->use("testShader");
+		shader->setUniform("u_time", currentFrame);
 		loadMatricesToShader();
 		m_jelloCube->drawMasses();
 	}
 
-	// shader->use("springShader");
-	// loadMatricesToShader();
+	shader->use("springShader");
+	loadMatricesToShader();
 
-	// m_jelloCube->drawSprings();
+	m_jelloCube->drawSprings();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -197,7 +198,7 @@ void NGLScene::keyReleaseEvent( QKeyEvent *_event	)
 
 void NGLScene::timerEvent( QTimerEvent *)
 {
-	// m_jelloCube->update();
+	m_jelloCube->update();
 	update();
 }
 

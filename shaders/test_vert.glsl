@@ -9,8 +9,8 @@ layout (location = 1) in vec2 inUV;
 
 struct State
 {
-	vec3 position;
-	vec3 velocity;
+	vec4 position;
+	vec4 velocity;
 };
 
 layout (std430, binding = 0) buffer massBuffer
@@ -27,7 +27,7 @@ uniform mat3 normalMatrix;
 uniform mat4 M;
 
 uniform int u_index;
-
+uniform float u_time;
 // uniform sampler1D massPointsPositionTex;
 
 
@@ -36,8 +36,7 @@ void main()
 	TexCoords = inUV;
 
 	// access texture to get position of mass point
-	// vec3 massPos = texelFetch(massPointsPositionTex, u_index, 0).xyz;
-	vec3 massPos = masses[u_index].position;
+	vec3 massPos = masses[u_index].position.xyz;
 
 	// add the position to our vert position (and scale the cube down a bit...)
 	float cubeScale = 0.1;

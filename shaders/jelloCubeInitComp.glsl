@@ -6,13 +6,26 @@ layout (binding = 0, offset = 0) uniform atomic_uint springCount;
 
 struct State
 {
-	vec3 position;
-	vec3 velocity;
+	vec4 position;
+	vec4 velocity;
+};
+
+struct Spring
+{
+	State state;
+	uint start;
+	uint end;
+	float restingLength;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer
 {
 	State masses[];
+};
+
+layout (std430, binding = 1) buffer springsBuffer
+{
+	Spring springs[];
 };
 
 // layout (binding = 0, rgba32f) uniform image1D u_massPointsPositionTex;
@@ -50,25 +63,32 @@ void addSpring(ivec3 _start, ivec3 _end)
 		int endIndex = getIndex(_end);
 
 		// vec3 startPos = imageLoad(u_massPointsPositionTex, startIndex).xyz;
+		vec3 startPos = masses[startIndex].position.xyz;
 		// vec3 endPos = imageLoad(u_massPointsPositionTex, endIndex).xyz;
-		// vec3 diff = endPos - startPos;
-		// float initialBounce = 2.0;
-		// float restingLength = initialBounce * length(diff);
+		vec3 endPos = masses[endIndex].position.xyz;
+		vec3 diff = endPos - startPos;
+		float initialBounce = 2.0;
+		float restingLength = initialBounce * length(diff);
 
 		// imageStore(u_springsRestingLengthTex, int(springIndex), vec4(restingLength));
+		springs[springIndex].restingLength = restingLength;
 		// imageStore(u_springsStatePositionTex, int(springIndex), vec4(diff, 0.0));
+		springs[springIndex].state.position = vec4(diff, 0.0);
 		// imageStore(u_springsStateVelocityTex, int(springIndex), vec4(0.0));
+		springs[springIndex].state.position = vec4(0.0);
 		// imageStore(u_springsStartIndexTex, int(springIndex), uvec4(startIndex, 0, 0, 0));
+		springs[springIndex].start = startIndex;
 		// imageStore(u_springsEndIndexTex, int(springIndex), uvec4(endIndex, 0, 0, 0));
+		springs[springIndex].end = endIndex;
 	}
 }
 
 void main()
 {
-	if (gl_GlobalInvocationID.x >= u_sizeX ||
-		gl_GlobalInvocationID.y >= u_sizeY ||
-		gl_GlobalInvocationID.z >= u_sizeZ)
-		return;
+	// if (gl_GlobalInvocationID.x >= u_sizeX ||
+	// 	gl_GlobalInvocationID.y >= u_sizeY ||
+	// 	gl_GlobalInvocationID.z >= u_sizeZ)
+	// 	return;
 
 	ivec3 writePos = ivec3(gl_GlobalInvocationID);
 	int currentIndex = getIndex(writePos);
@@ -77,8 +97,7 @@ void main()
 	{
 		// store the initial position of the current mass
 		vec3 pos = writePos * u_step + u_bottomLeft;
-		masses[currentIndex].position = pos;
-		// imageStore(u_massPointsPositionTex, currentIndex, vec4(pos, 1.0));
+		masses[currentIndex].position.xyz = pos;
 	}
 
 	// create / count structural springs

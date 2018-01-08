@@ -82,6 +82,7 @@ void JelloCube::drawMasses()
 	shader->setUniform("u_sizeY", GLint(m_sizeY));
 	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
 
+	// for (int i = 0; i < (m_sizeX * m_sizeY * m_sizeZ); ++i)
 	for (int i = 0; i < (m_sizeX * m_sizeY * m_sizeZ); ++i)
 	{
 		shader->setUniform("u_index", GLint(i));
@@ -106,6 +107,9 @@ void JelloCube::drawSprings()
 
 	// glActiveTexture(GL_TEXTURE0);
 	// glBindTexture(GL_TEXTURE_1D, m_massPointsPositionTex);
+
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
 
 	glBindVertexArray(m_emptyVAO);
 

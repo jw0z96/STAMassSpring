@@ -2,7 +2,7 @@
 #define JELLOCUBE_H
 
 #include <QObject>
-#include <ngl/Vec3.h>
+#include <ngl/Vec4.h>
 #include <vector>
 #include <memory>
 
@@ -12,16 +12,16 @@
 
 struct SSBO_State
 {
-	ngl::Vec3 m_position;
-	ngl::Vec3 m_velocity;
+	ngl::Vec4 m_position;
+	ngl::Vec4 m_velocity;
 };
 
 struct SSBO_Spring
 {
-	unsigned int m_start;
-	unsigned int m_end;
-	float m_restingLength;
 	SSBO_State m_state;
+	GLuint m_start; float pad0[3];
+	GLuint m_end; float pad1[3];
+	GLfloat m_restingLength; float pad2[3];
 };
 
 class JelloCube : public QObject
