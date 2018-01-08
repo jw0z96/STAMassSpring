@@ -4,12 +4,23 @@ layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 layout (binding = 0, offset = 0) uniform atomic_uint springCount;
 
-layout (binding = 0, rgba32f) uniform image1D u_massPointsPositionTex;
-layout (binding = 1, r32f) uniform writeonly image1D u_springsRestingLengthTex;
-layout (binding = 2, rgba32f) uniform writeonly image1D u_springsStatePositionTex;
-layout (binding = 3, rgba32f) uniform writeonly image1D u_springsStateVelocityTex;
-layout (binding = 4, r16ui) uniform uimage1D u_springsStartIndexTex;
-layout (binding = 5, r16ui) uniform uimage1D u_springsEndIndexTex;
+struct State
+{
+	vec3 position;
+	vec3 velocity;
+};
+
+layout (std430, binding = 0) buffer massPointsBuffer
+{
+	State masses[];
+};
+
+// layout (binding = 0, rgba32f) uniform image1D u_massPointsPositionTex;
+// layout (binding = 1, r32f) uniform writeonly image1D u_springsRestingLengthTex;
+// layout (binding = 2, rgba32f) uniform writeonly image1D u_springsStatePositionTex;
+// layout (binding = 3, rgba32f) uniform writeonly image1D u_springsStateVelocityTex;
+// layout (binding = 4, r16ui) uniform uimage1D u_springsStartIndexTex;
+// layout (binding = 5, r16ui) uniform uimage1D u_springsEndIndexTex;
 
 uniform int u_sizeX;
 uniform int u_sizeY;
@@ -38,17 +49,17 @@ void addSpring(ivec3 _start, ivec3 _end)
 		int startIndex = getIndex(_start);
 		int endIndex = getIndex(_end);
 
-		vec3 startPos = imageLoad(u_massPointsPositionTex, startIndex).xyz;
-		vec3 endPos = imageLoad(u_massPointsPositionTex, endIndex).xyz;
-		vec3 diff = endPos - startPos;
-		float initialBounce = 2.0;
-		float restingLength = initialBounce * length(diff);
+		// vec3 startPos = imageLoad(u_massPointsPositionTex, startIndex).xyz;
+		// vec3 endPos = imageLoad(u_massPointsPositionTex, endIndex).xyz;
+		// vec3 diff = endPos - startPos;
+		// float initialBounce = 2.0;
+		// float restingLength = initialBounce * length(diff);
 
-		imageStore(u_springsRestingLengthTex, int(springIndex), vec4(restingLength));
-		imageStore(u_springsStatePositionTex, int(springIndex), vec4(diff, 0.0));
-		imageStore(u_springsStateVelocityTex, int(springIndex), vec4(0.0));
-		imageStore(u_springsStartIndexTex, int(springIndex), uvec4(startIndex, 0, 0, 0));
-		imageStore(u_springsEndIndexTex, int(springIndex), uvec4(endIndex, 0, 0, 0));
+		// imageStore(u_springsRestingLengthTex, int(springIndex), vec4(restingLength));
+		// imageStore(u_springsStatePositionTex, int(springIndex), vec4(diff, 0.0));
+		// imageStore(u_springsStateVelocityTex, int(springIndex), vec4(0.0));
+		// imageStore(u_springsStartIndexTex, int(springIndex), uvec4(startIndex, 0, 0, 0));
+		// imageStore(u_springsEndIndexTex, int(springIndex), uvec4(endIndex, 0, 0, 0));
 	}
 }
 
@@ -66,7 +77,8 @@ void main()
 	{
 		// store the initial position of the current mass
 		vec3 pos = writePos * u_step + u_bottomLeft;
-		imageStore(u_massPointsPositionTex, currentIndex, vec4(pos, 1.0));
+		masses[currentIndex].position = pos;
+		// imageStore(u_massPointsPositionTex, currentIndex, vec4(pos, 1.0));
 	}
 
 	// create / count structural springs

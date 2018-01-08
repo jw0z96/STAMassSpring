@@ -8,13 +8,27 @@
 
 #include <math.h>
 
-#include "Spring.h"
+// #include "Spring.h"
+
+struct SSBO_State
+{
+	ngl::Vec3 m_position;
+	ngl::Vec3 m_velocity;
+};
+
+struct SSBO_Spring
+{
+	unsigned int m_start;
+	unsigned int m_end;
+	float m_restingLength;
+	SSBO_State m_state;
+};
 
 class JelloCube : public QObject
 {
 	Q_OBJECT
 
-	public:
+public:
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief Constructor for GLWindow
 	//----------------------------------------------------------------------------------------------------------------------
@@ -73,7 +87,7 @@ class JelloCube : public QObject
 	void drawMasses();
 	void drawSprings();
 
-	private:
+private:
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief build our arrays
 	//----------------------------------------------------------------------------------------------------------------------
@@ -82,16 +96,18 @@ class JelloCube : public QObject
 	/// @brief array of points that make up our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
 	// std::vector<std::shared_ptr<ngl::Vec3>> m_massPoints;
-	GLuint m_massPointsPositionTex;
+	// GLuint m_massPointsPositionTex;
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief array of springs that connect our jello cube
 	//----------------------------------------------------------------------------------------------------------------------
 	unsigned int m_springCount;
-	GLuint m_springsRestingLengthTex;
-	GLuint m_springsStatePositionTex;
-	GLuint m_springsStateVelocityTex;
-	GLuint m_springsStartIndexTex;
-	GLuint m_springsEndIndexTex;
+	GLuint m_massBufferId;
+	GLuint m_springBufferId;
+	// GLuint m_springsRestingLengthTex;
+	// GLuint m_springsStatePositionTex;
+	// GLuint m_springsStateVelocityTex;
+	// GLuint m_springsStartIndexTex;
+	// GLuint m_springsEndIndexTex;
 	// std::vector<Spring> m_structuralSprings;
 	// std::vector<Spring> m_bendSprings;
 	// std::vector<Spring> m_shearSprings;
