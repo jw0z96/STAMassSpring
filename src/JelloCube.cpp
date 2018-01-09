@@ -11,6 +11,7 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 {
 	std::cout<<"creating jello cube!\n";
 	m_timestep = 0.1;
+	m_subSteps = 1;
 	m_t = 0.0;
 	m_sizeX = 5;
 	m_sizeY = 5;
