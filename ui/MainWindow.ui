@@ -132,6 +132,23 @@
              </property>
             </widget>
            </item>
+           <item row="3" column="1">
+            <widget class="QSpinBox" name="subStepsSpinBox">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="subStepsLabel">
+             <property name="text">
+              <string>Substeps</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
         </layout>
@@ -176,7 +193,7 @@
      <x>0</x>
      <y>0</y>
      <width>1135</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

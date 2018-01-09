@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.9.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -24,6 +24,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -52,6 +53,8 @@ public:
     QDoubleSpinBox *dampingConstantSpinBox;
     QDoubleSpinBox *timeStepSpinBox;
     QLabel *timeStepLabel;
+    QSpinBox *subStepsSpinBox;
+    QLabel *subStepsLabel;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
     QMenuBar *menubar;
@@ -146,6 +149,18 @@ public:
 
         formLayout->setWidget(2, QFormLayout::LabelRole, timeStepLabel);
 
+        subStepsSpinBox = new QSpinBox(physicsControlsGB);
+        subStepsSpinBox->setObjectName(QStringLiteral("subStepsSpinBox"));
+        subStepsSpinBox->setMinimum(1);
+        subStepsSpinBox->setMaximum(999);
+
+        formLayout->setWidget(3, QFormLayout::FieldRole, subStepsSpinBox);
+
+        subStepsLabel = new QLabel(physicsControlsGB);
+        subStepsLabel->setObjectName(QStringLiteral("subStepsLabel"));
+
+        formLayout->setWidget(3, QFormLayout::LabelRole, subStepsLabel);
+
 
         gridLayout_3->addLayout(formLayout, 0, 0, 2, 1);
 
@@ -166,7 +181,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1135, 19));
+        menubar->setGeometry(QRect(0, 0, 1135, 23));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -190,6 +205,7 @@ public:
         springConstantLabel->setText(QApplication::translate("MainWindow", "Spring", Q_NULLPTR));
         dampingConstantLabel->setText(QApplication::translate("MainWindow", "Damping", Q_NULLPTR));
         timeStepLabel->setText(QApplication::translate("MainWindow", "Timestep", Q_NULLPTR));
+        subStepsLabel->setText(QApplication::translate("MainWindow", "Substeps", Q_NULLPTR));
     } // retranslateUi
 
 };
