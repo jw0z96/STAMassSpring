@@ -12,9 +12,9 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	std::cout<<"creating jello cube!\n";
 	m_timestep = 0.1;
 	m_t = 0.0;
-	m_sizeX = 5;
-	m_sizeY = 5;
-	m_sizeZ = 5;
+	m_sizeX = 20;
+	m_sizeY = 20;
+	m_sizeZ = 20;
 }
 
 JelloCube::~JelloCube()
@@ -177,13 +177,18 @@ void JelloCube::generate()
 
 void JelloCube::update()
 {
-	calculateExternalForces();
-	calculateSpringForces();
+	unsigned int subSteps = 10;
+
+	for (int i = 0; i < subSteps; ++i)
+	{
+		calculateExternalForces(subSteps);
+		calculateSpringForces(subSteps);
+		m_t += m_timestep / subSteps;
+	}
 	// update the timestep for the next time
-	m_t += m_timestep;
 }
 
-void JelloCube::calculateSpringForces()
+void JelloCube::calculateSpringForces(unsigned int _subSteps)
 {
 	// std::cout<<"updating springs\n";
 	// get singleton instances
@@ -191,7 +196,7 @@ void JelloCube::calculateSpringForces()
 	shader->use("jelloCubeSpringPass");
 
 	shader->setUniform("u_currentTime", m_t);
-	shader->setUniform("u_timeStep", m_timestep);
+	shader->setUniform("u_timeStep", float(m_timestep / _subSteps));
 	shader->setUniform("u_k", m_k);
 	shader->setUniform("u_damping", m_damping);
 
@@ -232,7 +237,7 @@ void JelloCube::calculateSpringForces()
 	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));*/
 }
 
-void JelloCube::calculateExternalForces()
+void JelloCube::calculateExternalForces(unsigned int _subSteps)
 {
 	// std::cout<<"updating springs\n";
 	// get singleton instances
@@ -244,7 +249,7 @@ void JelloCube::calculateExternalForces()
 	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
 
 	shader->setUniform("u_currentTime", m_t);
-	shader->setUniform("u_timeStep", m_timestep);
+	shader->setUniform("u_timeStep", float(m_timestep / _subSteps));
 
 	shader->setUniform("u_mass", GLfloat(0.1));
 	shader->setUniform("u_gravity", GLfloat(9.81));
