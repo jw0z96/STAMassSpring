@@ -64,6 +64,19 @@ void JelloCube::genAtomicCounter(unsigned int &buffer)
 
 //----------------------------------------------------------------------------------------------------------------------
 
+void JelloCube::genSSBO(unsigned int &buffer, GLsizeiptr size, const GLvoid * data, GLenum usage)
+{
+	if (buffer)
+		glDeleteBuffers(1, &buffer);
+
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, usage);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 void JelloCube::drawMasses()
 {
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();

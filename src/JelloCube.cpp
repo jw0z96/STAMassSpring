@@ -114,11 +114,9 @@ void JelloCube::generate()
 	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
 	std::vector<SSBO_State> massPointsArray(numMasses);
 
-	glGenBuffers(1, &m_massBufferId);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_massBufferId);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, numMasses * sizeof(SSBO_State), &massPointsArray[0], GL_DYNAMIC_COPY);
+	// generate an ssbo for the masses
+	genSSBO(m_massBufferId, numMasses * sizeof(SSBO_State), &massPointsArray[0], GL_DYNAMIC_COPY);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
 
 	// set to only count the number of springs
 	shader->setUniform("u_springWrite", false);
@@ -143,11 +141,9 @@ void JelloCube::generate()
 
 	std::vector<SSBO_Spring> springsArray(m_springCount);
 
-	glGenBuffers(1, &m_springBufferId);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_springBufferId);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, m_springCount * sizeof(SSBO_Spring), &springsArray[0], GL_DYNAMIC_COPY);
+	// generate an ssbo for the springs
+	genSSBO(m_springBufferId, m_springCount * sizeof(SSBO_Spring), &springsArray[0], GL_DYNAMIC_COPY);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
 
 	// set to write the contents of springs
 	shader->setUniform("u_springWrite", true);
