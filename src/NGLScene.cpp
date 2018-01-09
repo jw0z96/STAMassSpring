@@ -57,6 +57,12 @@ void NGLScene::initializeGL()
 	shader->use("testShader");
 	shader->setUniform("massPointsPositionTex", 0);
 
+	// create the plane shader program
+	shader->loadShader("basicShader",
+		"shaders/basic_vert.glsl",
+		"shaders/basic_frag.glsl");
+	shader->use("basicShader");
+
 	// Grey Background
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	// enable depth testing for drawing
@@ -81,6 +87,7 @@ void NGLScene::initializeGL()
 
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
 	prim->createSphere("sphere",0.1f,1);
+	prim->createTrianglePlane("ground", 14, 14, 80, 80, ngl::Vec3(0.0, 1.0, 0.0));
 
 	m_jelloCube->initializeShaders();
 }
@@ -157,8 +164,13 @@ void NGLScene::paintGL()
 
 	shader->use("springShader");
 	loadMatricesToShader();
-
 	m_jelloCube->drawSprings();
+
+	shader->use("basicShader");
+	loadMatricesToShader();
+	prim->draw("ground");
+
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------

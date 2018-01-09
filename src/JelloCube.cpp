@@ -12,9 +12,9 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	std::cout<<"creating jello cube!\n";
 	m_timestep = 0.1;
 	m_t = 0.0;
-	m_sizeX = 10;
-	m_sizeY = 10;
-	m_sizeZ = 10;
+	m_sizeX = 5;
+	m_sizeY = 5;
+	m_sizeZ = 5;
 }
 
 JelloCube::~JelloCube()
@@ -46,6 +46,14 @@ void JelloCube::initializeShaders()
 	shader->compileShader("jelloCubeSpringPassComp");
 	shader->attachShaderToProgram("jelloCubeSpringPass", "jelloCubeSpringPassComp");
 	shader->linkProgramObject("jelloCubeSpringPass");
+
+	// create the compute shader program for calculating the external forces in the simulation
+	shader->createShaderProgram("jelloCubeExternalForcesPass");
+	shader->attachShader("jelloCubeExternalForcesPassComp", ngl::ShaderType::COMPUTE );
+	shader->loadShaderSource("jelloCubeExternalForcesPassComp", "shaders/jelloCubeExternalForcesPassComp.glsl" );
+	shader->compileShader("jelloCubeExternalForcesPassComp");
+	shader->attachShaderToProgram("jelloCubeExternalForcesPass", "jelloCubeExternalForcesPassComp");
+	shader->linkProgramObject("jelloCubeExternalForcesPass");
 
 	// create the spring geometry shader program
 	shader->loadShader("springShader",
@@ -92,8 +100,8 @@ void JelloCube::generate()
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
 	shader->use("jelloCubeInitPass");
 
-	ngl::Vec3 topRight = ngl::Vec3(1.0, 1.0, 1.0);
-	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 0.0, 0.0);
+	ngl::Vec3 topRight = ngl::Vec3(1.0, 2.0, 1.0);
+	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 1.0, 0.0);
 	ngl::Vec3 span = topRight - bottomLeft;
 	ngl::Vec3 step = span / ngl::Vec3(m_sizeX, m_sizeY, m_sizeZ);
 
@@ -169,6 +177,14 @@ void JelloCube::generate()
 
 void JelloCube::update()
 {
+	calculateExternalForces();
+	calculateSpringForces();
+	// update the timestep for the next time
+	m_t += m_timestep;
+}
+
+void JelloCube::calculateSpringForces()
+{
 	// std::cout<<"updating springs\n";
 	// get singleton instances
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
@@ -178,6 +194,10 @@ void JelloCube::update()
 	shader->setUniform("u_timeStep", m_timestep);
 	shader->setUniform("u_k", m_k);
 	shader->setUniform("u_damping", m_damping);
+
+	shader->setUniform("u_sizeX", GLint(m_sizeX));
+	shader->setUniform("u_sizeY", GLint(m_sizeY));
+	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
@@ -190,8 +210,8 @@ void JelloCube::update()
 	// glDispatchCompute(m_springCount / 128.0, 1, 1);
 
 
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
+	// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
+	// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
 
 	// dispatch compute shader to update springs
 	shader->setUniform("u_writeMode", true);
@@ -199,8 +219,7 @@ void JelloCube::update()
 	glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
 	// glDispatchCompute(m_springCount / 128.0, 1, 1);
 
-	// update the timestep for the next time
-	m_t += m_timestep;
+
 
 /*	// for (size_t i = 0; i < m_massPoints.size(); ++i)
 	// {
@@ -211,4 +230,26 @@ void JelloCube::update()
 
 	float intensity = 0.01;
 	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));*/
+}
+
+void JelloCube::calculateExternalForces()
+{
+	// std::cout<<"updating springs\n";
+	// get singleton instances
+	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
+	shader->use("jelloCubeExternalForcesPass");
+
+	shader->setUniform("u_sizeX", GLint(m_sizeX));
+	shader->setUniform("u_sizeY", GLint(m_sizeY));
+	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
+
+	shader->setUniform("u_currentTime", m_t);
+	shader->setUniform("u_timeStep", m_timestep);
+
+	shader->setUniform("u_mass", GLfloat(0.1));
+	shader->setUniform("u_gravity", GLfloat(9.81));
+
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
+
+	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
 }

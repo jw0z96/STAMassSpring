@@ -59,7 +59,7 @@ void addSpring(ivec3 _start, ivec3 _end)
 		vec3 startPos = masses[startIndex].position.xyz;
 		vec3 endPos = masses[endIndex].position.xyz;
 		vec3 diff = endPos - startPos;
-		float initialBounce = 2.0;
+		float initialBounce = 1.0;
 		float restingLength = initialBounce * length(diff);
 
 		springs[springIndex].restingLength = restingLength;

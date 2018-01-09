@@ -38,6 +38,10 @@ uniform float u_damping;
 uniform bool u_writeMode;
 uniform int u_springCount;
 
+uniform int u_sizeX;
+uniform int u_sizeY;
+uniform int u_sizeZ;
+
 vec3 motionFunction(State _state, float _t)
 {
 	uint computeIndex = gl_GlobalInvocationID.x;
@@ -86,6 +90,13 @@ State integrate(State _currentState)
 	return newState;
 }
 
+// void atomicAddVec3(inout vec3 location, vec3 data)
+// {
+// 	atomicAdd(location.x, data.x);
+// 	atomicAdd(location.y, data.y);
+// 	atomicAdd(location.z, data.z);
+// }
+
 void main()
 {
 	uint computeIndex = gl_GlobalInvocationID.x;
@@ -103,12 +114,25 @@ void main()
 		uint startIndex = springs[computeIndex].start;
 		uint endIndex = springs[computeIndex].end;
 
-		atomicAdd(masses[startIndex].position.x, -springs[computeIndex].state.velocity.x);
-		atomicAdd(masses[startIndex].position.y, -springs[computeIndex].state.velocity.y);
-		atomicAdd(masses[startIndex].position.z, -springs[computeIndex].state.velocity.z);
+		// if (startIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
+		// 	startIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
+		// 	startIndex != (u_sizeX * u_sizeY) - 1 &&
+		// 	startIndex != (u_sizeX * u_sizeY) - u_sizeX)
+		// {
+			atomicAdd(masses[startIndex].position.x, -springs[computeIndex].state.velocity.x);
+			atomicAdd(masses[startIndex].position.y, -springs[computeIndex].state.velocity.y);
+			atomicAdd(masses[startIndex].position.z, -springs[computeIndex].state.velocity.z);
+		// }
 
-		atomicAdd(masses[endIndex].position.x, springs[computeIndex].state.velocity.x);
-		atomicAdd(masses[endIndex].position.y, springs[computeIndex].state.velocity.y);
-		atomicAdd(masses[endIndex].position.z, springs[computeIndex].state.velocity.z);
+		// if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1)
+		// if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
+		// 	endIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
+		// 	endIndex != (u_sizeX * u_sizeY) - 1 &&
+		// 	endIndex != (u_sizeX * u_sizeY) - u_sizeX)
+		// {
+			atomicAdd(masses[endIndex].position.x, springs[computeIndex].state.velocity.x);
+			atomicAdd(masses[endIndex].position.y, springs[computeIndex].state.velocity.y);
+			atomicAdd(masses[endIndex].position.z, springs[computeIndex].state.velocity.z);
+		// }
 	}
 }
