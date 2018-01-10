@@ -13,9 +13,9 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	m_timestep = 0.1;
 	m_subSteps = 1;
 	m_t = 0.0;
-	m_sizeX = 5;
-	m_sizeY = 5;
-	m_sizeZ = 5;
+	m_sizeX = 10;
+	m_sizeY = 10;
+	m_sizeZ = 10;
 }
 
 JelloCube::~JelloCube()
@@ -106,7 +106,7 @@ void JelloCube::generate()
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
 	shader->use("jelloCubeInitPass");
 
-	ngl::Vec3 topRight = ngl::Vec3(1.0, 2.0, 1.0);
+	ngl::Vec3 topRight = ngl::Vec3(3.0, 4.0, 3.0);
 	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 1.0, 0.0);
 	ngl::Vec3 span = topRight - bottomLeft;
 	ngl::Vec3 step = span / ngl::Vec3(m_sizeX, m_sizeY, m_sizeZ);
@@ -227,23 +227,11 @@ void JelloCube::calculateSpringForces()
 	// glDispatchCompute(1, 1, 1);
 	glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
 	// glDispatchCompute(m_springCount / 128.0, 1, 1);
-
-
-
-/*	// for (size_t i = 0; i < m_massPoints.size(); ++i)
-	// {
-	// 	*(m_massPoints[i]) += ngl::Vec3(-0.001 * sin(m_t + i), 0.001 * sin(m_t + i), 0.001 * cos(m_t + i));
-	// 	// *(m_massPoints[i]) += ngl::Vec3(0.0);
-	// }
-
-
-	float intensity = 0.01;
-	*(m_massPoints[int(m_t + 20)%124]) += ngl::Vec3(intensity * sin(m_t + 49.0), intensity * sin(m_t), intensity * cos(m_t + 7.0));*/
 }
 
 void JelloCube::calculateExternalForces()
 {
-	// std::cout<<"updating springs\n";
+	std::cout<<"updating springs\n";
 	// get singleton instances
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
 	shader->use("jelloCubeExternalForcesPass");

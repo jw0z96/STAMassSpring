@@ -37,33 +37,38 @@ int getIndex(ivec3 pos)
 
 void main()
 {
-	if (gl_GlobalInvocationID.x >= u_sizeX ||
-		gl_GlobalInvocationID.y >= u_sizeY ||
-		gl_GlobalInvocationID.z >= u_sizeZ)
-		return;
+	// if (gl_GlobalInvocationID.x >= u_sizeX ||
+	// 	gl_GlobalInvocationID.y >= u_sizeY ||
+	// 	gl_GlobalInvocationID.z >= u_sizeZ)
+	// 	return;
 
 	ivec3 writePos = ivec3(gl_GlobalInvocationID);
 	int currentIndex = getIndex(writePos);
 
-	if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - 1 )
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - 1 )
+	// 	return;
 
-	if (currentIndex == (u_sizeX * u_sizeY) - 1)
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY) - 1)
+	// 	return;
 
-	if (currentIndex == (u_sizeX * u_sizeY) - u_sizeX)
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY) - u_sizeX)
+	// 	return;
 
-	if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ )
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ )
+	// 	return;
 
-	masses[currentIndex].velocity.xyz = u_timeStep * vec3(0.0, u_mass * -u_gravity, 0.0);
+	masses[currentIndex].velocity.y += -0.01 * u_timeStep * u_mass * u_gravity;
 
 	masses[currentIndex].position.xyz += masses[currentIndex].velocity.xyz;
 
-	masses[currentIndex].position.y = max(masses[currentIndex].position.y, 0.0);
+	if (masses[currentIndex].position.y <= 0.0)
+	{
+		masses[currentIndex].position.y *= -1.0;
+		masses[currentIndex].velocity.y *= -1.0;
+		masses[currentIndex].velocity.xyz *= 0.5; //damping
+	}
 
-	// masses[currentIndex].velocity.xyz = vec3(0.0);
+	masses[currentIndex].velocity.xyz *= 0.99; // damping?? makes it a lot more stable
 
 	// atomicAdd(masses[currentIndex].position.x, masses[currentIndex].velocity.x);
 	// atomicAdd(masses[currentIndex].position.y, masses[currentIndex].velocity.y);
