@@ -243,7 +243,9 @@ void JelloCube::calculateExternalForces()
 	shader->setUniform("u_currentTime", m_t);
 	shader->setUniform("u_timeStep", float(m_timestep / m_subSteps));
 
-	shader->setUniform("u_mass", GLfloat(0.1));
+	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
+
+	shader->setUniform("u_mass", GLfloat(10.0 / numMasses));
 	shader->setUniform("u_gravity", GLfloat(9.81));
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
