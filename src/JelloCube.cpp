@@ -106,8 +106,8 @@ void JelloCube::generate()
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
 	shader->use("jelloCubeInitPass");
 
-	ngl::Vec3 topRight = ngl::Vec3(3.0, 4.0, 3.0);
-	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 1.0, 0.0);
+	ngl::Vec3 topRight = ngl::Vec3(3.0, 6.0, 3.0);
+	ngl::Vec3 bottomLeft = ngl::Vec3(0.0, 3.0, 0.0);
 	ngl::Vec3 span = topRight - bottomLeft;
 	ngl::Vec3 step = span / ngl::Vec3(m_sizeX, m_sizeY, m_sizeZ);
 

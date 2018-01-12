@@ -85,8 +85,8 @@ State integrate(State _currentState)
 	vec3 dvdt = 1.0f/6.0f * (a.velocity.xyz + 2.0 * (b.velocity.xyz + c.velocity.xyz) + d.velocity.xyz);
 
 	State newState;
-	newState.position.xyz = _currentState.position.xyz + dxdt * u_timeStep;
-	newState.velocity.xyz = _currentState.velocity.xyz + dvdt * u_timeStep;
+	newState.position.xyz = dxdt * u_timeStep;
+	newState.velocity.xyz = dvdt * u_timeStep;
 	return newState;
 }
 
@@ -119,9 +119,9 @@ void main()
 		// 	startIndex != (u_sizeX * u_sizeY) - 1 &&
 		// 	startIndex != (u_sizeX * u_sizeY) - u_sizeX)
 		// {
-			atomicAdd(masses[startIndex].position.x, -springs[computeIndex].state.velocity.x);
-			atomicAdd(masses[startIndex].position.y, -springs[computeIndex].state.velocity.y);
-			atomicAdd(masses[startIndex].position.z, -springs[computeIndex].state.velocity.z);
+			atomicAdd(masses[startIndex].velocity.x, -springs[computeIndex].state.velocity.x);
+			atomicAdd(masses[startIndex].velocity.y, -springs[computeIndex].state.velocity.y);
+			atomicAdd(masses[startIndex].velocity.z, -springs[computeIndex].state.velocity.z);
 		// }
 
 		// if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1)
@@ -130,9 +130,9 @@ void main()
 		// 	endIndex != (u_sizeX * u_sizeY) - 1 &&
 		// 	endIndex != (u_sizeX * u_sizeY) - u_sizeX)
 		// {
-			atomicAdd(masses[endIndex].position.x, springs[computeIndex].state.velocity.x);
-			atomicAdd(masses[endIndex].position.y, springs[computeIndex].state.velocity.y);
-			atomicAdd(masses[endIndex].position.z, springs[computeIndex].state.velocity.z);
+			atomicAdd(masses[endIndex].velocity.x, springs[computeIndex].state.velocity.x);
+			atomicAdd(masses[endIndex].velocity.y, springs[computeIndex].state.velocity.y);
+			atomicAdd(masses[endIndex].velocity.z, springs[computeIndex].state.velocity.z);
 		// }
 	}
 }

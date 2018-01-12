@@ -65,10 +65,10 @@ void main()
 	{
 		masses[currentIndex].position.y *= -1.0;
 		masses[currentIndex].velocity.y *= -1.0;
-		masses[currentIndex].velocity.xyz *= 0.5; //damping
+		masses[currentIndex].velocity.xyz *= 0.1; //damping
 	}
 
-	masses[currentIndex].velocity.xyz *= 0.99; // damping?? makes it a lot more stable
+	// masses[currentIndex].velocity.xyz *= 0.99; // damping?? makes it a lot more stable
 
 	// atomicAdd(masses[currentIndex].position.x, masses[currentIndex].velocity.x);
 	// atomicAdd(masses[currentIndex].position.y, masses[currentIndex].velocity.y);
