@@ -19,3 +19,7 @@
 ## TODO
 
 - collisions
+
+## LINKS
+
+- https://github.com/lemms/SiggraphAsiaDemo2012 Pixar presented GPU Mass-spring
