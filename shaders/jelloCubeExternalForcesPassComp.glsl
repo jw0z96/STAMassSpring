@@ -45,17 +45,17 @@ void main()
 	ivec3 writePos = ivec3(gl_GlobalInvocationID);
 	int currentIndex = getIndex(writePos);
 
-	if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - 1 )
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - 1 )
+	// 	return;
 
-	if (currentIndex == (u_sizeX * u_sizeY) - 1)
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY) - 1)
+	// 	return;
 
-	if (currentIndex == (u_sizeX * u_sizeY) - u_sizeX)
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY) - u_sizeX)
+	// 	return;
 
-	if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ )
-		return;
+	// if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ )
+	// 	return;
 
 	masses[currentIndex].velocity.y += -0.01 * u_timeStep * u_mass * u_gravity;
 

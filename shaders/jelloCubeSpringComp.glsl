@@ -114,25 +114,25 @@ void main()
 		uint startIndex = springs[computeIndex].start;
 		uint endIndex = springs[computeIndex].end;
 
-		if (startIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
-			startIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
-			startIndex != (u_sizeX * u_sizeY) - 1 &&
-			startIndex != (u_sizeX * u_sizeY) - u_sizeX)
-		{
+		// if (startIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
+		// 	startIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
+		// 	startIndex != (u_sizeX * u_sizeY) - 1 &&
+		// 	startIndex != (u_sizeX * u_sizeY) - u_sizeX)
+		// {
 			atomicAdd(masses[startIndex].velocity.x, -springs[computeIndex].state.velocity.x);
 			atomicAdd(masses[startIndex].velocity.y, -springs[computeIndex].state.velocity.y);
 			atomicAdd(masses[startIndex].velocity.z, -springs[computeIndex].state.velocity.z);
-		}
+		// }
 
-		if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1)
-		if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
-			endIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
-			endIndex != (u_sizeX * u_sizeY) - 1 &&
-			endIndex != (u_sizeX * u_sizeY) - u_sizeX)
-		{
+		// if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1)
+		// if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
+		// 	endIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
+		// 	endIndex != (u_sizeX * u_sizeY) - 1 &&
+		// 	endIndex != (u_sizeX * u_sizeY) - u_sizeX)
+		// {
 			atomicAdd(masses[endIndex].velocity.x, springs[computeIndex].state.velocity.x);
 			atomicAdd(masses[endIndex].velocity.y, springs[computeIndex].state.velocity.y);
 			atomicAdd(masses[endIndex].velocity.z, springs[computeIndex].state.velocity.z);
-		}
+		// }
 	}
 }
