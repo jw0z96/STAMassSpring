@@ -70,19 +70,19 @@ vec3 evaluate(vec3 _v, float _dt, vec3 _dv)
 	return motionFunction(v2);
 }
 
-State integrate(State _currentState)
+vec3 integrate(vec3 _currentState)
 {
-	vec3 a = evaluate(_currentState.velocity.xyz);
-	vec3 b = evaluate(_currentState.velocity.xyz, 0.5 * u_timeStep, a);
-	vec3 c = evaluate(_currentState.velocity.xyz, 0.5 * u_timeStep, b);
-	vec3 d = evaluate(_currentState.velocity.xyz, u_timeStep, c);
+	vec3 a = evaluate(_currentState);
+	vec3 b = evaluate(_currentState, 0.5 * u_timeStep, a);
+	vec3 c = evaluate(_currentState, 0.5 * u_timeStep, b);
+	vec3 d = evaluate(_currentState, u_timeStep, c);
 
 	vec3 dvdt = 1.0f/6.0f * (a + 2.0 * (b + c) + d);
 
-	State newState;
-	newState.position.xyz = vec3(0.0);
-	newState.velocity.xyz = dvdt * u_timeStep;
-	return newState;
+	// State newState;
+	// newState.position.xyz = vec3(0.0);
+	// newState.velocity.xyz = dvdt * u_timeStep;
+	return dvdt * u_timeStep;;
 }
 
 // void atomicAddVec3(inout vec3 location, vec3 data)
@@ -101,8 +101,8 @@ void main()
 
 	if (!u_writeMode)
 	{
-		State newState = integrate(springs[computeIndex].state);
-		springs[computeIndex].state = newState;
+		vec3 newState = integrate(springs[computeIndex].state.velocity.xyz);
+		springs[computeIndex].state.velocity.xyz = newState;
 	}
 	else
 	{
