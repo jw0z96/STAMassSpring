@@ -58,31 +58,31 @@ vec3 motionFunction(vec3 _v)
 }
 
 // calculate the velocity of the spring
+// vec3 _v: the relative velocity between masses
 vec3 evaluate(vec3 _v)
 {
 	return motionFunction(_v);
 }
 
 // calculate the velocity of the spring
+// vec3 _v: the relative velocity between masses
 vec3 evaluate(vec3 _v, float _dt, vec3 _dv)
 {
 	vec3 v2 = _v + _dv * _dt;
 	return motionFunction(v2);
 }
 
-vec3 integrate(vec3 _currentState)
+// perform RK4 integration and return dv, change in velocity
+// vec3 _v: the current relative velocity between masses
+vec3 integrate(vec3 _v)
 {
-	vec3 a = evaluate(_currentState);
-	vec3 b = evaluate(_currentState, 0.5 * u_timeStep, a);
-	vec3 c = evaluate(_currentState, 0.5 * u_timeStep, b);
-	vec3 d = evaluate(_currentState, u_timeStep, c);
+	vec3 a = evaluate(_v);
+	vec3 b = evaluate(_v, 0.5 * u_timeStep, a);
+	vec3 c = evaluate(_v, 0.5 * u_timeStep, b);
+	vec3 d = evaluate(_v, u_timeStep, c);
 
 	vec3 dvdt = 1.0f/6.0f * (a + 2.0 * (b + c) + d);
-
-	// State newState;
-	// newState.position.xyz = vec3(0.0);
-	// newState.velocity.xyz = dvdt * u_timeStep;
-	return dvdt * u_timeStep;;
+	return dvdt * u_timeStep;
 }
 
 // void atomicAddVec3(inout vec3 location, vec3 data)
@@ -97,7 +97,7 @@ void main()
 	uint computeIndex = gl_GlobalInvocationID.x;
 
 	if (computeIndex >= u_springCount)
-		return;
+	return;
 
 	if (!u_writeMode)
 	{
@@ -109,25 +109,12 @@ void main()
 		uint startIndex = springs[computeIndex].start;
 		uint endIndex = springs[computeIndex].end;
 
-		// if (startIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
-		// 	startIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
-		// 	startIndex != (u_sizeX * u_sizeY) - 1 &&
-		// 	startIndex != (u_sizeX * u_sizeY) - u_sizeX)
-		// {
-			atomicAdd(masses[startIndex].velocity.x, -springs[computeIndex].state.velocity.x);
-			atomicAdd(masses[startIndex].velocity.y, -springs[computeIndex].state.velocity.y);
-			atomicAdd(masses[startIndex].velocity.z, -springs[computeIndex].state.velocity.z);
-		// }
+		atomicAdd(masses[startIndex].velocity.x, -springs[computeIndex].state.velocity.x);
+		atomicAdd(masses[startIndex].velocity.y, -springs[computeIndex].state.velocity.y);
+		atomicAdd(masses[startIndex].velocity.z, -springs[computeIndex].state.velocity.z);
 
-		// if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1)
-		// if (endIndex != (u_sizeX * u_sizeY * u_sizeZ) - 1 &&
-		// 	endIndex != (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ &&
-		// 	endIndex != (u_sizeX * u_sizeY) - 1 &&
-		// 	endIndex != (u_sizeX * u_sizeY) - u_sizeX)
-		// {
-			atomicAdd(masses[endIndex].velocity.x, springs[computeIndex].state.velocity.x);
-			atomicAdd(masses[endIndex].velocity.y, springs[computeIndex].state.velocity.y);
-			atomicAdd(masses[endIndex].velocity.z, springs[computeIndex].state.velocity.z);
-		// }
+		atomicAdd(masses[endIndex].velocity.x, springs[computeIndex].state.velocity.x);
+		atomicAdd(masses[endIndex].velocity.y, springs[computeIndex].state.velocity.y);
+		atomicAdd(masses[endIndex].velocity.z, springs[computeIndex].state.velocity.z);
 	}
 }
