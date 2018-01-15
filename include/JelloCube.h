@@ -14,14 +14,15 @@ struct SSBO_State
 {
 	ngl::Vec4 m_position;
 	ngl::Vec4 m_velocity;
+	ngl::Vec4 m_forces;
 };
 
 struct SSBO_Spring
 {
-	SSBO_State m_state;
 	GLuint m_start; float pad0[3];
 	GLuint m_end; float pad1[3];
 	GLfloat m_restingLength; float pad2[3];
+	ngl::Vec4 m_velocity;
 };
 
 class JelloCube : public QObject

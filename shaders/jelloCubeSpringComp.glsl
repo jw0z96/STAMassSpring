@@ -9,14 +9,15 @@ struct State
 {
 	vec4 position;
 	vec4 velocity;
+	vec4 force;
 };
 
 struct Spring
 {
-	State state;
 	uint start;
 	uint end;
 	float restingLength;
+	vec4 velocity;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer
@@ -101,20 +102,19 @@ void main()
 
 	if (!u_writeMode)
 	{
-		vec3 newState = integrate(springs[computeIndex].state.velocity.xyz);
-		springs[computeIndex].state.velocity.xyz = newState;
+		springs[computeIndex].velocity.xyz = integrate(springs[computeIndex].velocity.xyz);
 	}
 	else
 	{
 		uint startIndex = springs[computeIndex].start;
 		uint endIndex = springs[computeIndex].end;
 
-		atomicAdd(masses[startIndex].velocity.x, -springs[computeIndex].state.velocity.x);
-		atomicAdd(masses[startIndex].velocity.y, -springs[computeIndex].state.velocity.y);
-		atomicAdd(masses[startIndex].velocity.z, -springs[computeIndex].state.velocity.z);
+		atomicAdd(masses[startIndex].velocity.x, -springs[computeIndex].velocity.x);
+		atomicAdd(masses[startIndex].velocity.y, -springs[computeIndex].velocity.y);
+		atomicAdd(masses[startIndex].velocity.z, -springs[computeIndex].velocity.z);
 
-		atomicAdd(masses[endIndex].velocity.x, springs[computeIndex].state.velocity.x);
-		atomicAdd(masses[endIndex].velocity.y, springs[computeIndex].state.velocity.y);
-		atomicAdd(masses[endIndex].velocity.z, springs[computeIndex].state.velocity.z);
+		atomicAdd(masses[endIndex].velocity.x, springs[computeIndex].velocity.x);
+		atomicAdd(masses[endIndex].velocity.y, springs[computeIndex].velocity.y);
+		atomicAdd(masses[endIndex].velocity.z, springs[computeIndex].velocity.z);
 	}
 }

@@ -6,14 +6,15 @@ struct State
 {
 	vec4 position;
 	vec4 velocity;
+	vec4 force;
 };
 
 struct Spring
 {
-	State state;
 	uint start;
 	uint end;
 	float restingLength;
+	vec4 velocity;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer

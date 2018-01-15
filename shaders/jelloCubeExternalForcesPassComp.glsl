@@ -9,6 +9,7 @@ struct State
 {
 	vec4 position;
 	vec4 velocity;
+	vec4 force;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer

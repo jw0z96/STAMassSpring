@@ -9,14 +9,15 @@ struct State
 {
 	vec4 position;
 	vec4 velocity;
+	vec4 force;
 };
 
 struct Spring
 {
-	State state;
 	uint start;
 	uint end;
 	float restingLength;
+	vec4 velocity;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer
@@ -62,11 +63,10 @@ void addSpring(ivec3 _start, ivec3 _end)
 		float initialBounce = 1.0;
 		float restingLength = initialBounce * length(diff);
 
-		springs[springIndex].restingLength = restingLength;
-		springs[springIndex].state.position = vec4(diff, 0.0);
-		springs[springIndex].state.position = vec4(0.0);
+		springs[springIndex].velocity = vec4(0.0);
 		springs[springIndex].start = startIndex;
 		springs[springIndex].end = endIndex;
+		springs[springIndex].restingLength = restingLength;
 	}
 }
 
@@ -84,7 +84,9 @@ void main()
 	{
 		// store the initial position of the current mass
 		vec3 pos = writePos * u_step + u_bottomLeft;
-		masses[currentIndex].position.xyz = pos;
+		masses[currentIndex].position = vec4(pos, 0.0);
+		masses[currentIndex].velocity = vec4(0.0);
+		masses[currentIndex].force = vec4(0.0);
 	}
 
 	// create / count structural springs
