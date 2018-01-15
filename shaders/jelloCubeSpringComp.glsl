@@ -2,7 +2,7 @@
 
 #extension GL_NV_shader_atomic_float : enable
 
-layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
 struct Mass
@@ -42,6 +42,9 @@ uniform int u_springCount;
 uniform int u_sizeX;
 uniform int u_sizeY;
 uniform int u_sizeZ;
+
+uniform float u_mass;
+uniform float u_gravity;
 
 // return the velocity (or force??) calculated by the spring according to hooke's law
 // vec3 _v: the relative velocity between the two masses
@@ -98,7 +101,7 @@ void main()
 	uint computeIndex = gl_GlobalInvocationID.x;
 
 	if (computeIndex >= u_springCount)
-	return;
+		return;
 
 	if (!u_writeMode)
 	{
@@ -109,12 +112,15 @@ void main()
 		uint startIndex = springs[computeIndex].start;
 		uint endIndex = springs[computeIndex].end;
 
-		atomicAdd(masses[startIndex].velocity.x, -springs[computeIndex].velocity.x);
-		atomicAdd(masses[startIndex].velocity.y, -springs[computeIndex].velocity.y);
-		atomicAdd(masses[startIndex].velocity.z, -springs[computeIndex].velocity.z);
+		// get force from integration result (dv)
+		vec3 springForce = (springs[computeIndex].velocity.xyz / u_timeStep) * 10.0; // * u_mass;
 
-		atomicAdd(masses[endIndex].velocity.x, springs[computeIndex].velocity.x);
-		atomicAdd(masses[endIndex].velocity.y, springs[computeIndex].velocity.y);
-		atomicAdd(masses[endIndex].velocity.z, springs[computeIndex].velocity.z);
+		atomicAdd(masses[startIndex].force.x, -springForce.x);
+		atomicAdd(masses[startIndex].force.y, -springForce.y);
+		atomicAdd(masses[startIndex].force.z, -springForce.z);
+
+		atomicAdd(masses[endIndex].force.x, springForce.x);
+		atomicAdd(masses[endIndex].force.y, springForce.y);
+		atomicAdd(masses[endIndex].force.z, springForce.z);
 	}
 }

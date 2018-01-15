@@ -50,15 +50,13 @@ void main()
 	// 	return;
 
 	// if (currentIndex == (u_sizeX * u_sizeY) - 1)
-	// 	return;
-
 	// if (currentIndex == (u_sizeX * u_sizeY) - u_sizeX)
 	// 	return;
 
 	// if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ )
 	// 	return;
 
-	masses[currentIndex].velocity.y += -0.01 * u_timeStep * u_mass * u_gravity;
+	masses[currentIndex].velocity.xyz += u_timeStep * masses[currentIndex].force.xyz;
 
 	masses[currentIndex].position.xyz += masses[currentIndex].velocity.xyz;
 
@@ -66,7 +64,7 @@ void main()
 	{
 		masses[currentIndex].position.y *= -1.0;
 		masses[currentIndex].velocity.y *= -1.0;
-		masses[currentIndex].velocity.xyz *= 0.1; //damping
+		masses[currentIndex].velocity.xyz *= 0.8; //damping
 	}
 
 	// reset force values

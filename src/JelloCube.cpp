@@ -188,8 +188,8 @@ void JelloCube::update()
 {
 	for (int i = 0; i < m_subSteps; ++i)
 	{
-		calculateExternalForces();
 		calculateSpringForces();
+		calculateExternalForces();
 		// update the timestep for the next time
 		m_t += m_timestep / m_subSteps;
 	}
@@ -217,10 +217,14 @@ void JelloCube::calculateSpringForces()
 	shader->setUniform("u_springCount", GLint(m_springCount));
 	shader->setUniform("u_writeMode", false);
 
-	// dispatch compute shader to integrate springs
-	glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
-	// glDispatchCompute(m_springCount / 128.0, 1, 1);
+	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
+	shader->setUniform("u_mass", GLfloat(10.0 / numMasses));
+	shader->setUniform("u_gravity", GLfloat(9.81));
 
+	// dispatch compute shader to integrate springs
+	// glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
+	glDispatchCompute(m_springCount, 1, 1);
+	// glDispatchCompute(m_springCount / 128.0, 1, 1);
 
 	// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
 	// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
@@ -228,7 +232,8 @@ void JelloCube::calculateSpringForces()
 	// dispatch compute shader to update springs
 	shader->setUniform("u_writeMode", true);
 	// glDispatchCompute(1, 1, 1);
-	glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
+	// glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
+	glDispatchCompute(m_springCount, 1, 1);
 	// glDispatchCompute(m_springCount / 128.0, 1, 1);
 }
 
