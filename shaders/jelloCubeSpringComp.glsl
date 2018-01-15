@@ -42,7 +42,9 @@ uniform int u_sizeX;
 uniform int u_sizeY;
 uniform int u_sizeZ;
 
-vec3 motionFunction(State _state, float _t)
+// return the velocity (or force??) calculated by the spring according to hooke's law
+// vec3 _v: the relative velocity between the two masses
+vec3 motionFunction(vec3 _v)
 {
 	uint computeIndex = gl_GlobalInvocationID.x;
 	uint startIndex = springs[computeIndex].start;
@@ -52,40 +54,33 @@ vec3 motionFunction(State _state, float _t)
 	vec3 distance = endPos - startPos;
 	float length = length(distance);
 	float restingLength = springs[computeIndex].restingLength;
-	return -u_k*(length-restingLength)*(distance/length)-u_damping*_state.velocity.xyz;
+	return -u_k * (length-restingLength) * (distance/length) -u_damping * _v;
 }
 
-State evaluate(State _state, float _t)
+// calculate the velocity of the spring
+vec3 evaluate(vec3 _v)
 {
-	State outputState;
-	outputState.position.xyz = _state.velocity.xyz;
-	outputState.velocity.xyz = motionFunction(_state, _t);
-	return outputState;
+	return motionFunction(_v);
 }
 
-State evaluate(State _state, float _t, float _dt, State _d)
+// calculate the velocity of the spring
+vec3 evaluate(vec3 _v, float _dt, vec3 _dv)
 {
-	State state1;
-	state1.position.xyz = _state.position.xyz + _d.position.xyz * _dt;
-	state1.velocity.xyz = _state.velocity.xyz + _d.velocity.xyz * _dt;
-	State outputState;
-	outputState.position.xyz = _state.velocity.xyz;
-	outputState.velocity.xyz = motionFunction(state1, _t + _dt);
-	return outputState;
+	vec3 v2 = _v + _dv * _dt;
+	return motionFunction(v2);
 }
 
 State integrate(State _currentState)
 {
-	State a = evaluate(_currentState, u_currentTime);
-	State b = evaluate(_currentState, u_currentTime, 0.5 * u_timeStep, a);
-	State c = evaluate(_currentState, u_currentTime, 0.5 * u_timeStep, b);
-	State d = evaluate(_currentState, u_currentTime, u_timeStep, c);
+	vec3 a = evaluate(_currentState.velocity.xyz);
+	vec3 b = evaluate(_currentState.velocity.xyz, 0.5 * u_timeStep, a);
+	vec3 c = evaluate(_currentState.velocity.xyz, 0.5 * u_timeStep, b);
+	vec3 d = evaluate(_currentState.velocity.xyz, u_timeStep, c);
 
-	vec3 dxdt = 1.0f/6.0f * (a.position.xyz + 2.0 * (b.position.xyz + c.position.xyz) + d.position.xyz);
-	vec3 dvdt = 1.0f/6.0f * (a.velocity.xyz + 2.0 * (b.velocity.xyz + c.velocity.xyz) + d.velocity.xyz);
+	vec3 dvdt = 1.0f/6.0f * (a + 2.0 * (b + c) + d);
 
 	State newState;
-	newState.position.xyz = dxdt * u_timeStep;
+	newState.position.xyz = vec3(0.0);
 	newState.velocity.xyz = dvdt * u_timeStep;
 	return newState;
 }
