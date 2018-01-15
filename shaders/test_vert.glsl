@@ -8,7 +8,7 @@ layout (location = 2) in vec3 inNormal;
 layout (location = 1) in vec2 inUV;
 
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
-struct State
+struct Mass
 {
 	vec4 position;
 	vec4 velocity;
@@ -17,7 +17,7 @@ struct State
 
 layout (std430, binding = 0) buffer massBuffer
 {
-	State masses[];
+	Mass masses[];
 };
 
 out vec2 TexCoords;

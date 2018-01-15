@@ -126,11 +126,14 @@ void JelloCube::generate()
 
 	// create the texture to store the positions of the mass points
 	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
-	std::vector<SSBO_State> massPointsArray(numMasses);
+	std::vector<SSBO_Mass> massPointsArray(numMasses);
 
 	// generate an ssbo for the masses
-	genSSBO(m_massBufferId, numMasses * sizeof(SSBO_State), &massPointsArray[0], GL_DYNAMIC_COPY);
+	genSSBO(m_massBufferId, numMasses * sizeof(SSBO_Mass), &massPointsArray[0], GL_DYNAMIC_COPY);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
+
+	shader->setUniform("u_mass", GLfloat(10.0 / numMasses));
+	shader->setUniform("u_gravity", GLfloat(9.81));
 
 	// set to only count the number of springs
 	shader->setUniform("u_springWrite", false);

@@ -5,7 +5,7 @@ layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout (binding = 0, offset = 0) uniform atomic_uint springCount;
 
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
-struct State
+struct Mass
 {
 	vec4 position;
 	vec4 velocity;
@@ -22,7 +22,7 @@ struct Spring
 
 layout (std430, binding = 0) buffer massPointsBuffer
 {
-	State masses[];
+	Mass masses[];
 };
 
 layout (std430, binding = 1) buffer springsBuffer
@@ -38,6 +38,9 @@ uniform vec3 u_bottomLeft;
 uniform vec3 u_step;
 
 uniform bool u_springWrite;
+
+uniform float u_mass;
+uniform float u_gravity;
 
 int getIndex(ivec3 pos)
 {
@@ -86,7 +89,7 @@ void main()
 		vec3 pos = writePos * u_step + u_bottomLeft;
 		masses[currentIndex].position = vec4(pos, 0.0);
 		masses[currentIndex].velocity = vec4(0.0);
-		masses[currentIndex].force = vec4(0.0);
+		masses[currentIndex].force = vec4(0.0, u_mass * -u_gravity, 0.0, 0.0);
 	}
 
 	// create / count structural springs

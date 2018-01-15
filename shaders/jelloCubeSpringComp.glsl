@@ -5,7 +5,7 @@
 layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
-struct State
+struct Mass
 {
 	vec4 position;
 	vec4 velocity;
@@ -22,7 +22,7 @@ struct Spring
 
 layout (std430, binding = 0) buffer massPointsBuffer
 {
-	State masses[];
+	Mass masses[];
 };
 
 layout (std430, binding = 1) buffer springsBuffer

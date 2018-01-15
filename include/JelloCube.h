@@ -10,7 +10,7 @@
 
 // #include "Spring.h"
 
-struct SSBO_State
+struct SSBO_Mass
 {
 	ngl::Vec4 m_position;
 	ngl::Vec4 m_velocity;

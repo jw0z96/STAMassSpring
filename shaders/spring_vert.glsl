@@ -2,7 +2,7 @@
 
 uniform mat4 MVP;
 
-struct State
+struct Mass
 {
 	vec4 position;
 	vec4 velocity;
@@ -19,7 +19,7 @@ struct Spring
 
 layout (std430, binding = 0) buffer massPointsBuffer
 {
-	State masses[];
+	Mass masses[];
 };
 
 layout (std430, binding = 1) buffer springsBuffer

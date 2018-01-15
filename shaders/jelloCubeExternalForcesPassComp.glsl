@@ -5,7 +5,7 @@
 layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
-struct State
+struct Mass
 {
 	vec4 position;
 	vec4 velocity;
@@ -14,7 +14,7 @@ struct State
 
 layout (std430, binding = 0) buffer massPointsBuffer
 {
-	State masses[];
+	Mass masses[];
 };
 
 uniform int u_sizeX;
@@ -69,9 +69,6 @@ void main()
 		masses[currentIndex].velocity.xyz *= 0.1; //damping
 	}
 
-	// masses[currentIndex].velocity.xyz *= 0.99; // damping?? makes it a lot more stable
-
-	// atomicAdd(masses[currentIndex].position.x, masses[currentIndex].velocity.x);
-	// atomicAdd(masses[currentIndex].position.y, masses[currentIndex].velocity.y);
-	// atomicAdd(masses[currentIndex].position.z, masses[currentIndex].velocity.z);
+	// reset force values
+	masses[currentIndex].force = vec4(0.0, u_mass * -u_gravity, 0.0, 0.0);
 }
