@@ -8,8 +8,6 @@
 
 #include <math.h>
 
-// #include "Spring.h"
-
 struct SSBO_Mass
 {
 	ngl::Vec4 m_position;
