@@ -43,9 +43,6 @@ uniform int u_sizeX;
 uniform int u_sizeY;
 uniform int u_sizeZ;
 
-uniform float u_mass;
-uniform float u_gravity;
-
 // return the velocity (or force??) calculated by the spring according to hooke's law
 // vec3 _v: the relative velocity between the two masses
 vec3 motionFunction(vec3 _v)

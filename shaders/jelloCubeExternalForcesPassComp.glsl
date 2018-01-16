@@ -58,6 +58,8 @@ void main()
 	// if (currentIndex == (u_sizeX * u_sizeY * u_sizeZ) - u_sizeZ )
 	// 	return;
 
+	masses[currentIndex].force += vec4(0.0, u_mass * u_gravity, 0.0, 0.0);
+
 	masses[currentIndex].velocity.xyz += u_timeStep * masses[currentIndex].force.xyz;
 
 	masses[currentIndex].position.xyz += masses[currentIndex].velocity.xyz;
@@ -73,5 +75,5 @@ void main()
 	masses[currentIndex].velocity.xyz *= 1.0 - (u_timeStep); //damping
 
 	// reset force values
-	masses[currentIndex].force = vec4(0.0, u_mass * -u_gravity, 0.0, 0.0);
+	masses[currentIndex].force = vec4(0.0);
 }

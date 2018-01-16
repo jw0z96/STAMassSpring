@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.0
+** Created by: Qt User Interface Compiler version 5.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -51,10 +51,16 @@ public:
     QDoubleSpinBox *springConstantSpinBox;
     QLabel *dampingConstantLabel;
     QDoubleSpinBox *dampingConstantSpinBox;
-    QDoubleSpinBox *timeStepSpinBox;
+    QLabel *jelloMassLabel;
+    QDoubleSpinBox *jelloMassSpinBox;
+    QLabel *gravityLabel;
+    QDoubleSpinBox *gravitySpinBox;
     QLabel *timeStepLabel;
-    QSpinBox *subStepsSpinBox;
+    QDoubleSpinBox *timeStepSpinBox;
     QLabel *subStepsLabel;
+    QSpinBox *subStepsSpinBox;
+    QLabel *massCountLabel;
+    QLabel *springCountLabel;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
     QMenuBar *menubar;
@@ -136,33 +142,71 @@ public:
 
         formLayout->setWidget(1, QFormLayout::FieldRole, dampingConstantSpinBox);
 
-        timeStepSpinBox = new QDoubleSpinBox(physicsControlsGB);
-        timeStepSpinBox->setObjectName(QStringLiteral("timeStepSpinBox"));
-        timeStepSpinBox->setDecimals(3);
-        timeStepSpinBox->setSingleStep(0.01);
-        timeStepSpinBox->setValue(0.1);
+        jelloMassLabel = new QLabel(physicsControlsGB);
+        jelloMassLabel->setObjectName(QStringLiteral("jelloMassLabel"));
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, timeStepSpinBox);
+        formLayout->setWidget(2, QFormLayout::LabelRole, jelloMassLabel);
+
+        jelloMassSpinBox = new QDoubleSpinBox(physicsControlsGB);
+        jelloMassSpinBox->setObjectName(QStringLiteral("jelloMassSpinBox"));
+        jelloMassSpinBox->setDecimals(2);
+        jelloMassSpinBox->setSingleStep(0.1);
+        jelloMassSpinBox->setValue(10);
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, jelloMassSpinBox);
+
+        gravityLabel = new QLabel(physicsControlsGB);
+        gravityLabel->setObjectName(QStringLiteral("gravityLabel"));
+
+        formLayout->setWidget(3, QFormLayout::LabelRole, gravityLabel);
+
+        gravitySpinBox = new QDoubleSpinBox(physicsControlsGB);
+        gravitySpinBox->setObjectName(QStringLiteral("gravitySpinBox"));
+        gravitySpinBox->setDecimals(2);
+        gravitySpinBox->setMinimum(-99.99);
+        gravitySpinBox->setSingleStep(0.1);
+        gravitySpinBox->setValue(-9.81);
+
+        formLayout->setWidget(3, QFormLayout::FieldRole, gravitySpinBox);
 
         timeStepLabel = new QLabel(physicsControlsGB);
         timeStepLabel->setObjectName(QStringLiteral("timeStepLabel"));
 
-        formLayout->setWidget(2, QFormLayout::LabelRole, timeStepLabel);
+        formLayout->setWidget(4, QFormLayout::LabelRole, timeStepLabel);
+
+        timeStepSpinBox = new QDoubleSpinBox(physicsControlsGB);
+        timeStepSpinBox->setObjectName(QStringLiteral("timeStepSpinBox"));
+        timeStepSpinBox->setDecimals(4);
+        timeStepSpinBox->setSingleStep(0.001);
+        timeStepSpinBox->setValue(0.01);
+
+        formLayout->setWidget(4, QFormLayout::FieldRole, timeStepSpinBox);
+
+        subStepsLabel = new QLabel(physicsControlsGB);
+        subStepsLabel->setObjectName(QStringLiteral("subStepsLabel"));
+
+        formLayout->setWidget(5, QFormLayout::LabelRole, subStepsLabel);
 
         subStepsSpinBox = new QSpinBox(physicsControlsGB);
         subStepsSpinBox->setObjectName(QStringLiteral("subStepsSpinBox"));
         subStepsSpinBox->setMinimum(1);
         subStepsSpinBox->setMaximum(999);
+        subStepsSpinBox->setValue(10);
 
-        formLayout->setWidget(3, QFormLayout::FieldRole, subStepsSpinBox);
-
-        subStepsLabel = new QLabel(physicsControlsGB);
-        subStepsLabel->setObjectName(QStringLiteral("subStepsLabel"));
-
-        formLayout->setWidget(3, QFormLayout::LabelRole, subStepsLabel);
+        formLayout->setWidget(5, QFormLayout::FieldRole, subStepsSpinBox);
 
 
         gridLayout_3->addLayout(formLayout, 0, 0, 2, 1);
+
+        massCountLabel = new QLabel(physicsControlsGB);
+        massCountLabel->setObjectName(QStringLiteral("massCountLabel"));
+
+        gridLayout_3->addWidget(massCountLabel, 3, 0, 1, 1);
+
+        springCountLabel = new QLabel(physicsControlsGB);
+        springCountLabel->setObjectName(QStringLiteral("springCountLabel"));
+
+        gridLayout_3->addWidget(springCountLabel, 4, 0, 1, 1);
 
 
         verticalLayout->addWidget(physicsControlsGB);
@@ -181,7 +225,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1135, 23));
+        menubar->setGeometry(QRect(0, 0, 1135, 19));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -204,8 +248,12 @@ public:
         resetJelloPushButton->setText(QApplication::translate("MainWindow", "Reset", Q_NULLPTR));
         springConstantLabel->setText(QApplication::translate("MainWindow", "Spring", Q_NULLPTR));
         dampingConstantLabel->setText(QApplication::translate("MainWindow", "Damping", Q_NULLPTR));
+        jelloMassLabel->setText(QApplication::translate("MainWindow", "Jello Mass", Q_NULLPTR));
+        gravityLabel->setText(QApplication::translate("MainWindow", "Gravity", Q_NULLPTR));
         timeStepLabel->setText(QApplication::translate("MainWindow", "Timestep", Q_NULLPTR));
         subStepsLabel->setText(QApplication::translate("MainWindow", "Substeps", Q_NULLPTR));
+        massCountLabel->setText(QApplication::translate("MainWindow", "Mass Count: ?", Q_NULLPTR));
+        springCountLabel->setText(QApplication::translate("MainWindow", "Spring Count: ?", Q_NULLPTR));
     } // retranslateUi
 
 };

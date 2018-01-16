@@ -10,16 +10,23 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_gl = new NGLScene(this, m_jelloCube);
 	m_ui->s_mainWindowGridLayout->addWidget(m_gl,0,0,2,1);
 
+	// reset button
+	connect(m_ui->resetJelloPushButton, SIGNAL(released()), this, SLOT(resetJelloCube()));
+
+	// display controls
 	connect(m_ui->displayMassesCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleMassPoints()));
 	connect(m_ui->displayStructuralSpringsCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleStructuralSpring()));
 	connect(m_ui->displayShearSpringsCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleShearSpring()));
 	connect(m_ui->displayBendSpringsCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleBendSpring()));
 
+	// physics controls
 	connect(m_ui->springConstantSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setK(double)));
 	connect(m_ui->dampingConstantSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setDamping(double)));
+	connect(m_ui->jelloMassSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setMass(double)));
+	connect(m_ui->gravitySpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setGravity(double)));
+	// timestep
 	connect(m_ui->timeStepSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setTimeStep(double)));
-	connect(m_ui->resetJelloPushButton, SIGNAL(released()), m_jelloCube, SLOT(reset()));
-
+	// sub steps spin box
 	connect(m_ui->subStepsSpinBox, SIGNAL(valueChanged(int)), m_jelloCube, SLOT(setSubSteps(int)));
 }
 
@@ -28,4 +35,16 @@ MainWindow::~MainWindow()
 	delete m_ui;
 	delete m_gl;
 	delete m_jelloCube;
+}
+
+void MainWindow::resetJelloCube()
+{
+	m_jelloCube->reset();
+	updateUIText();
+}
+
+void MainWindow::updateUIText()
+{
+	m_ui->massCountLabel->setText(QStringLiteral("Mass Count: %1").arg(m_jelloCube->getMassCount()));
+	m_ui->springCountLabel->setText(QStringLiteral("Spring Count: %1").arg(m_jelloCube->getSpringCount()));
 }

@@ -39,9 +39,6 @@ uniform vec3 u_step;
 
 uniform bool u_springWrite;
 
-uniform float u_mass;
-uniform float u_gravity;
-
 int getIndex(ivec3 pos)
 {
 	return int(
@@ -89,7 +86,6 @@ void main()
 		vec3 pos = writePos * u_step + u_bottomLeft;
 		masses[currentIndex].position = vec4(pos, 0.0);
 		masses[currentIndex].velocity = vec4(0.0);
-		// masses[currentIndex].force = vec4(0.0, u_mass * -u_gravity, 0.0, 0.0);
 		masses[currentIndex].force = vec4(0.0);
 	}
 

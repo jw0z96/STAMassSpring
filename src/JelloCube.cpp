@@ -10,12 +10,17 @@
 JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 {
 	std::cout<<"creating jello cube!\n";
-	m_timestep = 0.1;
-	m_subSteps = 1;
+	m_timestep = 0.01;
+	m_subSteps = 10;
 	m_t = 0.0;
 	m_sizeX = 10;
 	m_sizeY = 10;
 	m_sizeZ = 10;
+	m_mass = 10.0;
+	m_gravity = -9.81;
+
+	m_massBufferId = 0;
+	m_springBufferId = 0;
 }
 
 JelloCube::~JelloCube()
@@ -87,6 +92,16 @@ void JelloCube::setDamping(double _damping)
 	m_damping = _damping;
 }
 
+void JelloCube::setMass(double _mass)
+{
+	m_mass = _mass;
+}
+
+void JelloCube::setGravity(double _gravity)
+{
+	m_gravity = _gravity;
+}
+
 void JelloCube::setTimeStep(double _t)
 {
 	m_timestep = _t;
@@ -122,15 +137,12 @@ void JelloCube::generate()
 	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
 
 	// create the texture to store the positions of the mass points
-	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
-	std::vector<SSBO_Mass> massPointsArray(numMasses);
+	m_massCount = m_sizeX * m_sizeY * m_sizeZ;
+	std::vector<SSBO_Mass> massPointsArray(m_massCount);
 
 	// generate an ssbo for the masses
-	genSSBO(m_massBufferId, numMasses * sizeof(SSBO_Mass), &massPointsArray[0], GL_DYNAMIC_COPY);
+	genSSBO(m_massBufferId, m_massCount * sizeof(SSBO_Mass), &massPointsArray[0], GL_DYNAMIC_COPY);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
-
-	shader->setUniform("u_mass", GLfloat(10.0 / numMasses));
-	shader->setUniform("u_gravity", GLfloat(9.81));
 
 	// set to only count the number of springs
 	shader->setUniform("u_springWrite", false);
@@ -213,10 +225,6 @@ void JelloCube::calculateSpringForces()
 	shader->setUniform("u_springCount", GLint(m_springCount));
 	shader->setUniform("u_writeMode", false);
 
-	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
-	shader->setUniform("u_mass", GLfloat(10.0 / numMasses));
-	shader->setUniform("u_gravity", GLfloat(9.81));
-
 	// dispatch compute shader to integrate springs
 	// glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
 	glDispatchCompute(m_springCount, 1, 1);
@@ -241,10 +249,8 @@ void JelloCube::calculateExternalForces()
 	shader->setUniform("u_currentTime", m_t);
 	shader->setUniform("u_timeStep", float(m_timestep / (float)m_subSteps));
 
-	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
-
-	shader->setUniform("u_mass", GLfloat(10.0 / numMasses));
-	shader->setUniform("u_gravity", GLfloat(9.81));
+	shader->setUniform("u_mass", GLfloat(m_mass / (float)m_massCount));
+	shader->setUniform("u_gravity", m_gravity);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
 
