@@ -115,6 +115,11 @@ void main()
 		// get force from integration result (dv)
 		vec3 springForce = (springs[computeIndex].velocity.xyz / u_timeStep) * 10.0; // * u_mass;
 
+		// if (length(springForce) < 0.001)
+		// {
+		// 	return;
+		// }
+
 		atomicAdd(masses[startIndex].force.x, -springForce.x);
 		atomicAdd(masses[startIndex].force.y, -springForce.y);
 		atomicAdd(masses[startIndex].force.z, -springForce.z);

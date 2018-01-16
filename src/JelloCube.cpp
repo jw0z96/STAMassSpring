@@ -203,7 +203,7 @@ void JelloCube::calculateSpringForces()
 	shader->use("jelloCubeSpringPass");
 
 	shader->setUniform("u_currentTime", m_t);
-	shader->setUniform("u_timeStep", float(m_timestep / m_subSteps));
+	shader->setUniform("u_timeStep", float(m_timestep / (float)m_subSteps));
 	shader->setUniform("u_k", m_k);
 	shader->setUniform("u_damping", m_damping);
 
@@ -249,7 +249,7 @@ void JelloCube::calculateExternalForces()
 	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
 
 	shader->setUniform("u_currentTime", m_t);
-	shader->setUniform("u_timeStep", float(m_timestep / m_subSteps));
+	shader->setUniform("u_timeStep", float(m_timestep / (float)m_subSteps));
 
 	unsigned int numMasses = m_sizeX * m_sizeY * m_sizeZ;
 
