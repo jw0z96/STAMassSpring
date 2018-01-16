@@ -163,6 +163,11 @@ void NGLScene::paintGL()
 	}
 
 	shader->use("springShader");
+
+	shader->setUniform("u_drawStructuralSprings", m_drawStructuralSprings);
+	shader->setUniform("u_drawBendSprings", m_drawBendSprings);
+	shader->setUniform("u_drawShearSprings", m_drawShearSprings);
+
 	loadMatricesToShader();
 	m_jelloCube->drawSprings();
 

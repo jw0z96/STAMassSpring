@@ -4,6 +4,10 @@ layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 layout (binding = 0, offset = 0) uniform atomic_uint springCount;
 
+const uint SPRING_TYPE_STRUCTURAL = 0;
+const uint SPRING_TYPE_BEND = 1;
+const uint SPRING_TYPE_SHEAR = 2;
+
 // TOO LAZY TO PAD MANUALLY, REMEMBER TO ONLY ACCESS .XYZ
 struct Mass
 {
@@ -18,6 +22,7 @@ struct Spring
 	uint end;
 	float restingLength;
 	vec4 velocity;
+	uint type;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer
@@ -48,7 +53,7 @@ int getIndex(ivec3 pos)
 		);
 }
 
-void addSpring(ivec3 _start, ivec3 _end)
+void addSpring(uint _type, ivec3 _start, ivec3 _end)
 {
 	uint springIndex = atomicCounterIncrement(springCount);
 
@@ -67,6 +72,7 @@ void addSpring(ivec3 _start, ivec3 _end)
 		springs[springIndex].start = startIndex;
 		springs[springIndex].end = endIndex;
 		springs[springIndex].restingLength = restingLength;
+		springs[springIndex].type = _type;
 	}
 }
 
@@ -91,31 +97,31 @@ void main()
 
 	// create / count structural springs
 	if ((writePos.x + 1) < u_sizeX) // connect (i,j,k) to (i+1, j, k)
-		addSpring(writePos, writePos + ivec3(1, 0, 0));
+		addSpring(SPRING_TYPE_STRUCTURAL, writePos, writePos + ivec3(1, 0, 0));
 	if ((writePos.y + 1) < u_sizeY) // connect (i,j,k) to (i, j+1, k)
-		addSpring(writePos, writePos + ivec3(0, 1, 0));
+		addSpring(SPRING_TYPE_STRUCTURAL, writePos, writePos + ivec3(0, 1, 0));
 	if ((writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i, j, k+1)
-		addSpring(writePos, writePos + ivec3(0, 0, 1));
+		addSpring(SPRING_TYPE_STRUCTURAL, writePos, writePos + ivec3(0, 0, 1));
 
 	// create / count bend springs
 	if ((writePos.x + 2) < u_sizeX) // connect (i,j,k) to (i+2, j, k)
-		addSpring(writePos, writePos + ivec3(2, 0, 0));
+		addSpring(SPRING_TYPE_BEND, writePos, writePos + ivec3(2, 0, 0));
 	if ((writePos.y + 2) < u_sizeY) // connect (i,j,k) to (i, j+2, k)
-		addSpring(writePos, writePos + ivec3(0, 2, 0));
+		addSpring(SPRING_TYPE_BEND, writePos, writePos + ivec3(0, 2, 0));
 	if ((writePos.z + 2) < u_sizeZ) // connect (i,j,k) to (i, j, k+2)
-		addSpring(writePos, writePos + ivec3(0, 0, 2));
+		addSpring(SPRING_TYPE_BEND, writePos, writePos + ivec3(0, 0, 2));
 
 	// create / count shear springs
 	if ((writePos.x + 1) < u_sizeX && (writePos.y + 1) < u_sizeY) // connect (i,j,k) to (i+1,j+1,k)
-		addSpring(writePos, writePos + ivec3(1, 1, 0));
+		addSpring(SPRING_TYPE_SHEAR, writePos, writePos + ivec3(1, 1, 0));
 	if ((writePos.x + 1) < u_sizeX && (writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i+1,j,k+1)
-		addSpring(writePos, writePos + ivec3(1, 0, 1));
+		addSpring(SPRING_TYPE_SHEAR, writePos, writePos + ivec3(1, 0, 1));
 	if ((writePos.x + 1) < u_sizeX && writePos.z > 0) // connect (i,j,k) to (i+1,j,k-1)
-		addSpring(writePos, writePos + ivec3(1, 0, -1));
+		addSpring(SPRING_TYPE_SHEAR, writePos, writePos + ivec3(1, 0, -1));
 	if ((writePos.x + 1) < u_sizeX && writePos.y > 0) // connect (i,j,k) to (i+1,j-1,k)
-		addSpring(writePos, writePos + ivec3(1, -1, 0));
+		addSpring(SPRING_TYPE_SHEAR, writePos, writePos + ivec3(1, -1, 0));
 	if ((writePos.y + 1) < u_sizeY && (writePos.z + 1) < u_sizeZ) // connect (i,j,k) to (i,j+1,k+1)
-		addSpring(writePos, writePos + ivec3(0, 1, 1));
+		addSpring(SPRING_TYPE_SHEAR, writePos, writePos + ivec3(0, 1, 1));
 	if ((writePos.y + 1) < u_sizeY && writePos.z > 0) // connect (i,j,k) to (i,j+1,k-1)
-		addSpring(writePos, writePos + ivec3(0, 1, -1));
+		addSpring(SPRING_TYPE_SHEAR, writePos, writePos + ivec3(0, 1, -1));
 }

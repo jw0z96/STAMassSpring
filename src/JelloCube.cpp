@@ -31,6 +31,12 @@ JelloCube::~JelloCube()
 	glDeleteVertexArrays(1, &m_emptyVAO);
 }
 
+void JelloCube::reset()
+{
+	m_t = 0.0;
+	generate();
+}
+
 void JelloCube::initializeShaders()
 {
 	ngl::ShaderLib *shader=ngl::ShaderLib::instance();
@@ -74,42 +80,6 @@ void JelloCube::initializeShaders()
 	glGenVertexArrays(1, &m_emptyVAO); // Create our Vertex Array Object
 	glBindVertexArray(m_emptyVAO); // Bind our Vertex Array Object so we can use it
 	glBindVertexArray(0);
-}
-
-void JelloCube::reset()
-{
-	m_t = 0.0;
-	generate();
-}
-
-void JelloCube::setK(double _k)
-{
-	m_k = _k;
-}
-
-void JelloCube::setDamping(double _damping)
-{
-	m_damping = _damping;
-}
-
-void JelloCube::setMass(double _mass)
-{
-	m_mass = _mass;
-}
-
-void JelloCube::setGravity(double _gravity)
-{
-	m_gravity = _gravity;
-}
-
-void JelloCube::setTimeStep(double _t)
-{
-	m_timestep = _t;
-}
-
-void JelloCube::setSubSteps(int _s)
-{
-	m_subSteps = _s;
 }
 
 void JelloCube::generate()

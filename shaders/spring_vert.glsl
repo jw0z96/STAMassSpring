@@ -2,6 +2,8 @@
 
 uniform mat4 MVP;
 
+flat out uint springType;
+
 struct Mass
 {
 	vec4 position;
@@ -15,6 +17,7 @@ struct Spring
 	uint end;
 	float restingLength;
 	vec4 velocity;
+	uint type;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer
@@ -33,6 +36,7 @@ void main()
 {
 	int springId = int(floor((gl_VertexID / 2.0)));
 
+	springType = springs[springId].type;
 	uint startIndex = springs[springId].start;
 	vec3 startPos = masses[startIndex].position.xyz;
 	uint endIndex = springs[springId].end;
@@ -50,5 +54,4 @@ void main()
 	{
 		gl_Position = MVP * vec4(endPos, 1.0);
 	}
-
 }

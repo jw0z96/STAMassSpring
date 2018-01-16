@@ -72,7 +72,8 @@ void main()
 		masses[currentIndex].velocity.xyz *= 0.99; //damping
 	}
 
-	masses[currentIndex].velocity.xyz *= 1.0 - (u_timeStep); //damping
+	float u_velocityDamping = 1.0;
+	masses[currentIndex].velocity.xyz *= 1.0 - (u_velocityDamping * u_timeStep); //damping
 
 	// reset force values
 	masses[currentIndex].force = vec4(0.0);

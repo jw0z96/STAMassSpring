@@ -21,6 +21,7 @@ struct SSBO_Spring
 	GLuint m_end; float pad1[3];
 	GLfloat m_restingLength; float pad2[3];
 	ngl::Vec4 m_velocity;
+	GLuint m_springType; float pad3[3];
 };
 
 class JelloCube : public QObject

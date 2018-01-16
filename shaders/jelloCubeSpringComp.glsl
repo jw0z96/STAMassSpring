@@ -18,6 +18,7 @@ struct Spring
 	uint end;
 	float restingLength;
 	vec4 velocity;
+	uint type;
 };
 
 layout (std430, binding = 0) buffer massPointsBuffer
@@ -45,6 +46,12 @@ uniform int u_sizeZ;
 
 // return the velocity (or force??) calculated by the spring according to hooke's law
 // vec3 _v: the relative velocity between the two masses
+/// F = -k(|x|-d)(x/|x|) - bv where
+/// k is the spring constant
+/// |x| is the distance between the two spring points
+/// d is the distance of seperation
+/// b is the coefficient of damping larger b increases the damping force
+/// v is the relative velocity between the spring points
 vec3 motionFunction(vec3 _v)
 {
 	uint computeIndex = gl_GlobalInvocationID.x;
@@ -55,7 +62,7 @@ vec3 motionFunction(vec3 _v)
 	vec3 distance = endPos - startPos;
 	float length = length(distance);
 	float restingLength = springs[computeIndex].restingLength;
-	return -u_k * (length-restingLength) * (distance/length) -u_damping * _v;
+	return -u_k*(length-restingLength)*(distance/length)-u_damping*_v;
 }
 
 // calculate the velocity of the spring
@@ -86,19 +93,13 @@ vec3 integrate(vec3 _v)
 	return dvdt * u_timeStep;
 }
 
-// void atomicAddVec3(inout vec3 location, vec3 data)
-// {
-// 	atomicAdd(location.x, data.x);
-// 	atomicAdd(location.y, data.y);
-// 	atomicAdd(location.z, data.z);
-// }
 
 void main()
 {
 	uint computeIndex = gl_GlobalInvocationID.x;
 
 	if (computeIndex >= u_springCount)
-		return;
+	return;
 
 	if (!u_writeMode)
 	{
