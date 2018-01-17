@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(m_ui->resetJelloPushButton, SIGNAL(released()), this, SLOT(resetJelloCube()));
 
 	// display controls
+	connect(m_ui->displayMeshCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleMesh()));
 	connect(m_ui->displayMassesCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleMassPoints()));
 	connect(m_ui->displayStructuralSpringsCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleStructuralSpring()));
 	connect(m_ui->displayShearSpringsCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleShearSpring()));

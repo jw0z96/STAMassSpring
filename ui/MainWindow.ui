@@ -23,31 +23,41 @@
          <string>Display</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="2" column="0">
+         <item row="4" column="0">
           <widget class="QCheckBox" name="displayShearSpringsCheckBox">
            <property name="text">
             <string>Shear Springs</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="3" column="0">
           <widget class="QCheckBox" name="displayStructuralSpringsCheckBox">
            <property name="text">
             <string>Structural Springs</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="5" column="0">
           <widget class="QCheckBox" name="displayBendSpringsCheckBox">
            <property name="text">
             <string>Bend Springs</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item row="1" column="0">
           <widget class="QCheckBox" name="displayMassesCheckBox">
            <property name="text">
             <string>Masses</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="displayMeshCheckBox">
+           <property name="text">
+            <string>Mesh</string>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -253,7 +263,7 @@
      <x>0</x>
      <y>0</y>
      <width>1135</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

@@ -22,7 +22,8 @@ NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent),
 	this->resize(_parent->size());
 	m_timer.start();
 
-	m_drawMassPoints = true;
+	m_drawMesh = true;
+	m_drawMassPoints = false;
 	m_drawStructuralSprings = false;
 	m_drawShearSprings = false;
 	m_drawBendSprings = false;
@@ -155,10 +156,13 @@ void NGLScene::paintGL()
 	m_transform.reset();
 	// m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 
-	// draw jello mesh
-	shader->use("jelloGeoShader");
-	loadMatricesToShader();
-	m_jelloCube->drawMesh();
+	if (m_drawMesh)
+	{
+		// draw jello mesh
+		shader->use("jelloGeoShader");
+		loadMatricesToShader();
+		m_jelloCube->drawMesh();
+	}
 
 	// draw masses
 	if (m_drawMassPoints)

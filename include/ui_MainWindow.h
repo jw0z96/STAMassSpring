@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.9.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -43,6 +43,7 @@ public:
     QCheckBox *displayStructuralSpringsCheckBox;
     QCheckBox *displayBendSpringsCheckBox;
     QCheckBox *displayMassesCheckBox;
+    QCheckBox *displayMeshCheckBox;
     QGroupBox *physicsControlsGB;
     QGridLayout *gridLayout_3;
     QPushButton *resetJelloPushButton;
@@ -84,23 +85,29 @@ public:
         displayShearSpringsCheckBox = new QCheckBox(displayControlsGB);
         displayShearSpringsCheckBox->setObjectName(QStringLiteral("displayShearSpringsCheckBox"));
 
-        gridLayout_2->addWidget(displayShearSpringsCheckBox, 2, 0, 1, 1);
+        gridLayout_2->addWidget(displayShearSpringsCheckBox, 4, 0, 1, 1);
 
         displayStructuralSpringsCheckBox = new QCheckBox(displayControlsGB);
         displayStructuralSpringsCheckBox->setObjectName(QStringLiteral("displayStructuralSpringsCheckBox"));
 
-        gridLayout_2->addWidget(displayStructuralSpringsCheckBox, 1, 0, 1, 1);
+        gridLayout_2->addWidget(displayStructuralSpringsCheckBox, 3, 0, 1, 1);
 
         displayBendSpringsCheckBox = new QCheckBox(displayControlsGB);
         displayBendSpringsCheckBox->setObjectName(QStringLiteral("displayBendSpringsCheckBox"));
 
-        gridLayout_2->addWidget(displayBendSpringsCheckBox, 3, 0, 1, 1);
+        gridLayout_2->addWidget(displayBendSpringsCheckBox, 5, 0, 1, 1);
 
         displayMassesCheckBox = new QCheckBox(displayControlsGB);
         displayMassesCheckBox->setObjectName(QStringLiteral("displayMassesCheckBox"));
-        displayMassesCheckBox->setChecked(true);
+        displayMassesCheckBox->setChecked(false);
 
-        gridLayout_2->addWidget(displayMassesCheckBox, 0, 0, 1, 1);
+        gridLayout_2->addWidget(displayMassesCheckBox, 1, 0, 1, 1);
+
+        displayMeshCheckBox = new QCheckBox(displayControlsGB);
+        displayMeshCheckBox->setObjectName(QStringLiteral("displayMeshCheckBox"));
+        displayMeshCheckBox->setChecked(true);
+
+        gridLayout_2->addWidget(displayMeshCheckBox, 0, 0, 1, 1);
 
 
         verticalLayout->addWidget(displayControlsGB);
@@ -225,7 +232,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1135, 19));
+        menubar->setGeometry(QRect(0, 0, 1135, 23));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -244,6 +251,7 @@ public:
         displayStructuralSpringsCheckBox->setText(QApplication::translate("MainWindow", "Structural Springs", Q_NULLPTR));
         displayBendSpringsCheckBox->setText(QApplication::translate("MainWindow", "Bend Springs", Q_NULLPTR));
         displayMassesCheckBox->setText(QApplication::translate("MainWindow", "Masses", Q_NULLPTR));
+        displayMeshCheckBox->setText(QApplication::translate("MainWindow", "Mesh", Q_NULLPTR));
         physicsControlsGB->setTitle(QApplication::translate("MainWindow", "Controls", Q_NULLPTR));
         resetJelloPushButton->setText(QApplication::translate("MainWindow", "Reset", Q_NULLPTR));
         springConstantLabel->setText(QApplication::translate("MainWindow", "Spring", Q_NULLPTR));
