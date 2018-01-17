@@ -155,27 +155,29 @@ void NGLScene::paintGL()
 	m_transform.reset();
 	// m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 
+	// draw jello mesh
+	shader->use("jelloGeoShader");
+	loadMatricesToShader();
+	m_jelloCube->drawMesh();
+
+	// draw masses
 	if (m_drawMassPoints)
 	{
 		shader->use("testShader");
 		loadMatricesToShader();
 		m_jelloCube->drawMasses();
 	}
-
+	// draw springs
 	shader->use("springShader");
-
 	shader->setUniform("u_drawStructuralSprings", m_drawStructuralSprings);
 	shader->setUniform("u_drawBendSprings", m_drawBendSprings);
 	shader->setUniform("u_drawShearSprings", m_drawShearSprings);
-
 	loadMatricesToShader();
 	m_jelloCube->drawSprings();
-
+	// draw ground
 	shader->use("basicShader");
 	loadMatricesToShader();
 	prim->draw("ground");
-
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------

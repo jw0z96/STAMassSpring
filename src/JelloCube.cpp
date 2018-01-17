@@ -19,6 +19,7 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	m_mass = 10.0;
 	m_gravity = -9.81;
 
+	m_numQuads = 0;
 	m_massBufferId = 0;
 	m_springBufferId = 0;
 }
@@ -72,7 +73,13 @@ void JelloCube::initializeShaders()
 		"shaders/spring_vert.glsl",
 		"shaders/spring_frag.glsl");
 	shader->use("springShader");
-	shader->setUniform("massPointsPositionTex", 0);
+
+	// create the spring geometry shader program
+	shader->loadShader("jelloGeoShader",
+		"shaders/jello_vert.glsl",
+		"shaders/jello_frag.glsl",
+		"shaders/jello_geo.glsl");
+	shader->use("jelloGeoShader");
 
 	generate();
 
@@ -105,6 +112,11 @@ void JelloCube::generate()
 	genAtomicCounter(springCounter);
 	// bind the atomic counter
 	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, springCounter);
+
+	// calculate the number of quads needed to draw the mesh
+	m_numQuads = (m_sizeX - 1) * (m_sizeY - 1) * 2;
+	m_numQuads += (m_sizeX - 1) * (m_sizeZ - 1) * 2;
+	m_numQuads += (m_sizeY - 1) * (m_sizeZ - 1) * 2;
 
 	// create the texture to store the positions of the mass points
 	m_massCount = m_sizeX * m_sizeY * m_sizeZ;

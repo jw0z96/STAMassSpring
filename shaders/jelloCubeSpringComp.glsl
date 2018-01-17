@@ -93,7 +93,6 @@ vec3 integrate(vec3 _v)
 	return dvdt * u_timeStep;
 }
 
-
 void main()
 {
 	uint computeIndex = gl_GlobalInvocationID.x;

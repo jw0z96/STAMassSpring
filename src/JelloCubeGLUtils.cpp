@@ -77,6 +77,27 @@ void JelloCube::genSSBO(unsigned int &buffer, GLsizeiptr size, const GLvoid * da
 
 //----------------------------------------------------------------------------------------------------------------------
 
+void JelloCube::drawMesh()
+{
+	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
+	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
+
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
+
+	shader->setUniform("u_sizeX", GLint(m_sizeX));
+	shader->setUniform("u_sizeY", GLint(m_sizeY));
+	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
+
+	glEnable(GL_CULL_FACE);
+
+	glBindVertexArray(m_emptyVAO);
+	// draw half the number of quads (can mirror the other side)
+	glDrawArrays(GL_POINTS, 0, (m_numQuads / 2.0));
+	glBindVertexArray(0);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 void JelloCube::drawMasses()
 {
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
