@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(m_ui->displayBendSpringsCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleBendSpring()));
 
 	// physics controls
+	connect(m_ui->enableSphereColliderCheckBox, SIGNAL(stateChanged(int)), this, SLOT(toggleSphereCollider()));
 	connect(m_ui->springConstantSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setK(double)));
 	connect(m_ui->dampingConstantSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setDamping(double)));
 	connect(m_ui->jelloMassSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setMass(double)));
@@ -50,6 +51,12 @@ void MainWindow::resetJelloCube()
 {
 	m_jelloCube->reset();
 	updateUIText();
+}
+
+void MainWindow::toggleSphereCollider()
+{
+	m_jelloCube->toggleCollider();
+	m_gl->toggleCollider();
 }
 
 void MainWindow::updateUIText()

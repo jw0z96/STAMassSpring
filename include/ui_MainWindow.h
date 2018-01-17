@@ -65,6 +65,7 @@ public:
     QLabel *integratorLabel;
     QLabel *massCountLabel;
     QLabel *springCountLabel;
+    QCheckBox *enableSphereColliderCheckBox;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
     QMenuBar *menubar;
@@ -228,6 +229,12 @@ public:
 
         gridLayout_3->addWidget(springCountLabel, 5, 0, 1, 1);
 
+        enableSphereColliderCheckBox = new QCheckBox(physicsControlsGB);
+        enableSphereColliderCheckBox->setObjectName(QStringLiteral("enableSphereColliderCheckBox"));
+        enableSphereColliderCheckBox->setChecked(true);
+
+        gridLayout_3->addWidget(enableSphereColliderCheckBox, 0, 0, 1, 1);
+
 
         verticalLayout->addWidget(physicsControlsGB);
 
@@ -276,6 +283,7 @@ public:
         integratorLabel->setText(QApplication::translate("MainWindow", "Integrator", Q_NULLPTR));
         massCountLabel->setText(QApplication::translate("MainWindow", "Mass Count: ?", Q_NULLPTR));
         springCountLabel->setText(QApplication::translate("MainWindow", "Spring Count: ?", Q_NULLPTR));
+        enableSphereColliderCheckBox->setText(QApplication::translate("MainWindow", "Sphere Collider", Q_NULLPTR));
     } // retranslateUi
 
 };

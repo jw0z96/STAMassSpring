@@ -19,7 +19,7 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	m_mass = 1.0;
 	m_gravity = -9.81;
 	m_integrator = 0;
-
+	m_enableCollider = true;
 	m_numQuads = 0;
 	m_massBufferId = 0;
 	m_springBufferId = 0;
@@ -236,6 +236,7 @@ void JelloCube::calculateExternalForces(ngl::Vec3 _pos, float _radius)
 	shader->setUniform("u_mass", GLfloat(m_mass / (float)m_massCount));
 	shader->setUniform("u_gravity", m_gravity);
 
+	shader->setUniform("u_sphereCollisions", m_enableCollider);
 	shader->setUniform("u_spherePos", _pos);
 	shader->setUniform("u_sphereRadius", _radius);
 

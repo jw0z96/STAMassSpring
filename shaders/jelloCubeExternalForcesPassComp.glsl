@@ -27,6 +27,7 @@ uniform float u_timeStep;
 uniform float u_mass;
 uniform float u_gravity;
 
+uniform bool u_sphereCollisions;
 uniform vec3 u_spherePos;
 uniform float u_sphereRadius;
 
@@ -71,13 +72,16 @@ void main()
 	masses[currentIndex].force = vec4(0.0);
 
 	// sphere collision
-	vec3 sphereToMass = masses[currentIndex].position.xyz - u_spherePos;
-	if (length(sphereToMass) <= u_sphereRadius)
+	if (u_sphereCollisions)
 	{
-		vec3 normalizedSphereToMass = normalize(sphereToMass);
-		masses[currentIndex].position.xyz = u_spherePos + (normalizedSphereToMass * u_sphereRadius);
-		masses[currentIndex].force.xyz += u_mass * normalizedSphereToMass;
-		masses[currentIndex].velocity.xyz *= 0.8; // friction
+		vec3 sphereToMass = masses[currentIndex].position.xyz - u_spherePos;
+		if (length(sphereToMass) <= u_sphereRadius)
+		{
+			vec3 normalizedSphereToMass = normalize(sphereToMass);
+			masses[currentIndex].position.xyz = u_spherePos + (normalizedSphereToMass * u_sphereRadius);
+			masses[currentIndex].force.xyz += u_mass * normalizedSphereToMass;
+			masses[currentIndex].velocity.xyz *= 0.8; // friction
+		}
 	}
 
 	// ground plane collision

@@ -24,6 +24,7 @@ NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent),
 	this->resize(_parent->size());
 	m_timer.start();
 
+	m_drawCollider = true;
 	m_drawMesh = true;
 	m_drawMassPoints = false;
 	m_drawStructuralSprings = false;
@@ -190,13 +191,14 @@ void NGLScene::paintGL()
 	shader->setUniform("diffuse", ngl::Vec3(0.2, 0.2, 0.2));
 	prim->draw("ground");
 
-	m_transform.setPosition(m_spherePos);
-	m_transform.setScale(ngl::Vec3(m_sphereRadius, m_sphereRadius, m_sphereRadius));
-
-	loadMatricesToShader();
-
-	shader->setUniform("diffuse", ngl::Vec3(0.9, 0.1, 0.1));
-	prim->draw("sphereCollider");
+	if (m_drawCollider)
+	{
+		m_transform.setPosition(m_spherePos);
+		m_transform.setScale(ngl::Vec3(m_sphereRadius, m_sphereRadius, m_sphereRadius));
+		loadMatricesToShader();
+		shader->setUniform("diffuse", ngl::Vec3(0.9, 0.1, 0.1));
+		prim->draw("sphereCollider");
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------

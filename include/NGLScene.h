@@ -62,6 +62,7 @@ class NGLScene : public QOpenGLWidget
 
 	public slots:
 
+	void toggleCollider(){m_drawCollider = !m_drawCollider;};
 	void toggleMesh(){m_drawMesh = !m_drawMesh; update();};
 	void toggleMassPoints(){m_drawMassPoints = !m_drawMassPoints; update();};
 	void toggleStructuralSpring(){m_drawStructuralSprings = !m_drawStructuralSprings; update();};
@@ -120,6 +121,7 @@ class NGLScene : public QOpenGLWidget
 	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief bools to toggle the drawing of physics elements
 	//----------------------------------------------------------------------------------------------------------------------
+	bool m_drawCollider;
 	bool m_drawMesh;
 	bool m_drawMassPoints;
 	bool m_drawStructuralSprings;

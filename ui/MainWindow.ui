@@ -231,6 +231,16 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="enableSphereColliderCheckBox">
+           <property name="text">
+            <string>Sphere Collider</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
