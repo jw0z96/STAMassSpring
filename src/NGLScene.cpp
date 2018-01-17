@@ -62,6 +62,7 @@ void NGLScene::resizeGL( int _w, int _h )
 	m_cam.setProjection( 45.0f, static_cast<float>( _w ) / _h, 0.001f, 100.0f );
 	m_win.width  = static_cast<int>(_w * devicePixelRatio());
 	m_win.height = static_cast<int>(_h * devicePixelRatio());
+	m_isFBODirty = true;
 }
 
 void NGLScene::initializeGL()
