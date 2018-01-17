@@ -93,7 +93,7 @@ void NGLScene::initializeGL()
 
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
 	prim->createSphere("sphere",0.1f,1);
-	prim->createTrianglePlane("ground", 14, 14, 80, 80, ngl::Vec3(0.0, 1.0, 0.0));
+	prim->createTrianglePlane("ground", 100, 100, 20, 20, ngl::Vec3(0.0, 1.0, 0.0));
 	prim->createSphere("sphereCollider", 1.0f, 16);
 
 	m_jelloCube->initializeShaders();

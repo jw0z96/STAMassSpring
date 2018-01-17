@@ -27,6 +27,11 @@ void JelloCube::setFriction(double _friction)
 	m_friction = _friction;
 }
 
+void JelloCube::setRecovery(double _recovery)
+{
+	m_recovery = _recovery;
+}
+
 void JelloCube::setTimeStep(double _t)
 {
 	m_timestep = _t;

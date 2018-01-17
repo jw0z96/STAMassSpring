@@ -96,5 +96,4 @@ void main()
 	// air resistance
 	float u_velocityDamping = 1.0;
 	masses[currentIndex].velocity.xyz *= 1.0 - (u_velocityDamping * u_timeStep);
-
 }

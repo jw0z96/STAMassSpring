@@ -41,6 +41,7 @@ uniform float u_timeStep;
 uniform int u_integrator;
 uniform float u_k;
 uniform float u_damping;
+uniform float u_recovery;
 
 uniform bool u_writeMode;
 uniform int u_springCount;
@@ -66,6 +67,7 @@ vec3 motionFunction(vec3 _v)
 	vec3 endPos = masses[endIndex].position.xyz;
 	vec3 distance = endPos - startPos;
 	float length = length(distance);
+	springs[computeIndex].restingLength = mix(springs[computeIndex].restingLength, length, ((1.0 - u_recovery) / 100.0));
 	float restingLength = springs[computeIndex].restingLength;
 	return -u_k*(length-restingLength)*(distance/length)-u_damping*_v;
 }

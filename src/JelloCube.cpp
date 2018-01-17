@@ -19,6 +19,7 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	m_mass = 1.0;
 	m_gravity = -9.81;
 	m_friction = 0.2;
+	m_recovery = 1.0;
 	m_integrator = 0;
 	m_enableCollider = true;
 	m_numQuads = 0;
@@ -198,6 +199,7 @@ void JelloCube::calculateSpringForces()
 	shader->setUniform("u_timeStep", float(m_timestep / (float)m_subSteps));
 	shader->setUniform("u_k", m_k);
 	shader->setUniform("u_damping", m_damping);
+	shader->setUniform("u_recovery", m_recovery);
 
 	shader->setUniform("u_sizeX", GLint(m_sizeX));
 	shader->setUniform("u_sizeY", GLint(m_sizeY));

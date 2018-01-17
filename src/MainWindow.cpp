@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(m_ui->jelloMassSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setMass(double)));
 	connect(m_ui->gravitySpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setGravity(double)));
 	connect(m_ui->frictionSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setFriction(double)));
+	connect(m_ui->recoverySpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setRecovery(double)));
 	// timestep
 	connect(m_ui->timeStepSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setTimeStep(double)));
 	// sub steps spin box
