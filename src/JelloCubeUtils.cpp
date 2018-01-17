@@ -1,5 +1,7 @@
 #include "JelloCube.h"
 
+#include <iostream>
+
 void JelloCube::setK(double _k)
 {
 	m_k = _k;
@@ -28,4 +30,9 @@ void JelloCube::setTimeStep(double _t)
 void JelloCube::setSubSteps(int _s)
 {
 	m_subSteps = _s;
+}
+
+void JelloCube::setIntegrator(int _s)
+{
+	m_integrator = _s;
 }

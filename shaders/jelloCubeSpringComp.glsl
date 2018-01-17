@@ -31,9 +31,14 @@ layout (std430, binding = 1) buffer springsBuffer
 	Spring springs[];
 };
 
+const uint INTEGRATOR_TYPE_RK4 = 0;
+const uint INTEGRATOR_TYPE_RK2 = 1;
+const uint INTEGRATOR_TYPE_EULER = 2;
+
 uniform float u_currentTime;
 uniform float u_timeStep;
 
+uniform int u_integrator;
 uniform float u_k;
 uniform float u_damping;
 
@@ -82,7 +87,7 @@ vec3 evaluate(vec3 _v, float _dt, vec3 _dv)
 
 // perform RK4 integration and return dv, change in velocity
 // vec3 _v: the current relative velocity between masses
-vec3 integrate(vec3 _v)
+vec3 integrateRK4(vec3 _v)
 {
 	vec3 a = evaluate(_v);
 	vec3 b = evaluate(_v, 0.5 * u_timeStep, a);
@@ -90,6 +95,24 @@ vec3 integrate(vec3 _v)
 	vec3 d = evaluate(_v, u_timeStep, c);
 
 	vec3 dvdt = 1.0f/6.0f * (a + 2.0 * (b + c) + d);
+	return dvdt * u_timeStep;
+}
+
+// perform RK2 integration and return dv, change in velocity
+// vec3 _v: the current relative velocity between masses
+vec3 integrateRK2(vec3 _v)
+{
+	vec3 a = evaluate(_v);
+	vec3 b = evaluate(_v, 0.5 * u_timeStep, a);
+	vec3 dvdt = 0.5 * (a + b);
+	return dvdt * u_timeStep;
+}
+
+// perform Euler integration and return dv, change in velocity
+// vec3 _v: the current relative velocity between masses
+vec3 integrateEuler(vec3 _v)
+{
+	vec3 dvdt = evaluate(_v);
 	return dvdt * u_timeStep;
 }
 
@@ -102,7 +125,18 @@ void main()
 
 	if (!u_writeMode)
 	{
-		springs[computeIndex].velocity.xyz = integrate(springs[computeIndex].velocity.xyz);
+		if (u_integrator == INTEGRATOR_TYPE_RK4)
+		{
+			springs[computeIndex].velocity.xyz = integrateRK4(springs[computeIndex].velocity.xyz);
+		}
+		else if (u_integrator == INTEGRATOR_TYPE_RK2)
+		{
+			springs[computeIndex].velocity.xyz = integrateRK2(springs[computeIndex].velocity.xyz);
+		}
+		else if (u_integrator == INTEGRATOR_TYPE_EULER)
+		{
+			springs[computeIndex].velocity.xyz = integrateEuler(springs[computeIndex].velocity.xyz);
+		}
 	}
 	else
 	{

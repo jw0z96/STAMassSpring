@@ -16,8 +16,9 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	m_sizeX = 10;
 	m_sizeY = 10;
 	m_sizeZ = 10;
-	m_mass = 10.0;
+	m_mass = 1.0;
 	m_gravity = -9.81;
+	m_integrator = 0;
 
 	m_numQuads = 0;
 	m_massBufferId = 0;
@@ -201,6 +202,8 @@ void JelloCube::calculateSpringForces()
 	shader->setUniform("u_sizeY", GLint(m_sizeY));
 	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
 
+	shader->setUniform("u_integrator", GLint(m_integrator));
+
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
 
@@ -219,7 +222,6 @@ void JelloCube::calculateSpringForces()
 
 void JelloCube::calculateExternalForces(ngl::Vec3 _pos, float _radius)
 {
-	std::cout<<"updating springs\n";
 	// get singleton instances
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
 	shader->use("jelloCubeExternalForcesPass");

@@ -129,7 +129,7 @@ void NGLScene::paintGL()
 
 
 	float currentFrame = m_timer.elapsed()*0.001f;
-	std::cout<<"FPS: "<<1.0f / m_deltaTime<<'\n';
+	// std::cout<<"FPS: "<<1.0f / m_deltaTime<<'\n';
 	m_deltaTime = currentFrame - m_lastFrame;
 	m_lastFrame = currentFrame;
 

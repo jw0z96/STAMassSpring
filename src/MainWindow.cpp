@@ -29,6 +29,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(m_ui->timeStepSpinBox,SIGNAL(valueChanged(double)), m_jelloCube,SLOT(setTimeStep(double)));
 	// sub steps spin box
 	connect(m_ui->subStepsSpinBox, SIGNAL(valueChanged(int)), m_jelloCube, SLOT(setSubSteps(int)));
+
+	// populate integration scheme combobox
+	QList<QString> integratorsList;
+	integratorsList.append("RK4");
+	integratorsList.append("RK2");
+	integratorsList.append("Euler");
+	m_ui->integratorComboBox->addItems(integratorsList);
+	connect(m_ui->integratorComboBox, SIGNAL(currentIndexChanged(int)), m_jelloCube, SLOT(setIntegrator(int)));
 }
 
 MainWindow::~MainWindow()
