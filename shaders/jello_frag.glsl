@@ -1,7 +1,10 @@
 #version 430 core
 
-// The output colour. At location 0 it will be sent to the screen.
-layout (location=0) out vec4 fragColor;
+// The output textures that make up our gBuffer
+layout (location=0) out vec3 fragWSPosition;
+layout (location=1) out vec3 fragWSNormal;
+layout (location=2) out vec3 fragAlbedo;
+layout (location=3) out vec2 fragMetalRough;
 
 flat in int axis;
 
@@ -12,10 +15,6 @@ uniform vec3 camPos;
 
 void main()
 {
-	vec3 lightPos = vec3(10.0);
-	vec3 L = normalize(lightPos - f_pos);
-	float NdotL = max(0.0, dot(L, f_normal));
-	float LdotV = max(0.0, dot(normalize(camPos - f_pos), reflect(f_normal, L)));
 	vec3 diffuse = vec3(0.0);
 
 	if (axis == 0)
@@ -31,6 +30,9 @@ void main()
 	else if (axis == 5)
 		diffuse = vec3(1.0, 1.0, 1.0);
 
-	fragColor = vec4(diffuse * (LdotV + NdotL), 1.0);
+	fragAlbedo = vec3(diffuse);
+	fragWSPosition = f_pos;
+	fragWSNormal = f_normal;
+	fragMetalRough = vec2(0.0, 0.0);
 	// fragColor = vec4(f_pos, 0.0);
 }

@@ -31,6 +31,14 @@ NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent),
 	m_drawShearSprings = false;
 	m_drawBendSprings = false;
 
+	m_gBufferFBOId = 0;
+	m_FBOWSPositionId = 0;
+	m_FBOWSNormalId = 0;
+	m_FBODepthId = 0;
+	m_FBOAlbedoId = 0;
+	m_FBOMetalRoughId = 0;
+	m_isFBODirty = true;
+
 	m_sphereRadius = 1.0f;
 
 	startSimTimer();
@@ -39,6 +47,14 @@ NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent),
 NGLScene::~NGLScene()
 {
 	std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
+	// delete framebuffer textures
+	glDeleteTextures(1, &m_FBOWSPositionId);
+	glDeleteTextures(1, &m_FBOWSNormalId);
+	glDeleteTextures(1, &m_FBODepthId);
+	glDeleteTextures(1, &m_FBOAlbedoId);
+	glDeleteTextures(1, &m_FBOMetalRoughId);
+	// delete framebuffer object
+	glDeleteFramebuffers(1, &m_gBufferFBOId);
 }
 
 void NGLScene::resizeGL( int _w, int _h )
@@ -61,7 +77,6 @@ void NGLScene::initializeGL()
 		"shaders/test_vert.glsl",
 		"shaders/test_frag.glsl");
 	shader->use("testShader");
-	shader->setUniform("massPointsPositionTex", 0);
 
 	// create the plane shader program
 	shader->loadShader("basicShader",
@@ -69,16 +84,26 @@ void NGLScene::initializeGL()
 		"shaders/basic_frag.glsl");
 	shader->use("basicShader");
 
+	// create the output shader program
+	shader->loadShader("outputPass",
+		"shaders/screen_space_vert.glsl",
+		"shaders/output_frag.glsl");
+	shader->use("outputPass");
+	shader->setUniform("WSPositionTex", 0);
+	shader->setUniform("WSNormalTex", 1);
+	shader->setUniform("depthTex", 2);
+	shader->setUniform("albedoTex", 3);
+	shader->setUniform("metalRoughTex", 4);
+	setupSSAO();
+	shader->setUniform("noiseTex", 5);
+
 	// Grey Background
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	// enable depth testing for drawing
 	glEnable(GL_DEPTH_TEST);
 	// enable multisampling for smoother drawing
 	glEnable(GL_MULTISAMPLE);
-
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-	// glDisable(GL_BLEND);
 
 	ngl::Vec3 from(0.0, 1.0, 4.0);
 	ngl::Vec3 to(0.0, 0.0, 0.0);
@@ -93,29 +118,15 @@ void NGLScene::initializeGL()
 
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
 	prim->createSphere("sphere",0.1f,1);
+	prim->createSphere("skyBox", 50.0f, 16);
+	// ground plane geometry
 	prim->createTrianglePlane("ground", 100, 100, 20, 20, ngl::Vec3(0.0, 1.0, 0.0));
+	// collision sphere geometry
 	prim->createSphere("sphereCollider", 1.0f, 16);
+	// generate screen aligned quad
+	prim->createTrianglePlane("ScreenAlignedQuad", 2, 2, 1, 1, ngl::Vec3(0,1,0));
 
 	m_jelloCube->initializeShaders();
-}
-
-void NGLScene::loadMatricesToShader()
-{
-	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
-	ngl::Mat4 MV;
-	ngl::Mat4 MVP;
-	ngl::Mat3 normalMatrix;
-	ngl::Mat4 M;
-	M            = m_transform.getMatrix() * m_mouseGlobalTX ;
-	MV           = m_cam.getView() * M;
-	MVP          = m_cam.getVP() * M;
-
-	normalMatrix = MV;
-	normalMatrix.inverse().transpose();
-	shader->setUniform("MVP", MVP);
-	shader->setUniform("normalMatrix", normalMatrix);
-	shader->setUniform("M", M);
-	shader->setUniform("camPos",m_cam.getEye());
 }
 
 void NGLScene::paintGL()
@@ -123,11 +134,6 @@ void NGLScene::paintGL()
 	// get singleton instances
 	ngl::ShaderLib* shader = ngl::ShaderLib::instance();
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
-
-	// clear the screen and depth buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glViewport(0,0,m_win.width,m_win.height);
-
 
 	float currentFrame = m_timer.elapsed()*0.001f;
 	// std::cout<<"FPS: "<<1.0f / m_deltaTime<<'\n';
@@ -159,6 +165,21 @@ void NGLScene::paintGL()
 		m_cam.move(xDirection,yDirection,m_deltaTime);
 	}
 
+	//----------------------------------------------------------------------------------------------------------------------
+	/// GBUFFER PASS
+	//----------------------------------------------------------------------------------------------------------------------
+
+	// Check if the FBO needs to be recreated. This occurs after a resize.
+	if (m_isFBODirty)
+	{
+		initFBO();
+	}
+	// bind the gBuffer FBO
+	glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferFBOId);
+	// clear the screen and depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0,0,m_win.width,m_win.height);
+
 	m_transform.reset();
 	// m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 
@@ -175,7 +196,7 @@ void NGLScene::paintGL()
 	{
 		shader->use("testShader");
 		loadMatricesToShader();
-		m_jelloCube->drawMasses();
+		// m_jelloCube->drawMasses();
 	}
 	// draw springs
 	shader->use("springShader");
@@ -187,18 +208,60 @@ void NGLScene::paintGL()
 
 	// draw ground
 	shader->use("basicShader");
+	shader->setUniform("diffuse", ngl::Vec3(1.0, 1.0, 1.0));
+
 	loadMatricesToShader();
-	shader->setUniform("diffuse", ngl::Vec3(0.2, 0.2, 0.2));
 	prim->draw("ground");
+
+	m_transform.setPosition(m_cam.getEye());
+	loadMatricesToShader();
+	prim->draw("skyBox");
 
 	if (m_drawCollider)
 	{
+		m_transform.reset();
 		m_transform.setPosition(m_spherePos);
 		m_transform.setScale(ngl::Vec3(m_sphereRadius, m_sphereRadius, m_sphereRadius));
 		loadMatricesToShader();
 		shader->setUniform("diffuse", ngl::Vec3(0.9, 0.1, 0.1));
 		prim->draw("sphereCollider");
 	}
+
+
+	//----------------------------------------------------------------------------------------------------------------------
+	/// OUTPUT PASS START
+	//----------------------------------------------------------------------------------------------------------------------
+
+	m_transform.reset();
+	// unbind FBO
+	glBindFramebuffer(GL_FRAMEBUFFER, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glViewport(0,0,m_win.width,m_win.height);
+	// use the output pass shader
+	shader->use("outputPass");
+	// send the window size
+	shader->setUniform("windowSize", ngl::Vec2(m_win.width, m_win.height));
+	// MVP for screenspace effects
+	ngl::Mat4 SSMVP = ngl::Mat4(1.0f);
+	SSMVP.rotateX(90);
+	shader->setUniform("SSMVP", SSMVP);
+	// send matrices to shader
+	loadMatricesToShader();
+	// bind the textures to their texture units
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_FBOWSPositionId);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_FBOWSNormalId);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, m_FBODepthId);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, m_FBOAlbedoId);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, m_FBOMetalRoughId);
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, m_noiseTexture);
+	// draw screen quad
+	prim->draw("ScreenAlignedQuad");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
