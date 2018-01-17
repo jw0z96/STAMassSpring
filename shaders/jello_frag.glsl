@@ -31,6 +31,6 @@ void main()
 	else if (axis == 5)
 		diffuse = vec3(1.0, 1.0, 1.0);
 
-	fragColor = vec4(diffuse * (LdotV + NdotL), 0.0);
+	fragColor = vec4(diffuse * (LdotV + NdotL), 1.0);
 	// fragColor = vec4(f_pos, 0.0);
 }

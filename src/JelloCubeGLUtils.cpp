@@ -88,8 +88,6 @@ void JelloCube::drawMesh()
 	shader->setUniform("u_sizeY", GLint(m_sizeY));
 	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
 
-	glEnable(GL_CULL_FACE);
-
 	glBindVertexArray(m_emptyVAO);
 	// draw half the number of quads (can mirror the other side)
 	glDrawArrays(GL_POINTS, 0, (m_numQuads / 2.0));
