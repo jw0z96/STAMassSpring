@@ -26,6 +26,7 @@ uniform float u_timeStep;
 
 uniform float u_mass;
 uniform float u_gravity;
+uniform float u_friction;
 
 uniform bool u_sphereCollisions;
 uniform vec3 u_spherePos;
@@ -80,7 +81,7 @@ void main()
 			vec3 normalizedSphereToMass = normalize(sphereToMass);
 			masses[currentIndex].position.xyz = u_spherePos + (normalizedSphereToMass * u_sphereRadius);
 			masses[currentIndex].force.xyz += u_mass * normalizedSphereToMass;
-			masses[currentIndex].velocity.xyz *= 0.8; // friction
+			masses[currentIndex].velocity.xyz *= 1.0 - u_friction; // friction
 		}
 	}
 
@@ -89,7 +90,7 @@ void main()
 	{
 		masses[currentIndex].position.y = 0.0;
 		masses[currentIndex].force.xyz += u_mass * vec3(0.0, 1.0, 0.0);
-		masses[currentIndex].velocity.xyz *= 0.8; // friction
+		masses[currentIndex].velocity.xyz *= 1.0 - u_friction; // friction
 	}
 
 	// air resistance
