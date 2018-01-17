@@ -84,8 +84,7 @@ void main()
 	if (masses[currentIndex].position.y < 0.0)
 	{
 		masses[currentIndex].position.y = 0.0;
-		// masses[currentIndex].position.y *= -1.0;
-		masses[currentIndex].velocity.y *= -1.0;
+		masses[currentIndex].force.xyz += u_mass * vec3(0.0, 1.0, 0.0);
 		masses[currentIndex].velocity.xyz *= 0.8; // friction
 	}
 
