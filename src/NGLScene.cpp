@@ -12,6 +12,8 @@
 #include <ngl/ShaderLib.h>
 #include <ngl/VAOFactory.h>
 
+#include <math.h>
+
 //----------------------------------------------------------------------------------------------------------------------
 
 NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent), m_jelloCube(_cube)
@@ -27,6 +29,8 @@ NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent),
 	m_drawStructuralSprings = false;
 	m_drawShearSprings = false;
 	m_drawBendSprings = false;
+
+	m_sphereRadius = 1.0f;
 
 	startSimTimer();
 }
@@ -89,6 +93,7 @@ void NGLScene::initializeGL()
 	ngl::VAOPrimitives *prim = ngl::VAOPrimitives::instance();
 	prim->createSphere("sphere",0.1f,1);
 	prim->createTrianglePlane("ground", 14, 14, 80, 80, ngl::Vec3(0.0, 1.0, 0.0));
+	prim->createSphere("sphereCollider", 1.0f, 16);
 
 	m_jelloCube->initializeShaders();
 }
@@ -178,10 +183,20 @@ void NGLScene::paintGL()
 	shader->setUniform("u_drawShearSprings", m_drawShearSprings);
 	loadMatricesToShader();
 	m_jelloCube->drawSprings();
+
 	// draw ground
 	shader->use("basicShader");
 	loadMatricesToShader();
+	shader->setUniform("diffuse", ngl::Vec3(0.2, 0.2, 0.2));
 	prim->draw("ground");
+
+	m_transform.setPosition(m_spherePos);
+	m_transform.setScale(ngl::Vec3(m_sphereRadius, m_sphereRadius, m_sphereRadius));
+
+	loadMatricesToShader();
+
+	shader->setUniform("diffuse", ngl::Vec3(0.9, 0.1, 0.1));
+	prim->draw("sphereCollider");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -220,7 +235,9 @@ void NGLScene::keyReleaseEvent( QKeyEvent *_event	)
 
 void NGLScene::timerEvent( QTimerEvent *)
 {
-	m_jelloCube->update();
+	// m_spherePos = ngl::Vec3(sin(m_timer.elapsed() * 0.001f), 1.0f, 0.0);
+	m_spherePos = ngl::Vec3(1.5f + 10.0 * cos(m_timer.elapsed() * 0.001f), 1.0f, 1.5f);
+	m_jelloCube->update(m_spherePos, m_sphereRadius);
 	update();
 }
 

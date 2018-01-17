@@ -27,6 +27,9 @@ uniform float u_timeStep;
 uniform float u_mass;
 uniform float u_gravity;
 
+uniform vec3 u_spherePos;
+uniform float u_sphereRadius;
+
 int getIndex(ivec3 pos)
 {
 	return int(
@@ -64,17 +67,30 @@ void main()
 
 	masses[currentIndex].position.xyz += masses[currentIndex].velocity.xyz;
 
+	// reset force values
+	masses[currentIndex].force = vec4(0.0);
+
+	// sphere collision
+	vec3 sphereToMass = masses[currentIndex].position.xyz - u_spherePos;
+	if (length(sphereToMass) <= u_sphereRadius)
+	{
+		vec3 normalizedSphereToMass = normalize(sphereToMass);
+		masses[currentIndex].position.xyz = u_spherePos + (normalizedSphereToMass * u_sphereRadius);
+		masses[currentIndex].force.xyz += u_mass * normalizedSphereToMass;
+		masses[currentIndex].velocity.xyz *= 0.8; // friction
+	}
+
+	// ground plane collision
 	if (masses[currentIndex].position.y < 0.0)
 	{
 		masses[currentIndex].position.y = 0.0;
 		// masses[currentIndex].position.y *= -1.0;
 		masses[currentIndex].velocity.y *= -1.0;
-		masses[currentIndex].velocity.xyz *= 0.99; //damping
+		masses[currentIndex].velocity.xyz *= 0.8; // friction
 	}
 
+	// air resistance
 	float u_velocityDamping = 1.0;
-	masses[currentIndex].velocity.xyz *= 1.0 - (u_velocityDamping * u_timeStep); //damping
+	masses[currentIndex].velocity.xyz *= 1.0 - (u_velocityDamping * u_timeStep);
 
-	// reset force values
-	masses[currentIndex].force = vec4(0.0);
 }

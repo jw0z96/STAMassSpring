@@ -7,10 +7,10 @@ in vec3 Normal;
 layout (location=0) out vec4 fragColour;
 
 uniform vec3 camPos;
+uniform vec3 diffuse;
 
 void main()
 {
 	float ndotl = dot(WorldPos, camPos);
-	vec3 colour = vec3(0.2);
-	fragColour = vec4(colour, 1.0);
+	fragColour = vec4(diffuse, 1.0);
 }

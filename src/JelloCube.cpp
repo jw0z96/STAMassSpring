@@ -175,12 +175,12 @@ void JelloCube::generate()
 	glDeleteBuffers(1, &springCounter);
 }
 
-void JelloCube::update()
+void JelloCube::update(ngl::Vec3 _pos, float _radius)
 {
 	for (int i = 0; i < m_subSteps; ++i)
 	{
 		calculateSpringForces();
-		calculateExternalForces();
+		calculateExternalForces(_pos, _radius);
 		// update the timestep for the next time
 		m_t += m_timestep / (float)m_subSteps;
 	}
@@ -217,7 +217,7 @@ void JelloCube::calculateSpringForces()
 	glDispatchCompute(m_springCount, 1, 1);
 }
 
-void JelloCube::calculateExternalForces()
+void JelloCube::calculateExternalForces(ngl::Vec3 _pos, float _radius)
 {
 	std::cout<<"updating springs\n";
 	// get singleton instances
@@ -233,6 +233,9 @@ void JelloCube::calculateExternalForces()
 
 	shader->setUniform("u_mass", GLfloat(m_mass / (float)m_massCount));
 	shader->setUniform("u_gravity", m_gravity);
+
+	shader->setUniform("u_spherePos", _pos);
+	shader->setUniform("u_sphereRadius", _radius);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
 

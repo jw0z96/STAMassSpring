@@ -36,23 +36,6 @@ int getIndex(ivec3 pos)
 		);
 }
 
-// void emitQuad(vec4 _verts[4])
-// {
-// 	// calculate the normal for our first triangle in the quad;
-// 	// vec3 wsNormal = normalize(
-// 	// 	cross(_verts[1].xyz - _verts[0].xyz, _verts[2].xyz - _verts[0].xyz) +
-// 	// 	cross(_verts[2].xyz - _verts[1].xyz, _verts[3].xyz - _verts[1].xyz));
-
-// 	for (int i = 0; i < 4; ++i)
-// 	{
-// 		// f_normal = wsNormal;
-// 		// f_pos = _verts[i].xyz;
-// 		gl_Position = MVP * _verts[i];
-// 		EmitVertex();
-// 	}
-// 	EndPrimitive;
-// }
-
 void main()
 {
 	int quadID = gl_PrimitiveIDIn;
