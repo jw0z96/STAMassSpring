@@ -74,16 +74,16 @@ void NGLScene::initializeGL()
 	ngl::ShaderLib *shader=ngl::ShaderLib::instance();
 
 	// create the gBuffer shader program
-	shader->loadShader("testShader",
-		"shaders/test_vert.glsl",
-		"shaders/test_frag.glsl");
-	shader->use("testShader");
+	shader->loadShader("massShader",
+		"shaders/mass_vert.glsl",
+		"shaders/mass_frag.glsl");
+	shader->use("massShader");
 
-	// create the plane shader program
-	shader->loadShader("basicShader",
+	// create the collision geometry shader program
+	shader->loadShader("PBRShader",
 		"shaders/basic_vert.glsl",
-		"shaders/basic_frag.glsl");
-	shader->use("basicShader");
+		"shaders/PBR_frag.glsl");
+	shader->use("PBRShader");
 
 	// create the output shader program
 	shader->loadShader("outputPass",
@@ -204,13 +204,13 @@ void NGLScene::paintGL()
 	// draw masses
 	if (m_drawMassPoints)
 	{
-		shader->use("testShader");
+		shader->use("massShader");
 		loadMatricesToShader();
 		m_jelloCube->drawMasses();
 	}
 
 	// draw ground
-	shader->use("basicShader");
+	shader->use("PBRShader");
 	shader->setUniform("diffuse", ngl::Vec3(1.0, 1.0, 1.0));
 	loadMatricesToShader();
 	prim->draw("ground");

@@ -1,4 +1,9 @@
 #version 430 core
+// ----------------------------------------------------------------------------
+/// This shader is extremely messy, but the basic idea is this:
+/// for a 1D array of grid points, generated in jelloCubeInitPass,
+/// generate quads based on an index out of a precomputed number of required quads.
+// ----------------------------------------------------------------------------
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 8) out;

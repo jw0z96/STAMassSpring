@@ -18,13 +18,10 @@ uniform mat4 M;
 void main()
 {
 	TexCoords = inUV;
-
 	// pass worldspace position to fragment shader
 	WorldPos = vec3(M * vec4(inVert, 1.0f));
-
 	// pass worldspace normal to fragment shader
 	Normal = inNormal;
-
 	// transform input vertex
 	gl_Position = MVP * vec4(inVert,1.0);
 }

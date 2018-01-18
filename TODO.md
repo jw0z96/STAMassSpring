@@ -19,6 +19,7 @@
 ## TODO
 
 - cite jon macey
+- rename/remove unused shaders
 - remove unused functions
 - collider speed
 - mass / 1000.0
