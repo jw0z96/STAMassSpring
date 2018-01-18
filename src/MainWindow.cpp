@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_jelloCube = new JelloCube(m_ui->springConstantSpinBox->value(), m_ui->dampingConstantSpinBox->value());
 	m_gl = new NGLScene(this, m_jelloCube);
 	m_ui->s_mainWindowGridLayout->addWidget(m_gl,0,0,2,1);
+	m_timer = new QTimer(this);
 
 	// reset button
 	connect(m_ui->resetJelloPushButton, SIGNAL(released()), this, SLOT(resetJelloCube()));
@@ -40,6 +41,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	integratorsList.append("Euler");
 	m_ui->integratorComboBox->addItems(integratorsList);
 	connect(m_ui->integratorComboBox, SIGNAL(currentIndexChanged(int)), m_jelloCube, SLOT(setIntegrator(int)));
+
+	// fps counter
+	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateFPS()));
+	m_timer->start(100);
 }
 
 MainWindow::~MainWindow()
@@ -47,6 +52,7 @@ MainWindow::~MainWindow()
 	delete m_ui;
 	delete m_gl;
 	delete m_jelloCube;
+	delete m_timer;
 }
 
 void MainWindow::resetJelloCube()
@@ -65,4 +71,9 @@ void MainWindow::updateUIText()
 {
 	m_ui->massCountLabel->setText(QStringLiteral("Mass Count: %1").arg(m_jelloCube->getMassCount()));
 	m_ui->springCountLabel->setText(QStringLiteral("Spring Count: %1").arg(m_jelloCube->getSpringCount()));
+}
+
+void MainWindow::updateFPS()
+{
+	m_ui->framesPerSecondLabel->setText(QStringLiteral("FPS: %1").arg(m_gl->getFPS()));
 }

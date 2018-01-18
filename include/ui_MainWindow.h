@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.0
+** Created by: Qt User Interface Compiler version 5.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -70,6 +70,7 @@ public:
     QLabel *massCountLabel;
     QLabel *springCountLabel;
     QCheckBox *enableSphereColliderCheckBox;
+    QLabel *framesPerSecondLabel;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
     QMenuBar *menubar;
@@ -267,6 +268,11 @@ public:
 
         gridLayout_3->addWidget(enableSphereColliderCheckBox, 0, 0, 1, 1);
 
+        framesPerSecondLabel = new QLabel(physicsControlsGB);
+        framesPerSecondLabel->setObjectName(QStringLiteral("framesPerSecondLabel"));
+
+        gridLayout_3->addWidget(framesPerSecondLabel, 8, 0, 1, 1);
+
 
         verticalLayout->addWidget(physicsControlsGB);
 
@@ -284,7 +290,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1135, 23));
+        menubar->setGeometry(QRect(0, 0, 1135, 19));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -318,6 +324,7 @@ public:
         massCountLabel->setText(QApplication::translate("MainWindow", "Mass Count: ?", Q_NULLPTR));
         springCountLabel->setText(QApplication::translate("MainWindow", "Spring Count: ?", Q_NULLPTR));
         enableSphereColliderCheckBox->setText(QApplication::translate("MainWindow", "Sphere Collider", Q_NULLPTR));
+        framesPerSecondLabel->setText(QApplication::translate("MainWindow", "FPS: ?", Q_NULLPTR));
     } // retranslateUi
 
 };

@@ -28,8 +28,8 @@ uniform vec3 samples[64]; //array of kernel samples being passed in
 uniform int SAMPLES = 32; //parameter for number of samples being used
 const int MAX_SAMPLES = 64; //parameter for number of samples being passed
 const float radius = 0.5; //uniform for SSAO radius
-const float bias = 0.25; //uniform for SSAO bias
-const float intensity = 2; //uniform for SSAO intensity
+const float bias = 0.1; //uniform for SSAO bias
+const float intensity = 2.0; //uniform for SSAO intensity
 vec2 noiseScale = windowSize/4; //ensuring the noise is 1px big
 
 const vec3 lightPosition = vec3(5.0, 5.0, 5.0);
