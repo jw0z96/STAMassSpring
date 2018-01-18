@@ -50,6 +50,8 @@ uniform int u_sizeX;
 uniform int u_sizeY;
 uniform int u_sizeZ;
 
+const float DEFORMATION_STRENGTH = 2.0;
+
 // ----------------------------------------------------------------------------
 /// The following section is modified from:
 /// Jon Macey (2015): Mass Spring System using RK 4 integration
@@ -72,7 +74,7 @@ vec3 motionFunction(vec3 _v)
 	vec3 endPos = masses[endIndex].position.xyz;
 	vec3 distance = endPos - startPos;
 	float length = length(distance);
-	springs[computeIndex].restingLength = mix(springs[computeIndex].restingLength, length, ((1.0 - u_recovery) * u_timeStep));
+	springs[computeIndex].restingLength = mix(springs[computeIndex].restingLength, length, ((1.0 - u_recovery) * DEFORMATION_STRENGTH * u_timeStep));
 	float restingLength = springs[computeIndex].restingLength;
 	return -u_k*(length-restingLength)*(distance/length)-u_damping*_v;
 }

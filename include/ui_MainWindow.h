@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.9.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -17,6 +17,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFormLayout>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
@@ -47,30 +48,42 @@ public:
     QCheckBox *displayMeshCheckBox;
     QGroupBox *physicsControlsGB;
     QGridLayout *gridLayout_3;
-    QPushButton *resetJelloPushButton;
+    QLabel *shadingTimeLabel;
     QFormLayout *formLayout;
     QLabel *springConstantLabel;
     QDoubleSpinBox *springConstantSpinBox;
     QLabel *dampingConstantLabel;
     QDoubleSpinBox *dampingConstantSpinBox;
-    QLabel *jelloMassLabel;
-    QDoubleSpinBox *jelloMassSpinBox;
-    QLabel *gravityLabel;
-    QDoubleSpinBox *gravitySpinBox;
-    QLabel *timeStepLabel;
-    QDoubleSpinBox *timeStepSpinBox;
-    QLabel *subStepsLabel;
-    QSpinBox *subStepsSpinBox;
-    QComboBox *integratorComboBox;
-    QLabel *integratorLabel;
     QLabel *frictionLabel;
     QDoubleSpinBox *frictionSpinBox;
     QLabel *recoveryConstantLabel;
     QDoubleSpinBox *recoverySpinBox;
+    QLabel *jelloMassLabel;
+    QDoubleSpinBox *jelloMassSpinBox;
+    QSpinBox *jelloResolutionSpinBox;
+    QLabel *jelloResolutionLabel;
     QLabel *massCountLabel;
     QLabel *springCountLabel;
     QCheckBox *enableSphereColliderCheckBox;
     QLabel *framesPerSecondLabel;
+    QFrame *line;
+    QFormLayout *formLayout_4;
+    QLabel *sphereSpeedLabel;
+    QDoubleSpinBox *sphereSpeedSpinBox;
+    QLabel *gravityLabel;
+    QDoubleSpinBox *gravitySpinBox;
+    QFrame *line_3;
+    QPushButton *pauseJelloPushButton;
+    QFrame *line_2;
+    QPushButton *resetJelloPushButton;
+    QFormLayout *formLayout_5;
+    QLabel *integratorLabel;
+    QComboBox *integratorComboBox;
+    QLabel *timeStepLabel;
+    QDoubleSpinBox *timeStepSpinBox;
+    QLabel *subStepsLabel;
+    QSpinBox *subStepsSpinBox;
+    QLabel *simulationTimeLabel;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
     QMenuBar *menubar;
@@ -80,7 +93,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1135, 741);
+        MainWindow->resize(1135, 837);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         s_mainWindowGridLayout = new QGridLayout(centralwidget);
@@ -125,17 +138,17 @@ public:
         physicsControlsGB->setObjectName(QStringLiteral("physicsControlsGB"));
         gridLayout_3 = new QGridLayout(physicsControlsGB);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        resetJelloPushButton = new QPushButton(physicsControlsGB);
-        resetJelloPushButton->setObjectName(QStringLiteral("resetJelloPushButton"));
+        shadingTimeLabel = new QLabel(physicsControlsGB);
+        shadingTimeLabel->setObjectName(QStringLiteral("shadingTimeLabel"));
 
-        gridLayout_3->addWidget(resetJelloPushButton, 7, 0, 1, 1);
+        gridLayout_3->addWidget(shadingTimeLabel, 16, 0, 1, 1);
 
         formLayout = new QFormLayout();
         formLayout->setObjectName(QStringLiteral("formLayout"));
         springConstantLabel = new QLabel(physicsControlsGB);
         springConstantLabel->setObjectName(QStringLiteral("springConstantLabel"));
 
-        formLayout->setWidget(1, QFormLayout::LabelRole, springConstantLabel);
+        formLayout->setWidget(0, QFormLayout::LabelRole, springConstantLabel);
 
         springConstantSpinBox = new QDoubleSpinBox(physicsControlsGB);
         springConstantSpinBox->setObjectName(QStringLiteral("springConstantSpinBox"));
@@ -143,12 +156,12 @@ public:
         springConstantSpinBox->setSingleStep(0.1);
         springConstantSpinBox->setValue(1);
 
-        formLayout->setWidget(1, QFormLayout::FieldRole, springConstantSpinBox);
+        formLayout->setWidget(0, QFormLayout::FieldRole, springConstantSpinBox);
 
         dampingConstantLabel = new QLabel(physicsControlsGB);
         dampingConstantLabel->setObjectName(QStringLiteral("dampingConstantLabel"));
 
-        formLayout->setWidget(2, QFormLayout::LabelRole, dampingConstantLabel);
+        formLayout->setWidget(1, QFormLayout::LabelRole, dampingConstantLabel);
 
         dampingConstantSpinBox = new QDoubleSpinBox(physicsControlsGB);
         dampingConstantSpinBox->setObjectName(QStringLiteral("dampingConstantSpinBox"));
@@ -156,75 +169,12 @@ public:
         dampingConstantSpinBox->setSingleStep(0.1);
         dampingConstantSpinBox->setValue(2);
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, dampingConstantSpinBox);
-
-        jelloMassLabel = new QLabel(physicsControlsGB);
-        jelloMassLabel->setObjectName(QStringLiteral("jelloMassLabel"));
-
-        formLayout->setWidget(5, QFormLayout::LabelRole, jelloMassLabel);
-
-        jelloMassSpinBox = new QDoubleSpinBox(physicsControlsGB);
-        jelloMassSpinBox->setObjectName(QStringLiteral("jelloMassSpinBox"));
-        jelloMassSpinBox->setDecimals(2);
-        jelloMassSpinBox->setSingleStep(0.1);
-        jelloMassSpinBox->setValue(1);
-
-        formLayout->setWidget(5, QFormLayout::FieldRole, jelloMassSpinBox);
-
-        gravityLabel = new QLabel(physicsControlsGB);
-        gravityLabel->setObjectName(QStringLiteral("gravityLabel"));
-
-        formLayout->setWidget(6, QFormLayout::LabelRole, gravityLabel);
-
-        gravitySpinBox = new QDoubleSpinBox(physicsControlsGB);
-        gravitySpinBox->setObjectName(QStringLiteral("gravitySpinBox"));
-        gravitySpinBox->setDecimals(2);
-        gravitySpinBox->setMinimum(-99.99);
-        gravitySpinBox->setSingleStep(0.1);
-        gravitySpinBox->setValue(-9.81);
-
-        formLayout->setWidget(6, QFormLayout::FieldRole, gravitySpinBox);
-
-        timeStepLabel = new QLabel(physicsControlsGB);
-        timeStepLabel->setObjectName(QStringLiteral("timeStepLabel"));
-
-        formLayout->setWidget(7, QFormLayout::LabelRole, timeStepLabel);
-
-        timeStepSpinBox = new QDoubleSpinBox(physicsControlsGB);
-        timeStepSpinBox->setObjectName(QStringLiteral("timeStepSpinBox"));
-        timeStepSpinBox->setDecimals(4);
-        timeStepSpinBox->setSingleStep(0.001);
-        timeStepSpinBox->setValue(0.01);
-
-        formLayout->setWidget(7, QFormLayout::FieldRole, timeStepSpinBox);
-
-        subStepsLabel = new QLabel(physicsControlsGB);
-        subStepsLabel->setObjectName(QStringLiteral("subStepsLabel"));
-
-        formLayout->setWidget(8, QFormLayout::LabelRole, subStepsLabel);
-
-        subStepsSpinBox = new QSpinBox(physicsControlsGB);
-        subStepsSpinBox->setObjectName(QStringLiteral("subStepsSpinBox"));
-        subStepsSpinBox->setMinimum(1);
-        subStepsSpinBox->setMaximum(999);
-        subStepsSpinBox->setValue(10);
-
-        formLayout->setWidget(8, QFormLayout::FieldRole, subStepsSpinBox);
-
-        integratorComboBox = new QComboBox(physicsControlsGB);
-        integratorComboBox->setObjectName(QStringLiteral("integratorComboBox"));
-
-        formLayout->setWidget(0, QFormLayout::FieldRole, integratorComboBox);
-
-        integratorLabel = new QLabel(physicsControlsGB);
-        integratorLabel->setObjectName(QStringLiteral("integratorLabel"));
-
-        formLayout->setWidget(0, QFormLayout::LabelRole, integratorLabel);
+        formLayout->setWidget(1, QFormLayout::FieldRole, dampingConstantSpinBox);
 
         frictionLabel = new QLabel(physicsControlsGB);
         frictionLabel->setObjectName(QStringLiteral("frictionLabel"));
 
-        formLayout->setWidget(3, QFormLayout::LabelRole, frictionLabel);
+        formLayout->setWidget(2, QFormLayout::LabelRole, frictionLabel);
 
         frictionSpinBox = new QDoubleSpinBox(physicsControlsGB);
         frictionSpinBox->setObjectName(QStringLiteral("frictionSpinBox"));
@@ -233,12 +183,12 @@ public:
         frictionSpinBox->setSingleStep(0.1);
         frictionSpinBox->setValue(0.2);
 
-        formLayout->setWidget(3, QFormLayout::FieldRole, frictionSpinBox);
+        formLayout->setWidget(2, QFormLayout::FieldRole, frictionSpinBox);
 
         recoveryConstantLabel = new QLabel(physicsControlsGB);
         recoveryConstantLabel->setObjectName(QStringLiteral("recoveryConstantLabel"));
 
-        formLayout->setWidget(4, QFormLayout::LabelRole, recoveryConstantLabel);
+        formLayout->setWidget(3, QFormLayout::LabelRole, recoveryConstantLabel);
 
         recoverySpinBox = new QDoubleSpinBox(physicsControlsGB);
         recoverySpinBox->setObjectName(QStringLiteral("recoverySpinBox"));
@@ -247,20 +197,46 @@ public:
         recoverySpinBox->setSingleStep(0.1);
         recoverySpinBox->setValue(1);
 
-        formLayout->setWidget(4, QFormLayout::FieldRole, recoverySpinBox);
+        formLayout->setWidget(3, QFormLayout::FieldRole, recoverySpinBox);
+
+        jelloMassLabel = new QLabel(physicsControlsGB);
+        jelloMassLabel->setObjectName(QStringLiteral("jelloMassLabel"));
+
+        formLayout->setWidget(4, QFormLayout::LabelRole, jelloMassLabel);
+
+        jelloMassSpinBox = new QDoubleSpinBox(physicsControlsGB);
+        jelloMassSpinBox->setObjectName(QStringLiteral("jelloMassSpinBox"));
+        jelloMassSpinBox->setDecimals(2);
+        jelloMassSpinBox->setSingleStep(0.1);
+        jelloMassSpinBox->setValue(1);
+
+        formLayout->setWidget(4, QFormLayout::FieldRole, jelloMassSpinBox);
+
+        jelloResolutionSpinBox = new QSpinBox(physicsControlsGB);
+        jelloResolutionSpinBox->setObjectName(QStringLiteral("jelloResolutionSpinBox"));
+        jelloResolutionSpinBox->setMinimum(2);
+        jelloResolutionSpinBox->setMaximum(50);
+        jelloResolutionSpinBox->setValue(10);
+
+        formLayout->setWidget(5, QFormLayout::FieldRole, jelloResolutionSpinBox);
+
+        jelloResolutionLabel = new QLabel(physicsControlsGB);
+        jelloResolutionLabel->setObjectName(QStringLiteral("jelloResolutionLabel"));
+
+        formLayout->setWidget(5, QFormLayout::LabelRole, jelloResolutionLabel);
 
 
-        gridLayout_3->addLayout(formLayout, 1, 0, 2, 1);
+        gridLayout_3->addLayout(formLayout, 3, 0, 2, 1);
 
         massCountLabel = new QLabel(physicsControlsGB);
         massCountLabel->setObjectName(QStringLiteral("massCountLabel"));
 
-        gridLayout_3->addWidget(massCountLabel, 4, 0, 1, 1);
+        gridLayout_3->addWidget(massCountLabel, 7, 0, 1, 1);
 
         springCountLabel = new QLabel(physicsControlsGB);
         springCountLabel->setObjectName(QStringLiteral("springCountLabel"));
 
-        gridLayout_3->addWidget(springCountLabel, 5, 0, 1, 1);
+        gridLayout_3->addWidget(springCountLabel, 8, 0, 1, 1);
 
         enableSphereColliderCheckBox = new QCheckBox(physicsControlsGB);
         enableSphereColliderCheckBox->setObjectName(QStringLiteral("enableSphereColliderCheckBox"));
@@ -271,7 +247,116 @@ public:
         framesPerSecondLabel = new QLabel(physicsControlsGB);
         framesPerSecondLabel->setObjectName(QStringLiteral("framesPerSecondLabel"));
 
-        gridLayout_3->addWidget(framesPerSecondLabel, 8, 0, 1, 1);
+        gridLayout_3->addWidget(framesPerSecondLabel, 14, 0, 1, 1);
+
+        line = new QFrame(physicsControlsGB);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        gridLayout_3->addWidget(line, 2, 0, 1, 1);
+
+        formLayout_4 = new QFormLayout();
+        formLayout_4->setObjectName(QStringLiteral("formLayout_4"));
+        sphereSpeedLabel = new QLabel(physicsControlsGB);
+        sphereSpeedLabel->setObjectName(QStringLiteral("sphereSpeedLabel"));
+
+        formLayout_4->setWidget(0, QFormLayout::LabelRole, sphereSpeedLabel);
+
+        sphereSpeedSpinBox = new QDoubleSpinBox(physicsControlsGB);
+        sphereSpeedSpinBox->setObjectName(QStringLiteral("sphereSpeedSpinBox"));
+        sphereSpeedSpinBox->setDecimals(3);
+        sphereSpeedSpinBox->setSingleStep(0.1);
+        sphereSpeedSpinBox->setValue(1);
+
+        formLayout_4->setWidget(0, QFormLayout::FieldRole, sphereSpeedSpinBox);
+
+        gravityLabel = new QLabel(physicsControlsGB);
+        gravityLabel->setObjectName(QStringLiteral("gravityLabel"));
+
+        formLayout_4->setWidget(1, QFormLayout::LabelRole, gravityLabel);
+
+        gravitySpinBox = new QDoubleSpinBox(physicsControlsGB);
+        gravitySpinBox->setObjectName(QStringLiteral("gravitySpinBox"));
+        gravitySpinBox->setDecimals(2);
+        gravitySpinBox->setMinimum(-99.99);
+        gravitySpinBox->setSingleStep(0.1);
+        gravitySpinBox->setValue(-9.81);
+
+        formLayout_4->setWidget(1, QFormLayout::FieldRole, gravitySpinBox);
+
+
+        gridLayout_3->addLayout(formLayout_4, 1, 0, 1, 1);
+
+        line_3 = new QFrame(physicsControlsGB);
+        line_3->setObjectName(QStringLiteral("line_3"));
+        line_3->setFrameShape(QFrame::HLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        gridLayout_3->addWidget(line_3, 13, 0, 1, 1);
+
+        pauseJelloPushButton = new QPushButton(physicsControlsGB);
+        pauseJelloPushButton->setObjectName(QStringLiteral("pauseJelloPushButton"));
+
+        gridLayout_3->addWidget(pauseJelloPushButton, 10, 0, 1, 1);
+
+        line_2 = new QFrame(physicsControlsGB);
+        line_2->setObjectName(QStringLiteral("line_2"));
+        line_2->setFrameShape(QFrame::HLine);
+        line_2->setFrameShadow(QFrame::Sunken);
+
+        gridLayout_3->addWidget(line_2, 11, 0, 1, 1);
+
+        resetJelloPushButton = new QPushButton(physicsControlsGB);
+        resetJelloPushButton->setObjectName(QStringLiteral("resetJelloPushButton"));
+
+        gridLayout_3->addWidget(resetJelloPushButton, 9, 0, 1, 1);
+
+        formLayout_5 = new QFormLayout();
+        formLayout_5->setObjectName(QStringLiteral("formLayout_5"));
+        integratorLabel = new QLabel(physicsControlsGB);
+        integratorLabel->setObjectName(QStringLiteral("integratorLabel"));
+
+        formLayout_5->setWidget(0, QFormLayout::LabelRole, integratorLabel);
+
+        integratorComboBox = new QComboBox(physicsControlsGB);
+        integratorComboBox->setObjectName(QStringLiteral("integratorComboBox"));
+
+        formLayout_5->setWidget(0, QFormLayout::FieldRole, integratorComboBox);
+
+        timeStepLabel = new QLabel(physicsControlsGB);
+        timeStepLabel->setObjectName(QStringLiteral("timeStepLabel"));
+
+        formLayout_5->setWidget(1, QFormLayout::LabelRole, timeStepLabel);
+
+        timeStepSpinBox = new QDoubleSpinBox(physicsControlsGB);
+        timeStepSpinBox->setObjectName(QStringLiteral("timeStepSpinBox"));
+        timeStepSpinBox->setDecimals(4);
+        timeStepSpinBox->setSingleStep(0.001);
+        timeStepSpinBox->setValue(0.01);
+
+        formLayout_5->setWidget(1, QFormLayout::FieldRole, timeStepSpinBox);
+
+        subStepsLabel = new QLabel(physicsControlsGB);
+        subStepsLabel->setObjectName(QStringLiteral("subStepsLabel"));
+
+        formLayout_5->setWidget(2, QFormLayout::LabelRole, subStepsLabel);
+
+        subStepsSpinBox = new QSpinBox(physicsControlsGB);
+        subStepsSpinBox->setObjectName(QStringLiteral("subStepsSpinBox"));
+        subStepsSpinBox->setMinimum(1);
+        subStepsSpinBox->setMaximum(999);
+        subStepsSpinBox->setValue(10);
+
+        formLayout_5->setWidget(2, QFormLayout::FieldRole, subStepsSpinBox);
+
+
+        gridLayout_3->addLayout(formLayout_5, 12, 0, 1, 1);
+
+        simulationTimeLabel = new QLabel(physicsControlsGB);
+        simulationTimeLabel->setObjectName(QStringLiteral("simulationTimeLabel"));
+
+        gridLayout_3->addWidget(simulationTimeLabel, 15, 0, 1, 1);
 
 
         verticalLayout->addWidget(physicsControlsGB);
@@ -290,7 +375,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1135, 19));
+        menubar->setGeometry(QRect(0, 0, 1135, 23));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -311,20 +396,25 @@ public:
         displayMassesCheckBox->setText(QApplication::translate("MainWindow", "Masses", Q_NULLPTR));
         displayMeshCheckBox->setText(QApplication::translate("MainWindow", "Mesh", Q_NULLPTR));
         physicsControlsGB->setTitle(QApplication::translate("MainWindow", "Controls", Q_NULLPTR));
-        resetJelloPushButton->setText(QApplication::translate("MainWindow", "Reset", Q_NULLPTR));
+        shadingTimeLabel->setText(QApplication::translate("MainWindow", "Shading Time: ?", Q_NULLPTR));
         springConstantLabel->setText(QApplication::translate("MainWindow", "Spring", Q_NULLPTR));
         dampingConstantLabel->setText(QApplication::translate("MainWindow", "Damping", Q_NULLPTR));
-        jelloMassLabel->setText(QApplication::translate("MainWindow", "Jello Mass", Q_NULLPTR));
-        gravityLabel->setText(QApplication::translate("MainWindow", "Gravity", Q_NULLPTR));
-        timeStepLabel->setText(QApplication::translate("MainWindow", "Timestep", Q_NULLPTR));
-        subStepsLabel->setText(QApplication::translate("MainWindow", "Substeps", Q_NULLPTR));
-        integratorLabel->setText(QApplication::translate("MainWindow", "Integrator", Q_NULLPTR));
         frictionLabel->setText(QApplication::translate("MainWindow", "Friction", Q_NULLPTR));
         recoveryConstantLabel->setText(QApplication::translate("MainWindow", "Recovery", Q_NULLPTR));
+        jelloMassLabel->setText(QApplication::translate("MainWindow", "Jello Mass", Q_NULLPTR));
+        jelloResolutionLabel->setText(QApplication::translate("MainWindow", "Resolution", Q_NULLPTR));
         massCountLabel->setText(QApplication::translate("MainWindow", "Mass Count: ?", Q_NULLPTR));
         springCountLabel->setText(QApplication::translate("MainWindow", "Spring Count: ?", Q_NULLPTR));
         enableSphereColliderCheckBox->setText(QApplication::translate("MainWindow", "Sphere Collider", Q_NULLPTR));
         framesPerSecondLabel->setText(QApplication::translate("MainWindow", "FPS: ?", Q_NULLPTR));
+        sphereSpeedLabel->setText(QApplication::translate("MainWindow", "Speed", Q_NULLPTR));
+        gravityLabel->setText(QApplication::translate("MainWindow", "Gravity", Q_NULLPTR));
+        pauseJelloPushButton->setText(QApplication::translate("MainWindow", "Pause", Q_NULLPTR));
+        resetJelloPushButton->setText(QApplication::translate("MainWindow", "Reset", Q_NULLPTR));
+        integratorLabel->setText(QApplication::translate("MainWindow", "Integrator", Q_NULLPTR));
+        timeStepLabel->setText(QApplication::translate("MainWindow", "Timestep", Q_NULLPTR));
+        subStepsLabel->setText(QApplication::translate("MainWindow", "Substeps", Q_NULLPTR));
+        simulationTimeLabel->setText(QApplication::translate("MainWindow", "Simulation Time: ?", Q_NULLPTR));
     } // retranslateUi
 
 };

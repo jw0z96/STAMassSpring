@@ -40,6 +40,7 @@ NGLScene::NGLScene(QWidget *_parent, JelloCube *_cube) : QOpenGLWidget(_parent),
 	m_isFBODirty = true;
 
 	m_sphereRadius = 1.0f;
+	m_sphereSpeed = 1.0f;
 
 	startSimTimer();
 }
@@ -301,7 +302,7 @@ void NGLScene::keyReleaseEvent( QKeyEvent *_event	)
 void NGLScene::timerEvent( QTimerEvent *)
 {
 	// m_spherePos = ngl::Vec3(sin(m_timer.elapsed() * 0.001f), 1.0f, 0.0);
-	m_spherePos = ngl::Vec3(1.5f + 10.0 * cos(m_timer.elapsed() * 0.001f), 1.0f, 1.5f);
+	m_spherePos = ngl::Vec3(1.5f + 10.0 * cos(m_timer.elapsed() * m_sphereSpeed * 0.001f), 1.0f, 1.5f);
 	m_jelloCube->update(m_spherePos, m_sphereRadius);
 	update();
 }

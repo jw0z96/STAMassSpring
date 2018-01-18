@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1135</width>
-    <height>741</height>
+    <height>837</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,23 +73,23 @@
          <string>Controls</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="7" column="0">
-          <widget class="QPushButton" name="resetJelloPushButton">
+         <item row="16" column="0">
+          <widget class="QLabel" name="shadingTimeLabel">
            <property name="text">
-            <string>Reset</string>
+            <string>Shading Time: ?</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0" rowspan="2">
+         <item row="3" column="0" rowspan="2">
           <layout class="QFormLayout" name="formLayout">
-           <item row="1" column="0">
+           <item row="0" column="0">
             <widget class="QLabel" name="springConstantLabel">
              <property name="text">
               <string>Spring</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="springConstantSpinBox">
              <property name="decimals">
               <number>3</number>
@@ -102,14 +102,14 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="1" column="0">
             <widget class="QLabel" name="dampingConstantLabel">
              <property name="text">
               <string>Damping</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="dampingConstantSpinBox">
              <property name="decimals">
               <number>3</number>
@@ -122,107 +122,14 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="jelloMassLabel">
-             <property name="text">
-              <string>Jello Mass</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="1">
-            <widget class="QDoubleSpinBox" name="jelloMassSpinBox">
-             <property name="decimals">
-              <number>2</number>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="gravityLabel">
-             <property name="text">
-              <string>Gravity</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
-            <widget class="QDoubleSpinBox" name="gravitySpinBox">
-             <property name="decimals">
-              <number>2</number>
-             </property>
-             <property name="minimum">
-              <double>-99.989999999999995</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>-9.810000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0">
-            <widget class="QLabel" name="timeStepLabel">
-             <property name="text">
-              <string>Timestep</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="1">
-            <widget class="QDoubleSpinBox" name="timeStepSpinBox">
-             <property name="decimals">
-              <number>4</number>
-             </property>
-             <property name="singleStep">
-              <double>0.001000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0">
-            <widget class="QLabel" name="subStepsLabel">
-             <property name="text">
-              <string>Substeps</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="1">
-            <widget class="QSpinBox" name="subStepsSpinBox">
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>999</number>
-             </property>
-             <property name="value">
-              <number>10</number>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="integratorComboBox"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="integratorLabel">
-             <property name="text">
-              <string>Integrator</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="frictionLabel">
              <property name="text">
               <string>Friction</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="frictionSpinBox">
              <property name="decimals">
               <number>3</number>
@@ -238,14 +145,14 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="recoveryConstantLabel">
              <property name="text">
               <string>Recovery</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="recoverySpinBox">
              <property name="decimals">
               <number>3</number>
@@ -261,16 +168,56 @@
              </property>
             </widget>
            </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="jelloMassLabel">
+             <property name="text">
+              <string>Jello Mass</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="jelloMassSpinBox">
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QSpinBox" name="jelloResolutionSpinBox">
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>50</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="jelloResolutionLabel">
+             <property name="text">
+              <string>Resolution</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
-         <item row="4" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="massCountLabel">
            <property name="text">
             <string>Mass Count: ?</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="8" column="0">
           <widget class="QLabel" name="springCountLabel">
            <property name="text">
             <string>Spring Count: ?</string>
@@ -287,10 +234,153 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
+         <item row="14" column="0">
           <widget class="QLabel" name="framesPerSecondLabel">
            <property name="text">
             <string>FPS: ?</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="sphereSpeedLabel">
+             <property name="text">
+              <string>Speed</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="sphereSpeedSpinBox">
+             <property name="decimals">
+              <number>3</number>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="gravityLabel">
+             <property name="text">
+              <string>Gravity</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="gravitySpinBox">
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>-9.810000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="13" column="0">
+          <widget class="Line" name="line_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QPushButton" name="pauseJelloPushButton">
+           <property name="text">
+            <string>Pause</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <widget class="QPushButton" name="resetJelloPushButton">
+           <property name="text">
+            <string>Reset</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
+          <layout class="QFormLayout" name="formLayout_5">
+           <item row="0" column="0">
+            <widget class="QLabel" name="integratorLabel">
+             <property name="text">
+              <string>Integrator</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="integratorComboBox"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="timeStepLabel">
+             <property name="text">
+              <string>Timestep</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="timeStepSpinBox">
+             <property name="decimals">
+              <number>4</number>
+             </property>
+             <property name="singleStep">
+              <double>0.001000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="subStepsLabel">
+             <property name="text">
+              <string>Substeps</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QSpinBox" name="subStepsSpinBox">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>999</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="15" column="0">
+          <widget class="QLabel" name="simulationTimeLabel">
+           <property name="text">
+            <string>Simulation Time: ?</string>
            </property>
           </widget>
          </item>
@@ -336,7 +426,7 @@
      <x>0</x>
      <y>0</y>
      <width>1135</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
