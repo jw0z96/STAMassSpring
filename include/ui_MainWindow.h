@@ -48,7 +48,6 @@ public:
     QCheckBox *displayMeshCheckBox;
     QGroupBox *physicsControlsGB;
     QGridLayout *gridLayout_3;
-    QLabel *shadingTimeLabel;
     QFormLayout *formLayout;
     QLabel *springConstantLabel;
     QDoubleSpinBox *springConstantSpinBox;
@@ -60,8 +59,6 @@ public:
     QDoubleSpinBox *recoverySpinBox;
     QLabel *jelloMassLabel;
     QDoubleSpinBox *jelloMassSpinBox;
-    QSpinBox *jelloResolutionSpinBox;
-    QLabel *jelloResolutionLabel;
     QLabel *massCountLabel;
     QLabel *springCountLabel;
     QCheckBox *enableSphereColliderCheckBox;
@@ -83,7 +80,6 @@ public:
     QDoubleSpinBox *timeStepSpinBox;
     QLabel *subStepsLabel;
     QSpinBox *subStepsSpinBox;
-    QLabel *simulationTimeLabel;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
     QMenuBar *menubar;
@@ -138,11 +134,6 @@ public:
         physicsControlsGB->setObjectName(QStringLiteral("physicsControlsGB"));
         gridLayout_3 = new QGridLayout(physicsControlsGB);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        shadingTimeLabel = new QLabel(physicsControlsGB);
-        shadingTimeLabel->setObjectName(QStringLiteral("shadingTimeLabel"));
-
-        gridLayout_3->addWidget(shadingTimeLabel, 16, 0, 1, 1);
-
         formLayout = new QFormLayout();
         formLayout->setObjectName(QStringLiteral("formLayout"));
         springConstantLabel = new QLabel(physicsControlsGB);
@@ -211,19 +202,6 @@ public:
         jelloMassSpinBox->setValue(1);
 
         formLayout->setWidget(4, QFormLayout::FieldRole, jelloMassSpinBox);
-
-        jelloResolutionSpinBox = new QSpinBox(physicsControlsGB);
-        jelloResolutionSpinBox->setObjectName(QStringLiteral("jelloResolutionSpinBox"));
-        jelloResolutionSpinBox->setMinimum(2);
-        jelloResolutionSpinBox->setMaximum(50);
-        jelloResolutionSpinBox->setValue(10);
-
-        formLayout->setWidget(5, QFormLayout::FieldRole, jelloResolutionSpinBox);
-
-        jelloResolutionLabel = new QLabel(physicsControlsGB);
-        jelloResolutionLabel->setObjectName(QStringLiteral("jelloResolutionLabel"));
-
-        formLayout->setWidget(5, QFormLayout::LabelRole, jelloResolutionLabel);
 
 
         gridLayout_3->addLayout(formLayout, 3, 0, 2, 1);
@@ -353,11 +331,6 @@ public:
 
         gridLayout_3->addLayout(formLayout_5, 12, 0, 1, 1);
 
-        simulationTimeLabel = new QLabel(physicsControlsGB);
-        simulationTimeLabel->setObjectName(QStringLiteral("simulationTimeLabel"));
-
-        gridLayout_3->addWidget(simulationTimeLabel, 15, 0, 1, 1);
-
 
         verticalLayout->addWidget(physicsControlsGB);
 
@@ -396,13 +369,11 @@ public:
         displayMassesCheckBox->setText(QApplication::translate("MainWindow", "Masses", Q_NULLPTR));
         displayMeshCheckBox->setText(QApplication::translate("MainWindow", "Mesh", Q_NULLPTR));
         physicsControlsGB->setTitle(QApplication::translate("MainWindow", "Controls", Q_NULLPTR));
-        shadingTimeLabel->setText(QApplication::translate("MainWindow", "Shading Time: ?", Q_NULLPTR));
         springConstantLabel->setText(QApplication::translate("MainWindow", "Spring", Q_NULLPTR));
         dampingConstantLabel->setText(QApplication::translate("MainWindow", "Damping", Q_NULLPTR));
         frictionLabel->setText(QApplication::translate("MainWindow", "Friction", Q_NULLPTR));
         recoveryConstantLabel->setText(QApplication::translate("MainWindow", "Recovery", Q_NULLPTR));
         jelloMassLabel->setText(QApplication::translate("MainWindow", "Jello Mass", Q_NULLPTR));
-        jelloResolutionLabel->setText(QApplication::translate("MainWindow", "Resolution", Q_NULLPTR));
         massCountLabel->setText(QApplication::translate("MainWindow", "Mass Count: ?", Q_NULLPTR));
         springCountLabel->setText(QApplication::translate("MainWindow", "Spring Count: ?", Q_NULLPTR));
         enableSphereColliderCheckBox->setText(QApplication::translate("MainWindow", "Sphere Collider", Q_NULLPTR));
@@ -414,7 +385,6 @@ public:
         integratorLabel->setText(QApplication::translate("MainWindow", "Integrator", Q_NULLPTR));
         timeStepLabel->setText(QApplication::translate("MainWindow", "Timestep", Q_NULLPTR));
         subStepsLabel->setText(QApplication::translate("MainWindow", "Substeps", Q_NULLPTR));
-        simulationTimeLabel->setText(QApplication::translate("MainWindow", "Simulation Time: ?", Q_NULLPTR));
     } // retranslateUi
 
 };
