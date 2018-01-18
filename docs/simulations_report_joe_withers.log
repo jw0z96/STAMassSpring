@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2016.5.26)  18 JAN 2018 17:09
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2016.5.26)  18 JAN 2018 18:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -397,24 +397,29 @@ Package: listings 2007/02/22 1.4 (Carsten Heinz)
 Package: glsllst 
 ) (./rmlst.sty
 Package: rmlst 
-) (./simulations_report_joe_withers.aux)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/underscore/underscore.sty
+Package: underscore 2006/09/13
+LaTeX Info: Redefining \_ on input line 42.
+)
+(./simulations_report_joe_withers.aux)
 \openout1 = `simulations_report_joe_withers.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 75.
-LaTeX Font Info:    ... okay on input line 75.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 75.
-LaTeX Font Info:    ... okay on input line 75.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 75.
-LaTeX Font Info:    ... okay on input line 75.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 75.
-LaTeX Font Info:    ... okay on input line 75.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 75.
-LaTeX Font Info:    ... okay on input line 75.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 75.
-LaTeX Font Info:    ... okay on input line 75.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 75.
-LaTeX Font Info:    ... okay on input line 75.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 75.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 76.
+LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 76.
+LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 76.
+LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 76.
+LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 76.
+LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 76.
+LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 76.
+LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 76.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
@@ -454,7 +459,7 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box34
-Package hyperref Info: Link coloring ON on input line 75.
+Package hyperref Info: Link coloring ON on input line 76.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -464,40 +469,40 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count148
 )
-LaTeX Info: Redefining \ref on input line 75.
-LaTeX Info: Redefining \pageref on input line 75.
-LaTeX Info: Redefining \nameref on input line 75.
+LaTeX Info: Redefining \ref on input line 76.
+LaTeX Info: Redefining \pageref on input line 76.
+LaTeX Info: Redefining \nameref on input line 76.
 \c@lstlisting=\count149
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 82.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 83.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 82.
+(Font)              scaled to size 13.24796pt on input line 83.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 82.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 83.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 13.24796pt on input line 82.
+(Font)              scaled to size 13.24796pt on input line 83.
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 84.
+(Font)              scaled to size 11.03998pt on input line 85.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <12> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 84.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 85.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 11.03998pt on input line 84.
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 97.
+(Font)              scaled to size 11.03998pt on input line 85.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 98.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 97.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 97.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 98.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 98.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \hbox (badness 2119) in paragraph at lines 128--129
+Underfull \hbox (badness 2119) in paragraph at lines 129--130
 []\OT1/ptm/m/n/9 Spring ve-loc-ity - [][][][][][][][][][][][][][], Size = Num-b
 er of
  []
@@ -508,6 +513,10 @@ Missing character: There is no ˜ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
+[1{/usr/share/texlive/texmf/fonts/map/pdftex/updmap/pdftex.map}
+
+
+]
 (./simulations_report_joe_withers.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 4--7
 []\OT1/ptm/m/sc/9 Fiedler, G.\OT1/ptm/m/n/9 , 2004.  Physics in 3d.  [][]$\OT1/
@@ -520,29 +529,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--12
 /pcr/m/n/9 https :
  []
 
-[1{/usr/share/texlive/texmf/fonts/map/pdftex/updmap/pdftex.map}
-
-
-])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 146.
+)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 152.
  [2
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 146.
-
-(./simulations_report_joe_withers.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 146.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 146.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 146.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 152.
+ (./simulations_report_joe_withers.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 152.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 152.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 152.
  ) 
 Here is how much of TeX's memory you used:
- 9650 strings out of 495063
- 142587 string characters out of 3182201
- 351086 words of memory out of 3000000
- 12689 multiletter control sequences out of 15000+200000
- 21519 words of font info for 50 fonts, out of 3000000 for 9000
+ 9668 strings out of 495063
+ 142981 string characters out of 3182201
+ 353222 words of memory out of 3000000
+ 12701 multiletter control sequences out of 15000+200000
+ 23203 words of font info for 52 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 43i,15n,40p,839b,974s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,15n,40p,839b,972s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fo
@@ -550,11 +555,12 @@ nts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier
 /ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on simulations_report_joe_withers.pdf (2 pages, 85399 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on simulations_report_joe_withers.pdf (2 pages, 95531 bytes).
 PDF statistics:
- 72 PDF objects out of 1000 (max. 8388607)
- 59 compressed objects within 1 object stream
+ 76 PDF objects out of 1000 (max. 8388607)
+ 62 compressed objects within 1 object stream
  12 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
