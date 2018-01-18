@@ -18,7 +18,12 @@
 
 ## TODO
 
-- collisions
+- cite jon macey
+- remove unused functions
+- collider speed
+- mass / 1000.0
+- restitution strength
+- performance metrics
 
 ## LINKS
 

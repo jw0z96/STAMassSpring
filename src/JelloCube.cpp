@@ -236,7 +236,8 @@ void JelloCube::calculateExternalForces(ngl::Vec3 _pos, float _radius)
 	shader->setUniform("u_currentTime", m_t);
 	shader->setUniform("u_timeStep", float(m_timestep / (float)m_subSteps));
 
-	shader->setUniform("u_mass", GLfloat(m_mass / (float)m_massCount));
+	shader->setUniform("u_mass", GLfloat(m_mass / (float)1000.0));
+	// shader->setUniform("u_mass", GLfloat(m_mass / (float)m_massCount));
 	shader->setUniform("u_gravity", m_gravity);
 	shader->setUniform("u_friction", m_friction);
 
