@@ -183,7 +183,6 @@ void NGLScene::paintGL()
 	glViewport(0,0,m_win.width,m_win.height);
 
 	m_transform.reset();
-	// m_transform.setScale(ngl::Vec3(0.1, 0.1, 0.1));
 
 	if (m_drawMesh)
 	{
@@ -225,7 +224,7 @@ void NGLScene::paintGL()
 		m_transform.setPosition(m_spherePos);
 		m_transform.setScale(ngl::Vec3(m_sphereRadius, m_sphereRadius, m_sphereRadius));
 		loadMatricesToShader();
-		shader->setUniform("diffuse", ngl::Vec3(0.9, 0.1, 0.1));
+		shader->setUniform("diffuse", ngl::Vec3(1.0, 0.0, 0.0));
 		prim->draw("sphereCollider");
 	}
 

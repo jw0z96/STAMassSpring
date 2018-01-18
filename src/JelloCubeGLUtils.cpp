@@ -4,46 +4,6 @@
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
 
-void _check_gl_error(int _line)
-{
-	GLenum err (glGetError());
-
-	while(err!=GL_NO_ERROR)
-	{
-		std::string error;
-
-		switch(err)
-		{
-			case GL_INVALID_OPERATION:      error="INVALID_OPERATION";      break;
-			case GL_INVALID_ENUM:           error="INVALID_ENUM";           break;
-			case GL_INVALID_VALUE:          error="INVALID_VALUE";          break;
-			case GL_OUT_OF_MEMORY:          error="OUT_OF_MEMORY";          break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
-		}
-
-		std::cerr<<"GL_"<<error.c_str()<<" line: "<<_line<<std::endl;
-		err=glGetError();
-	}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-
-void JelloCube::gen1DTexture(unsigned int &texId, unsigned int size, GLenum internalFormat, GLenum format, GLenum type, const GLvoid* data)
-{
-	if (texId)
-		glDeleteTextures(1, &texId);
-
-	glGenTextures(1, &texId );
-	glBindTexture(GL_TEXTURE_1D, texId);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage1D(GL_TEXTURE_1D, 0, internalFormat, size, 0, format, type, data);
-	_check_gl_error(42);
-	glBindTexture(GL_TEXTURE_1D, 0);
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 
 void JelloCube::genAtomicCounter(unsigned int &buffer)

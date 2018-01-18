@@ -50,10 +50,6 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------
 	void calculateExternalForces(ngl::Vec3 _pos, float _radius);
 	//----------------------------------------------------------------------------------------------------------------------
-	/// @brief helper function for generating 1D textures
-	//----------------------------------------------------------------------------------------------------------------------
-	void gen1DTexture(unsigned int &texId, unsigned int size, GLenum internalFormat, GLenum format, GLenum type, const GLvoid* data);
-	//----------------------------------------------------------------------------------------------------------------------
 	/// @brief helper function for generating an atomic counter
 	//----------------------------------------------------------------------------------------------------------------------
 	void genAtomicCounter(unsigned int &buffer);

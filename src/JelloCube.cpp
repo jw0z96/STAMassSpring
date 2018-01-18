@@ -103,12 +103,12 @@ void JelloCube::generate()
 	ngl::Vec3 span = topRight - bottomLeft;
 	ngl::Vec3 step = span / ngl::Vec3(m_sizeX, m_sizeY, m_sizeZ);
 
+	shader->setUniform("u_bottomLeft", bottomLeft);
+	shader->setUniform("u_step", step);
+
 	shader->setUniform("u_sizeX", GLint(m_sizeX));
 	shader->setUniform("u_sizeY", GLint(m_sizeY));
 	shader->setUniform("u_sizeZ", GLint(m_sizeZ));
-
-	shader->setUniform("u_bottomLeft", bottomLeft);
-	shader->setUniform("u_step", step);
 
 	// create an atomic counter to get the number of required springs
 	GLuint springCounter;
@@ -133,7 +133,6 @@ void JelloCube::generate()
 	shader->setUniform("u_springWrite", false);
 	// dispatch compute shader
 	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
-	// glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 	// read the atomic counter value
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, springCounter);
@@ -145,20 +144,19 @@ void JelloCube::generate()
 	std::cout<<"spring count: "<<count[0]<<"\n";
 
 	m_springCount = count[0];
+
 	// reset the counter to 0
 	memset(count, 0, sizeof(GLuint));
 	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
 
-	std::vector<SSBO_Spring> springsArray(m_springCount);
-
 	// generate an ssbo for the springs
+	std::vector<SSBO_Spring> springsArray(m_springCount);
 	genSSBO(m_springBufferId, m_springCount * sizeof(SSBO_Spring), &springsArray[0], GL_DYNAMIC_COPY);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_springBufferId);
 
 	// set to write the contents of springs
 	shader->setUniform("u_springWrite", true);
-
 	// dispatch compute shader (this time to store springs)
 	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
 
@@ -214,12 +212,10 @@ void JelloCube::calculateSpringForces()
 	shader->setUniform("u_writeMode", false);
 
 	// dispatch compute shader to integrate springs
-	// glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
 	glDispatchCompute(m_springCount, 1, 1);
 
 	// dispatch compute shader to update springs
 	shader->setUniform("u_writeMode", true);
-	// glDispatchCompute(ceil(m_springCount / 128.0), 1, 1);
 	glDispatchCompute(m_springCount, 1, 1);
 }
 
@@ -246,6 +242,5 @@ void JelloCube::calculateExternalForces(ngl::Vec3 _pos, float _radius)
 	shader->setUniform("u_sphereRadius", _radius);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_massBufferId);
-
 	glDispatchCompute(m_sizeX, m_sizeY, m_sizeZ);
 }

@@ -135,7 +135,9 @@ void NGLScene::initFBO()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-
+/// The following section is modified from:
+/// Richard Southern (2017): Realtime Rendering Assignment Materials
+/// Available from https://mybu.bournemouth.ac.uk/webapps/blackboard/content/listContent.jsp?course_id=_50978_1&content_id=_1375211_1
 void NGLScene::checkFrameBuffer() const
 {
 	switch(glCheckFramebufferStatus(GL_FRAMEBUFFER))
@@ -169,18 +171,7 @@ void NGLScene::checkFrameBuffer() const
 		break;
 	}
 }
-
-//----------------------------------------------------------------------------------------------------------------------
-
-void NGLScene::checkGLerror() const
-{
-	// check OpenGL error
-	GLenum err;
-	while ((err = glGetError()) != GL_NO_ERROR)
-	{
-		std::cout <<"OpenGL error: "<<glewGetErrorString(err)<<"\n";
-	}
-}
+/// end of citation
 
 //----------------------------------------------------------------------------------------------------------------------
 
