@@ -17,5 +17,5 @@ void main()
 	fragAlbedo = diffuse;
 	fragWSPosition = WorldPos;
 	fragWSNormal = Normal;
-	fragMetalRough = vec2(0.0, 0.0);
+	fragMetalRough = vec2(0.0, 0.1);
 }

@@ -33,6 +33,6 @@ void main()
 	fragAlbedo = vec3(diffuse);
 	fragWSPosition = f_pos;
 	fragWSNormal = f_normal;
-	fragMetalRough = vec2(0.0, 0.0);
+	fragMetalRough = vec2(0.0, 0.1);
 	// fragColor = vec4(f_pos, 0.0);
 }

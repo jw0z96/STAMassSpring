@@ -4,7 +4,10 @@ in vec3 WorldPos;
 in vec3 Normal;
 
 // The output textures that make up our gBuffer
-layout (location=0) out vec4 fragColour;
+layout (location=0) out vec3 fragWSPosition;
+layout (location=1) out vec3 fragWSNormal;
+layout (location=2) out vec3 fragAlbedo;
+layout (location=3) out vec2 fragMetalRough;
 
 uniform int u_index;
 
@@ -25,6 +28,9 @@ void main()
 	// world space position out
 	vec3 indexColour = getIndex(u_index);
 	indexColour /= 4.0;
-	fragColour = vec4(indexColour, 1.0);
-	// fragColour = vec4(WorldPos, 1.0);
+
+	fragAlbedo = indexColour;
+	fragWSPosition = WorldPos;
+	fragWSNormal = Normal;
+	fragMetalRough = vec2(0.0, 0.1);
 }

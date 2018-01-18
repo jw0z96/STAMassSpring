@@ -192,13 +192,6 @@ void NGLScene::paintGL()
 		m_jelloCube->drawMesh();
 	}
 
-	// draw masses
-	if (m_drawMassPoints)
-	{
-		shader->use("testShader");
-		loadMatricesToShader();
-		// m_jelloCube->drawMasses();
-	}
 	// draw springs
 	shader->use("springShader");
 	shader->setUniform("u_drawStructuralSprings", m_drawStructuralSprings);
@@ -207,10 +200,17 @@ void NGLScene::paintGL()
 	loadMatricesToShader();
 	m_jelloCube->drawSprings();
 
+	// draw masses
+	if (m_drawMassPoints)
+	{
+		shader->use("testShader");
+		loadMatricesToShader();
+		m_jelloCube->drawMasses();
+	}
+
 	// draw ground
 	shader->use("basicShader");
 	shader->setUniform("diffuse", ngl::Vec3(1.0, 1.0, 1.0));
-
 	loadMatricesToShader();
 	prim->draw("ground");
 
@@ -227,7 +227,6 @@ void NGLScene::paintGL()
 		shader->setUniform("diffuse", ngl::Vec3(0.9, 0.1, 0.1));
 		prim->draw("sphereCollider");
 	}
-
 
 	//----------------------------------------------------------------------------------------------------------------------
 	/// OUTPUT PASS START
