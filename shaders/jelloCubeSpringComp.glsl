@@ -50,6 +50,11 @@ uniform int u_sizeX;
 uniform int u_sizeY;
 uniform int u_sizeZ;
 
+// ----------------------------------------------------------------------------
+/// The following section is modified from:
+/// Jon Macey (2015): Mass Spring System using RK 4 integration
+/// Available from https://github.com/NCCA/MassSpring
+// ----------------------------------------------------------------------------
 // return the velocity (or force??) calculated by the spring according to hooke's law
 // vec3 _v: the relative velocity between the two masses
 /// F = -k(|x|-d)(x/|x|) - bv where
@@ -71,14 +76,14 @@ vec3 motionFunction(vec3 _v)
 	float restingLength = springs[computeIndex].restingLength;
 	return -u_k*(length-restingLength)*(distance/length)-u_damping*_v;
 }
-
+// ----------------------------------------------------------------------------
 // calculate the velocity of the spring
 // vec3 _v: the relative velocity between masses
 vec3 evaluate(vec3 _v)
 {
 	return motionFunction(_v);
 }
-
+// ----------------------------------------------------------------------------
 // calculate the velocity of the spring
 // vec3 _v: the relative velocity between masses
 vec3 evaluate(vec3 _v, float _dt, vec3 _dv)
@@ -86,7 +91,7 @@ vec3 evaluate(vec3 _v, float _dt, vec3 _dv)
 	vec3 v2 = _v + _dv * _dt;
 	return motionFunction(v2);
 }
-
+// ----------------------------------------------------------------------------
 // perform RK4 integration and return dv, change in velocity
 // vec3 _v: the current relative velocity between masses
 vec3 integrateRK4(vec3 _v)
@@ -99,7 +104,8 @@ vec3 integrateRK4(vec3 _v)
 	vec3 dvdt = 1.0f/6.0f * (a + 2.0 * (b + c) + d);
 	return dvdt * u_timeStep;
 }
-
+/// end of citation
+// ----------------------------------------------------------------------------
 // perform RK2 integration and return dv, change in velocity
 // vec3 _v: the current relative velocity between masses
 vec3 integrateRK2(vec3 _v)
@@ -109,7 +115,7 @@ vec3 integrateRK2(vec3 _v)
 	vec3 dvdt = 0.5 * (a + b);
 	return dvdt * u_timeStep;
 }
-
+// ----------------------------------------------------------------------------
 // perform Euler integration and return dv, change in velocity
 // vec3 _v: the current relative velocity between masses
 vec3 integrateEuler(vec3 _v)
@@ -117,7 +123,7 @@ vec3 integrateEuler(vec3 _v)
 	vec3 dvdt = evaluate(_v);
 	return dvdt * u_timeStep;
 }
-
+// ----------------------------------------------------------------------------
 void main()
 {
 	uint computeIndex = gl_GlobalInvocationID.x;
@@ -147,11 +153,6 @@ void main()
 
 		// get force from integration result (dv)
 		vec3 springForce = (springs[computeIndex].velocity.xyz / u_timeStep) * 10.0; // * u_mass;
-
-		// if (length(springForce) < 0.001)
-		// {
-		// 	return;
-		// }
 
 		atomicAdd(masses[startIndex].force.x, -springForce.x);
 		atomicAdd(masses[startIndex].force.y, -springForce.y);

@@ -24,6 +24,7 @@
 - mass / 1000.0
 - restitution strength
 - performance metrics
+- jello resolution control
 
 ## LINKS
 
