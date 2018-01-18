@@ -1,12 +1,4 @@
 #version 430
-// ----------------------------------------------------------------------------
-/// ALL OF THE CONTENT RELATING TO SSAO IS CITED FROM MY
-/// REALTIME RENDERING ASSIGNMENT SUBMISSION.
-/// SSAO TECHNIQUE IMPLEMENTED:
-/// https://learnopengl.com/#!Advanced-Lighting/SSAO
-/// PBR TECHNIQUES IMPLEMENTED:
-/// https://learnopengl.com/#!PBR/Lighting
-// ----------------------------------------------------------------------------
 
 // our input textures from our framebuffer object
 layout(binding = 0) uniform sampler2D WSPositionTex;
@@ -15,6 +7,7 @@ layout(binding = 2) uniform sampler2D depthTex;
 layout(binding = 3) uniform sampler2D albedoTex;
 layout(binding = 4) uniform sampler2D metalRoughTex;
 layout(binding = 5) uniform sampler2D noiseTex;
+
 // The output colour. At location 0 it will be sent to the screen.
 layout (location = 0) out vec4 fragColor;
 
@@ -37,10 +30,11 @@ const vec3 lightColor = vec3(100.0);
 const float PI = 3.14159265359;
 
 // ----------------------------------------------------------------------------
-
+/// The following section is modified from:
+/// Joey De Vries (2015): LearnOpenGL - SSAO
+/// Available from https://learnopengl.com/#!Advanced-Lighting/SSAO
 float calcSSAO(vec2 texpos, vec3 normal, vec3 position)
 {
-	//SOURCE FROM https://learnopengl.com/#!Advanced-Lighting/SSAO BEGINS HERE
 	vec3 randomVec = texture(noiseTex, texpos * noiseScale).rgb; //this should be random
 	vec3 tangent   = normalize(randomVec - normal * dot(randomVec, normal));
 	vec3 bitangent = cross(normal, tangent);
@@ -60,14 +54,15 @@ float calcSSAO(vec2 texpos, vec3 normal, vec3 position)
 		float rangeCheck = smoothstep(0.0, 1.0, radius / abs(origDepth - sampleDepth));
 		occlusion += (origDepth >= sampleDepth + bias ? 1.0 : 0.0) * rangeCheck;
 	}
-	//SOURCE FROM https://learnopengl.com/#!Advanced-Lighting/SSAO ENDS HERE
 	return 1.0 - intensity * (occlusion / SAMPLES);
 }
-
-// ----------------------------------------------------------------------------
-/// PBR FUNCTIONS
+/// end of citation
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+/// The following section is from:
+/// Joey De Vries (2016): LearnOpenGL - PBR Lighting
+/// Available from 	https://learnopengl.com/#!PBR/Lighting
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
 	float a = roughness*roughness;
@@ -81,9 +76,7 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 
 	return nom / denom;
 }
-
 // ----------------------------------------------------------------------------
-
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
 	float r = (roughness + 1.0);
@@ -94,9 +87,7 @@ float GeometrySchlickGGX(float NdotV, float roughness)
 
 	return nom / denom;
 }
-
 // ----------------------------------------------------------------------------
-
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
 	float NdotV = max(dot(N, V), 0.0);
@@ -106,19 +97,20 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
 	return ggx1 * ggx2;
 }
-
 // ----------------------------------------------------------------------------
-
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
 	return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
-
+/// end of citation
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+/// The following section is modified from:
+/// Joey De Vries (2016): LearnOpenGL - PBR Lighting
+/// Available from 	https://learnopengl.com/#!PBR/Lighting
 vec3 calculateSpecular(vec3 albedo, vec3 normal, vec3 position, float metallic, float roughness, float ao)
 {
-	// SOURCE FROM https://learnopengl.com/#!PBR/Lighting
 	vec3 N = normalize(normal);
 	vec3 V = normalize(camPos - position);
 
@@ -152,7 +144,7 @@ vec3 calculateSpecular(vec3 albedo, vec3 normal, vec3 position, float metallic, 
 	vec3 ambient = vec3(0.1) * albedo;
 	return (ambient + Lo) * ao;
 }
-
+/// end of citation
 // ----------------------------------------------------------------------------
 
 void main()
@@ -186,6 +178,5 @@ void main()
 	fragShaded = fragShaded / (fragShaded + vec3(1.0));
 	// gamma correct
 	fragShaded = pow(fragShaded, vec3(1.0/2.2));
-
 	fragColor = vec4(fragShaded, 1.0);
 }
