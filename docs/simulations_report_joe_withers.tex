@@ -150,7 +150,7 @@ One of the features I had planned initially was the ability to choose between RK
 
 \section{Research Report} \label{sec:report}
 
-Overall I was quite impressed by the performance I was able to gain by offloading the physics calculations for my system onto the GPU.
+Overall I was quite impressed by the performance I was able to gain by offloading the physics calculations for my system onto the GPU, however there are a number of problems within my calculations that reduce the overal quality of my simulation.
 
 One thing I have noticed is that, although I have implemented the option to switch between different integration schemes, the difference between them is negligible. I suspect this is because I am using very small timestep, and have also implemented 'sub steps', which performs the physics calculations multiple times per frame at even smaller timestep values.
 [TODO] notes that the error present in Euler integration can be reduced by running the integration multiple times at smaller time steps, which would seem to confirm this.
