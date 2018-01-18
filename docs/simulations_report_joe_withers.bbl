@@ -1,9 +1,14 @@
-\begin{thebibliography}{\protect\citename{Fiedler }2004}
+\begin{thebibliography}{\protect\citename{Fiedler }2004b}
 
-\bibitem[\protect\citename{Fiedler }2004]{gafferPhys}
+\bibitem[\protect\citename{Fiedler }2004a]{gafferPhys}
 {\sc Fiedler, G.}, 2004.
 \newblock Physics in 3d.
 \newblock \url{https://gafferongames.com/post/physics_in_3d/}.
+
+\bibitem[\protect\citename{Fiedler }2004b]{gafferSpring}
+{\sc Fiedler, G.}, 2004.
+\newblock Spring physics.
+\newblock \url{https://gafferongames.com/post/spring_physics/}.
 
 \bibitem[\protect\citename{Macey }2014]{ngl}
 {\sc Macey, J.}, 2014.

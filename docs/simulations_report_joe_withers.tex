@@ -91,18 +91,51 @@ During this project I explored the feasibility of offloading computation onto th
 
 I used C++ and OpenGL to develop my implementation, utilising the NCCA Graphics Library NGL \cite{ngl} to interact with OpenGL, and Qt5 to create the user interface. I based my implementation around a demo of a Mass Spring System using RK4 (Runge-Kutta 4th Order) integration \cite{nglMassSpring}, that uses NGL and Qt5 for it's user interface. I was able to use many aspects this implementation as 'boilerplate code', such as the camera movement and passing of basic geometry to OpenGL, which saved me a lot of time and allowed me to focus on developing the simulation itself. This implementation also provided an example of RK4 integration and calculations of spring forces according to Hooke's law, though these needed to be altered to make them suitable for use with GPU computation.
 
-Before starting to implement the system on the GPU, I first had to establish what the data structures for the Mass-spring system would be, and to do this I looked at tutorial material covering game physics systems \cite{gafferPhys} hosted by Gaffer On Games. This provided me with an understanding of the necessary data I would need to store for each 'Mass' the system; the necessary data required to represent the 'Springs' was inferred from the previously mentioned Mass-spring implementation \cite{nglMassSpring}. I determined that each 'Mass' would be a struct of two vectors:
+Before starting to implement the system on the GPU, I first had to establish what the data structures for the Mass-spring system would be, and to do this I looked at tutorial material covering game physics systems \cite{gafferPhys} hosted by Gaffer On Games. This provided me with an understanding of the necessary data I would need to store for each mass object in the system. I determined that each mass object would be a struct of two vectors:
+
 \begin{itemize}
-	\item Position $[x, y, z]$ - This stores the position of the mass in world space coordinates.
-	\item Velocity $[x, y, z]$- This stores the combined speed and direction at which the mass is travelling.
+	\item \lstinline{Vec3} Position - This stores the position of the mass in world space coordinates.
+	\item \lstinline{Vec3} Velocity - This stores the combined speed and direction at which the mass is travelling.
 \end{itemize}
 
-For my first attempt at GPU implementation I decided to store each the attributes for each mass and each spring in openGL textures, and to use Image Load/Store commands for bindless textures for accessing and manipulating data. I implemented the following attributes as 1D textures:
-Mass positions (Vec3, RGBA32F, size = number of masses)
-Spring ‘state’ position attribute (Vec3, RGBA32F, size = number of springs)
-Spring ‘state’ velocity attribute (Vec3, RGBA32F, size = number of springs)
-Spring resting length attribute (Float, R32F, size = number of springs)
-The spring start and end index attributes serve as a ‘pointer’ to an index in the mass positions texture which they manipulate.
+To determine the data required to represent the springs I looked at tutorial material covering implementations of spring physics in game engines \cite{gafferSpring}, hosted by Gaffer On Games. This article explains that the calculation of damped spring forces, according to Hooke's law, can be calculated by following:
+
+\begin{equation}
+	F = -k(|x|-d)(x/|x|) - bv \\
+\end{equation}
+where:
+
+% \begin{center}
+$F$ = The force to apply to each of the mass points. \\
+$k$ = The spring constant. \\
+$|x|$ = The distance between the two mass points. \\
+$d$ = The resting length of the spring. \\
+$b$ = The damping coefficient for the spring. \\
+$v$ = The relative velocity between the spring points. \\
+% \end{center}
+I then determined that the data for the spring object could be represented with the following struct:
+\begin{itemize}
+	\item \lstinline{Unsigned Int} Start Index - This stores an integer that represents one of the connected masses, as an index into the array of masses.
+	\item \lstinline{Unsigned Int} End Index - This stores an integer that represents the other connected mass, as an index into the array of masses.
+	\item \lstinline{float} Resting Length - This stores the original resting length of the spring.
+	\item \lstinline{Vec3} Relative Velocity - This stores the combined speed and direction at which the masses are travelling to or from each other.
+\end{itemize}
+
+For my first attempt at GPU implementation I decided to store each the attributes for each mass struct and each spring struct in OpenGL textures, and use Image Load/Store commands for accessing and manipulating data. I implemented the following attributes as 1D textures:
+
+\begin{itemize}
+	\item Mass positions - \lstinline{Vec3, RGBA32F}, Size = Number of Masses.
+	\item Spring velocity - \lstinline{Vec3, RGBA32F}, Size = Number of Springs.
+	\item Spring resting length - \lstinline{float, R32F}, Size = Number of Springs.
+	\item Spring start index - \lstinline{unsigned int, R16UI}, Size = Number of Springs.
+	\item Spring end index - \lstinline{unsigned int, R16UI}, Size = Number of Springs.
+\end{itemize}
+
+To initialise these textures, I first dispatch a compute shader with workgroups equal to the dimensions of my ‘JelloCube’ object. This sets the initial position for the masses in the mass positions texture, whilst also counting how many springs need to be created using an atomic counter. I then read the contents of atomic counter and create the textures necessary for spring attributes, whose length is equal to the number of springs counted by the atomic counter. The atomic counter is then reset, and the compute shader is then dispatched for a second time, however this time it calls a subroutine which stores the spring attributes into each corresponding texture.
+
+Whilst this approach works, it relies on maintaining six textures at once, which is quite unwieldy. I also found that once the number of masses is increased past 1000, the number of springs needed to be stored exceeds the number of texels I can specify with glTexImage1D, at least on my system. I therefore decided to switch to using Shader Storage Buffer Objects, as their size is only limited by the amount of memory on the GPU, and they are much easier to maintain and manipulate compared to textures.
+
+Shader Storage Buffer Objects allow the passing of structs to directly shaders, so I was able to reduce my system to using just two Shader Storage Buffer Objects; One stores an array of Mass structs, the other stores an array of Spring structs. Upon changing the system to use Shader Storage Buffer Objects, I found them to be much faster, allowing up to 1.5 million springs to be calculated at once with interactive framerates.
 
 \section{Research Report} \label{sec:report}
 
