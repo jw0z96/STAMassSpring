@@ -409,7 +409,7 @@ public:
         framesPerSecondLabel->setText(QApplication::translate("MainWindow", "FPS: ?", Q_NULLPTR));
         sphereSpeedLabel->setText(QApplication::translate("MainWindow", "Speed", Q_NULLPTR));
         gravityLabel->setText(QApplication::translate("MainWindow", "Gravity", Q_NULLPTR));
-        pauseJelloPushButton->setText(QApplication::translate("MainWindow", "Pause", Q_NULLPTR));
+        pauseJelloPushButton->setText(QApplication::translate("MainWindow", "Play / Pause", Q_NULLPTR));
         resetJelloPushButton->setText(QApplication::translate("MainWindow", "Reset", Q_NULLPTR));
         integratorLabel->setText(QApplication::translate("MainWindow", "Integrator", Q_NULLPTR));
         timeStepLabel->setText(QApplication::translate("MainWindow", "Timestep", Q_NULLPTR));

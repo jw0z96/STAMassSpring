@@ -25,6 +25,7 @@ JelloCube::JelloCube(double _k, double _damping) : m_k(_k), m_damping(_damping)
 	m_numQuads = 0;
 	m_massBufferId = 0;
 	m_springBufferId = 0;
+	m_simulateToggle = true;
 }
 
 JelloCube::~JelloCube()
@@ -178,12 +179,19 @@ void JelloCube::generate()
 
 void JelloCube::update(ngl::Vec3 _pos, float _radius)
 {
-	for (int i = 0; i < m_subSteps; ++i)
+	if (m_simulateToggle)
 	{
-		calculateSpringForces();
-		calculateExternalForces(_pos, _radius);
-		// update the timestep for the next time
-		m_t += m_timestep / (float)m_subSteps;
+		for (int i = 0; i < m_subSteps; ++i)
+		{
+			calculateSpringForces();
+			calculateExternalForces(_pos, _radius);
+			// update the timestep for the next time
+			m_t += m_timestep / (float)m_subSteps;
+		}
+	}
+	else
+	{
+		return;
 	}
 }
 

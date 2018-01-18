@@ -11,8 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_ui->s_mainWindowGridLayout->addWidget(m_gl,0,0,2,1);
 	m_timer = new QTimer(this);
 
-	// reset button
+	// reset and pause button
 	connect(m_ui->resetJelloPushButton, SIGNAL(released()), this, SLOT(resetJelloCube()));
+	connect(m_ui->pauseJelloPushButton, SIGNAL(released()), m_jelloCube, SLOT(toggleSimulation()));
 
 	// display controls
 	connect(m_ui->displayMeshCheckBox, SIGNAL(stateChanged(int)), m_gl, SLOT(toggleMesh()));

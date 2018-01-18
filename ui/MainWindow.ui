@@ -305,7 +305,7 @@
          <item row="10" column="0">
           <widget class="QPushButton" name="pauseJelloPushButton">
            <property name="text">
-            <string>Pause</string>
+            <string>Play / Pause</string>
            </property>
           </widget>
          </item>
