@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: simulations_report_joe_withers.aux
+The style file: acmsiggraph.bst
+Database file #1: references.bib
+You've used 3 entries,
+            2748 wiz_defined-function locations,
+            613 strings with 4746 characters,
+and the built_in function-call counts, 844 in all, are:
+= -- 78
+> -- 27
+< -- 0
++ -- 6
+- -- 9
+* -- 47
+:= -- 146
+add.period$ -- 9
+call.type$ -- 3
+change.case$ -- 15
+chr.to.int$ -- 3
+cite$ -- 3
+duplicate$ -- 33
+empty$ -- 82
+format.name$ -- 9
+if$ -- 176
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 18
+num.names$ -- 9
+pop$ -- 27
+preamble$ -- 1
+purify$ -- 12
+quote$ -- 0
+skip$ -- 30
+stack$ -- 0
+substring$ -- 15
+swap$ -- 9
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 24
+warning$ -- 0
+while$ -- 9
+width$ -- 5
+write$ -- 38

@@ -1,0 +1,112 @@
+%%% template.tex
+%%%
+%%% This LaTeX source document can be used as the basis for your technical
+%%% paper or abstract. Intentionally stripped of annotation, the parameters
+%%% and commands should be adjusted for your particular paper - title,
+%%% author, article DOI, etc.
+%%% The accompanying ``template.annotated.tex'' provides copious annotation
+%%% for the commands and parameters found in the source document. (The code
+%%% is identical in ``template.tex'' and ``template.annotated.tex.'')
+
+\documentclass[]{acmsiggraph}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\TOGonlineid{45678}
+\TOGvolume{0}
+\TOGnumber{0}
+\TOGarticleDOI{0}
+\TOGprojectURL{}
+\TOGvideoURL{}
+\TOGdataURL{}
+\TOGcodeURL{}
+\usepackage{color}
+%\definecolor{red}{rgb}{0.9, 0.17, 0.31}
+\usepackage{multirow}
+\usepackage{subfig}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{glsllst} % My own package providing markup listing for glsl
+\usepackage{rmlst}   % My own package providing markup listing for renderman
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\lstset{
+	backgroundcolor=\color[rgb]{0.95, 0.95, 0.95},
+	tabsize=3,
+	%rulecolor=,
+	basicstyle=\footnotesize\ttfamily,
+	upquote=true,
+	aboveskip={1.5\baselineskip},
+	columns=fixed,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	frame=none,
+	aboveskip=15pt,
+	belowskip=8pt,
+	captionpos=t,
+	showtabs=false,
+	showspaces=false,
+	showstringspaces=false,
+	identifierstyle=\ttfamily,
+	%keywordstyle=\color{red}\bfseries,
+	%keywordstyle=[1]\bfseries\color{syntaxBlue},
+	%keywordstyle=[2]\bfseries\color{syntaxRed},
+	%keywordstyle=[3]\color{blue}\bfseries,
+	%keywordstyle=[4]\bfseries\color{syntaxBlue},
+	commentstyle=\color[rgb]{0.082,0.639,0.082},
+	keywordstyle=[1]\bfseries\color[rgb]{0,0,0.75},
+	keywordstyle=[2]\bfseries\color[rgb]{0.5,0.0,0.0},
+	keywordstyle=[3]\bfseries\color[rgb]{0.127,0.427,0.514},
+	keywordstyle=[4]\bfseries\color[rgb]{0.4,0.4,0.4},
+	stringstyle=\color[rgb]{0.639,0.082,0.082},
+}
+
+\title{Simulation Techniques for Animation: GPU Accelerated Mass Spring System}
+
+\author{Joe Withers\thanks{e-mail:joewithers96gmail.com}}
+\pdfauthor{Joe Withers}
+
+\keywords{simulations}
+
+\begin{document}
+
+%% \teaser{
+%%   \includegraphics[height=1.5in]{images/sampleteaser}
+%%   \caption{Spring Training 2009, Peoria, AZ.}
+%% }
+
+\maketitle
+
+\begin{abstract}
+During this project I explored the feasibility of offloading computation onto the GPU, in soft body Mass-spring system simulations, focusing primarily on techniques that make use of OpenGL compute shaders. This report documents my implementation of such techniques, as well as my findings.
+\end{abstract}
+%\keywordlist
+%\TOGlinkslist
+
+\section{Implementation Diary} \label{sec:implementation}
+
+I used C++ and OpenGL to develop my implementation, utilising the NCCA Graphics Library NGL \cite{ngl} to interact with OpenGL, and Qt5 to create the user interface. I based my implementation around a demo of a Mass Spring System using RK4 (Runge-Kutta 4th Order) integration \cite{nglMassSpring}, that uses NGL and Qt5 for it's user interface. I was able to use many aspects this implementation as 'boilerplate code', such as the camera movement and passing of basic geometry to OpenGL, which saved me a lot of time and allowed me to focus on developing the simulation itself. This implementation also provided an example of RK4 integration and calculations of spring forces according to Hooke's law, though these needed to be altered to make them suitable for use with GPU computation.
+
+Before starting to implement the system on the GPU, I first had to establish what the data structures for the Mass-spring system would be, and to do this I looked at tutorial material covering game physics systems \cite{gafferPhys} hosted by Gaffer On Games. This provided me with an understanding of the necessary data I would need to store for each 'Mass' the system; the necessary data required to represent the 'Springs' was inferred from the previously mentioned Mass-spring implementation \cite{nglMassSpring}. I determined that each 'Mass' would be a struct of two vectors:
+\begin{itemize}
+	\item Position $[x, y, z]$ - This stores the position of the mass in world space coordinates.
+	\item Velocity $[x, y, z]$- This stores the combined speed and direction at which the mass is travelling.
+\end{itemize}
+
+For my first attempt at GPU implementation I decided to store each the attributes for each mass and each spring in openGL textures, and to use Image Load/Store commands for bindless textures for accessing and manipulating data. I implemented the following attributes as 1D textures:
+Mass positions (Vec3, RGBA32F, size = number of masses)
+Spring ‘state’ position attribute (Vec3, RGBA32F, size = number of springs)
+Spring ‘state’ velocity attribute (Vec3, RGBA32F, size = number of springs)
+Spring resting length attribute (Float, R32F, size = number of springs)
+The spring start and end index attributes serve as a ‘pointer’ to an index in the mass positions texture which they manipulate.
+
+\section{Research Report} \label{sec:report}
+
+\bibliographystyle{acmsiggraph}
+\bibliography{references}
+
+\end{document}

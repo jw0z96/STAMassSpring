@@ -1,0 +1,18 @@
+\begin{thebibliography}{\protect\citename{Fiedler }2004}
+
+\bibitem[\protect\citename{Fiedler }2004]{gafferPhys}
+{\sc Fiedler, G.}, 2004.
+\newblock Physics in 3d.
+\newblock \url{https://gafferongames.com/post/physics_in_3d/}.
+
+\bibitem[\protect\citename{Macey }2014]{ngl}
+{\sc Macey, J.}, 2014.
+\newblock Ngl the ncca graphics library.
+\newblock \url{https://github.com/NCCA/NGL}.
+
+\bibitem[\protect\citename{Macey }2015]{nglMassSpring}
+{\sc Macey, J.}, 2015.
+\newblock Mass spring system using rk 4 integration.
+\newblock \url{https://github.com/NCCA/MassSpring}.
+
+\end{thebibliography}

@@ -2,7 +2,7 @@
 %%%
 %%% This LaTeX source document can be used as the basis for your technical
 %%% paper or abstract. Intentionally stripped of annotation, the parameters
-%%% and commands should be adjusted for your particular paper - title, 
+%%% and commands should be adjusted for your particular paper - title,
 %%% author, article DOI, etc.
 %%% The accompanying ``template.annotated.tex'' provides copious annotation
 %%% for the commands and parameters found in the source document. (The code
@@ -65,12 +65,12 @@
 	stringstyle=\color[rgb]{0.639,0.082,0.082},
 }
 
-\title{Principles of Rendering: Example short paper}
+\title{Simulation Techniques for Animation: GPU Accelerated Mass Spring System}
 
-\author{Richard Southern\thanks{e-mail:rsouthern@bournemouth.ac.uk}\\National Centre for Computer Animation}
-\pdfauthor{Richard Southern}
+\author{Joe Withers\thanks{e-mail:joewithers96gmail.com}}
+\pdfauthor{Joe Withers}
 
-\keywords{rendering}
+\keywords{simulations}
 
 \begin{document}
 
@@ -90,7 +90,7 @@ An abstract provides an executive summary of your short paper.
 %\TOGlinkslist
 
 \section{Introduction} \label{sec:introduction}
-In this section you should introduce the shader effect you're trying to recreate. You should include a few examples of real reference images which you are trying to simulate, such as in Figure~\ref{fig:reference}. You must also decompose the chosen effect into individual layers or effects which you are going to try to implement. 
+In this section you should introduce the shader effect you're trying to recreate. You should include a few examples of real reference images which you are trying to simulate, such as in Figure~\ref{fig:reference}. You must also decompose the chosen effect into individual layers or effects which you are going to try to implement.
 
 \begin{figure}[htbp]\centering
  \includegraphics[width=0.75\linewidth]{images/strawberry.jpg}
@@ -114,7 +114,7 @@ In this section you should present the final method which you have implemented i
 L_o \left( \mathbf{x},\omega_o,\lambda,t \right) = L_e\left(\mathbf{x},\omega_o,\lambda,t \right) + \\
    \int_\Omega f_r \left(\mathbf{x},\omega_i,\omega_o,\lambda,t\right) L_i\left(\mathbf{x},\omega_i,\lambda,t\right) \left(\omega_i \cdot \mathbf{n}\right) d\omega_i
 \end{multline}
-Alternatively you might want to present your method in the form of a pseudocode algorithm, as in Algorithm~\ref{alg:euclid}. 
+Alternatively you might want to present your method in the form of a pseudocode algorithm, as in Algorithm~\ref{alg:euclid}.
 \begin{algorithm}
 \caption{Euclid’s algorithm}\label{alg:euclid}
 \begin{algorithmic}[1]
@@ -144,7 +144,7 @@ Here you should present the rendering results of the method(s) which you have de
  \caption{\label{fig:comparison}A side by side comparison of different render effects is always a good idea to demonstrate a choice of parameters or design of your shader. These were appropriated from \protect\cite{renderman16}.}
 \end{figure}
 
-If you are generating a real time effect, it might also be suitable to demonstrate with some numbers or statistics the performance improvements that you were able to attain by optimisations to your shader or C++ application. 
+If you are generating a real time effect, it might also be suitable to demonstrate with some numbers or statistics the performance improvements that you were able to attain by optimisations to your shader or C++ application.
 
 You may also want to provide a discussion of development iterations and the thought processes by which you arrived at the final method presented in Section~\ref{sec:overview}. It is important in this section to be self-reflective and critical: we don't expect you to have created the perfect effect. If you are disatisfied by any aspect of the result, you should communicate this to us with some sort of explanation.
 
@@ -157,7 +157,7 @@ You may also want to provide a discussion of development iterations and the thou
 An example of Renderman code listing is included below. Please make sure that when including code segments that you include only sections that are directly relevant to the application at hand, and preferably which link to the method described in Section~\ref{sec:overview}.
 \begin{lstlisting}[language=rendermansl, label={lst:renderman}, caption={Renderman example lifted from \protect\cite{renderman16}.}]
 surface basicSpecular(
-    color myOpacity = 1; 
+    color myOpacity = 1;
     float roughness = 0.1;
 )
 {
@@ -165,10 +165,10 @@ surface basicSpecular(
         normal Nn = normalize(N);
         //Specular stuff
         vector V = normalize(-I);
-        
+
         Ci = myColor * myOpacity * diffuse(Nn) + specular(Nn, V, roughness);
         Oi = myOpacity;
-} 
+}
 \end{lstlisting}
 
 

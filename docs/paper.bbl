@@ -1,0 +1,26 @@
+\begin{thebibliography}{\protect\citename{Akenine-M\"{o}ller et~al\mbox{.}
+  }2008}
+
+\bibitem[\protect\citename{Akenine-M\"{o}ller et~al\mbox{.} }2008]{rtr08}
+{\sc Akenine-M\"{o}ller, T., Haines, E., and Hoffman, N.}
+\newblock 2008.
+\newblock {\em Real-Time Rendering (3rd edition)}.
+\newblock A.K. Peters Ltd.
+
+\bibitem[\protect\citename{{free-pictures-photos.com} }2016]{fruits16}
+{\sc {free-pictures-photos.com}}, 2016.
+\newblock Fruits large free pictures for print.
+\newblock \url{https://www.free-pictures-photos.com/fruits/}.
+
+\bibitem[\protect\citename{Pharr and Humphreys }2010]{pbr10}
+{\sc Pharr, M., and Humphreys, G.}
+\newblock 2010.
+\newblock {\em Physically Based Rendering: From Theory to Implementation}.
+\newblock Elsevier.
+
+\bibitem[\protect\citename{{Renderman Support} }2016]{renderman16}
+{\sc {Renderman Support}}, 2016.
+\newblock Writing and compiling a simple shader.
+\newblock \url{https://renderman.pixar.com/view/simple-shader-writing}.
+
+\end{thebibliography}
