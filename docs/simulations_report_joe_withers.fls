@@ -197,6 +197,12 @@ INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm
+INPUT images/screenshot001.png
+INPUT ./images/screenshot001.png
+INPUT ./images/screenshot001.png
+INPUT images/screenshot002.png
+INPUT ./images/screenshot002.png
+INPUT ./images/screenshot002.png
 INPUT simulations_report_joe_withers.bbl
 INPUT simulations_report_joe_withers.bbl
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmrc7t.tfm

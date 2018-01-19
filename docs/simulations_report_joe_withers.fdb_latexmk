@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex simulations_report_joe_withers"] 1516329519 "simulations_report_joe_withers.aux" "simulations_report_joe_withers.bbl" "simulations_report_joe_withers" 1516329519
+["bibtex simulations_report_joe_withers"] 1516333229 "simulations_report_joe_withers.aux" "simulations_report_joe_withers.bbl" "simulations_report_joe_withers" 1516333630
   "./acmsiggraph.bst" 1516306734 23357 eedf7aa63e6f1eb845ecfa55cfd9d383 ""
   "references.bib" 1516328692 2333 ce7f712927f39c6e726d4d28cf0e1aa0 ""
-  "simulations_report_joe_withers.aux" 1516329519 3296 b52b7db938bdeb64d6348142d1d47da6 ""
+  "simulations_report_joe_withers.aux" 1516333630 3911 22979769b33339169a7e8ff43576ad4d ""
   (generated)
   "simulations_report_joe_withers.blg"
   "simulations_report_joe_withers.bbl"
-["pdflatex"] 1516329519 "simulations_report_joe_withers.tex" "simulations_report_joe_withers.pdf" "simulations_report_joe_withers" 1516329519
+["pdflatex"] 1516333629 "simulations_report_joe_withers.tex" "simulations_report_joe_withers.pdf" "simulations_report_joe_withers" 1516333630
   "/home/jw0z/.cache/texlive/texmf-var/web2c/pdftex/pdflatex.fmt" 1510180580 719143 88d356959a00881ccb18a2c476271507 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1463015741 1888031 5317a64a246c13fa560847c387843238 ""
@@ -110,15 +110,17 @@
   "algpseudocode.sty" 1516306734 3457 d9077efe6b74c5a094199256af8d7d9a ""
   "glsllst.sty" 1516306734 3326 9b6bc4eee8771897b9e3b95fc3767d4b ""
   "images/bend.png" 1516323291 16808 379cf41f425067586e3f4433b703b1d2 ""
+  "images/screenshot001.png" 1516329807 161357 8980807fa5b7898a9e3ccb4328ad1dbb ""
+  "images/screenshot002.png" 1516329946 199952 e725c6c5ae5a46c5d61d436cd729e9f7 ""
   "images/shear.png" 1516323305 49893 1670859fdbb8dc64e0ebb7747d06b5ed ""
   "images/structural.png" 1516323277 19563 e04ff870c2ed99e4ce55dc4415a7b334 ""
   "lineno.sty" 1516306734 151736 f1e4ea1a3da2e056656e97ed78d62374 ""
   "lipsum.sty" 1516306734 103491 f3a8d28ba533bcdb24167b15de14ff22 ""
   "rmlst.sty" 1516306734 1694 ff842d461cee624f8b73af44ce065702 ""
-  "simulations_report_joe_withers.aux" 1516329519 3296 b52b7db938bdeb64d6348142d1d47da6 ""
-  "simulations_report_joe_withers.bbl" 1516329519 1812 7a3dfa6e80e10c571a3544003a06ac99 "bibtex simulations_report_joe_withers"
-  "simulations_report_joe_withers.tex" 1516329516 15030 000a8d00dcc4c2d089a3926725027ea1 ""
+  "simulations_report_joe_withers.aux" 1516333630 3911 22979769b33339169a7e8ff43576ad4d ""
+  "simulations_report_joe_withers.bbl" 1516333229 1812 7a3dfa6e80e10c571a3544003a06ac99 "bibtex simulations_report_joe_withers"
+  "simulations_report_joe_withers.tex" 1516333629 18014 ad5cc5e3e684ca0c54abb9d84c5cb4b9 ""
   (generated)
-  "simulations_report_joe_withers.log"
-  "simulations_report_joe_withers.pdf"
   "simulations_report_joe_withers.aux"
+  "simulations_report_joe_withers.pdf"
+  "simulations_report_joe_withers.log"
