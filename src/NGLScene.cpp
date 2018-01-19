@@ -149,7 +149,7 @@ void NGLScene::paintGL()
 	// now we loop for each of the pressed keys in the the set
 	// and see which ones have been pressed. If they have been pressed
 	// we set the movement value to be an incremental value
-	constexpr float s_update = 1.0f;
+	constexpr float s_update = 10.0f;
 	foreach(Qt::Key key, m_keysPressed)
 	{
 		switch (key)

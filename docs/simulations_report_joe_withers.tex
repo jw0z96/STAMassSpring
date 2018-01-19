@@ -90,7 +90,10 @@ During this project I explored the feasibility of offloading computation onto th
 
 \section{Implementation} \label{sec:implementation}
 
+\subsection{Resources}
 I used C++ and OpenGL to develop my implementation, utilising the NCCA Graphics Library NGL \cite{ngl} to interact with OpenGL, and Qt5 to create the user interface. I based my implementation around a demo of a Mass Spring System using RK4 (Runge-Kutta 4th Order) integration \cite{nglMassSpring}, that uses NGL and Qt5 for it's user interface. I was able to use many aspects this implementation as 'boilerplate code', such as the camera movement and passing of basic geometry to OpenGL, which saved me a lot of time and allowed me to focus on developing the simulation itself. This implementation also provided an example of RK4 integration and calculations of spring forces according to Hooke's law, though these needed to be altered to make them suitable for use with GPU computation.
+
+\subsection{Data Structures}
 
 Before starting to implement the system on the GPU, I first had to establish what the data structures for the Mass-spring system would be, and to do this I looked at tutorial material covering game physics systems \cite{gafferPhys} hosted by Gaffer On Games. This provided me with an understanding of the necessary data I would need to store for each mass object in the system. I determined that each mass object would be a struct of two vectors:
 
@@ -122,6 +125,8 @@ I then determined that the data for the spring object could be represented with 
 	\item \lstinline{Vec3} Relative Velocity - This stores the combined speed and direction at which the masses are travelling to or from each other.
 \end{itemize}
 
+\subsection{GPU Computation}
+
 For my first attempt at GPU implementation I decided to store each the attributes for each mass struct and each spring struct in OpenGL textures, and use Image Load/Store commands for accessing and manipulating data. I implemented the following attributes as 1D textures:
 
 \begin{itemize}
@@ -132,7 +137,18 @@ For my first attempt at GPU implementation I decided to store each the attribute
 	\item Spring end index - \lstinline{unsigned int, R16UI}, Size = Number of Springs.
 \end{itemize}
 
-To initialise these textures, I first dispatch a compute shader with workgroups equal to the dimensions of my ‘JelloCube’ object. This sets the initial position for the masses in the mass positions texture, whilst also counting how many springs need to be created using an atomic counter. I then read the contents of atomic counter and create the textures necessary for spring attributes, whose length is equal to the number of springs counted by the atomic counter. The atomic counter is then reset, and the compute shader is then dispatched for a second time, however this time it calls a subroutine which stores the spring attributes into each corresponding texture.
+To initialise these textures, I first dispatch a compute shader with workgroups equal to the dimensions of my ‘JelloCube’ object. This sets the initial position for the masses in the mass positions texture, whilst also counting how many springs need to be created using an atomic counter. The masses are arranged in a cartesian axis aligned grid, with three different types of springs connecting them: structural, shear, and bending. Figure~\ref{fig:springs} provides a diagram of the connectivity between springs and their masses.
+
+\begin{figure}[t]
+\centering
+\subfloat[Structural Springs]{\includegraphics[width=0.15\textwidth]{images/structural.png}}
+\subfloat[Shear Springs]{\includegraphics[width=0.15\textwidth]{images/shear.png}}
+\subfloat[Bending Springs]{\includegraphics[width=0.15\textwidth]{images/bend.png}}
+\caption{Diagrams showing the connectivity of each type of spring and their masses. \protect\cite{siggraphPixar}}
+\label{fig:springs}
+\end{figure}
+
+I then read the contents of atomic counter and create the textures necessary for spring attributes, whose length is equal to the number of springs counted by the atomic counter. The atomic counter is then reset, and the compute shader is then dispatched for a second time, however this time it calls a subroutine which stores the spring attributes into each corresponding texture.
 
 Whilst this approach works, it relies on maintaining six textures at once, which is quite unwieldy. I also found that once the number of masses is increased past 1000, the number of springs needed to be stored exceeds the number of texels I can specify with glTexImage1D, at least on my system. I therefore decided to switch to using Shader Storage Buffer Objects, as their size is only limited by the amount of memory on the GPU, and they are much easier to maintain and manipulate compared to textures.
 
@@ -140,23 +156,31 @@ Shader Storage Buffer Objects allow the passing of structs to directly shaders, 
 
 Spring calculations are then performed by dispatching a compute shader two times. The first dispatch performs RK4 integration to calculate the updated relative velocity for the each of the springs. The second dispatch makes use of the \textit{NV_shader_atomic_float} extension to allow atomic operations to be used with 32 bit floats, which is used to accumulate the calculated velocity onto each of the positions of each of the mass points, in parallel.
 
+\subsection{Physics Calculations}
+
 I then attempted to implement gravity and collisions with the ground plane, by adding an additional 'external forces' compute shader pass which operates on each mass, after the spring computation pass. This compute shader accumulates velocity towards the ground plane, and performs basic collision detection by clamping the mass position Y coordinate to 0, and reflecting the velocity Y value should the mass position be below the ground plane. I found this to be unsuccessfull as the spring forces were not able to counteract the velocity accumulated by 'gravity', resulting in the system being unable to achieve a resting position on the plane. I then attempted to accumulate the mass velocity in the spring calculation pass, however this resulted in the masses oscillating uncontrollably.
 
-To solve this, I extended my mass struct to store a 'Force' value, which the output of the spring calculation pass can be accumulated on. The 'external forces' compute shader pass can then accumulate gravity onto this value, and use it to calculate the updated mass velocity. The 'Force' value is then cleared before starting the spring computation pass again for the next time step. This was also beneficial as it allowed me to apply 'Forces' directly upon detecting collision. Slight instability was still present, but I was able to mitigate it by introducing pseudo air resistance, which simply multiplies the velocity by a fixed value (0.99 for example).
+In reading the notes from a Pixar presentation about GPU compute \cite{siggraphPixar}, I found a solution; extend the mass struct to store a 'Force' value, which the output of the spring calculation pass can then be accumulated on. The 'external forces' compute shader pass can then accumulate gravity onto this value, and use it to calculate the updated mass velocity. The 'Force' value is then cleared before starting the spring computation pass again for the next time step. This was also beneficial as it allowed me to apply 'Forces' directly upon detecting collision. Slight instability was still present, but I was able to mitigate it by introducing pseudo air resistance, which simply multiplies the velocity by a fixed value (0.99 for example).
 
-I then implemented additional physics interactions, such as collision with a sphere, friction, and a constant for restitution or 'recovery'. Collisions with the sphere are handled in the 'external forces', and uses signed distance to determine whether a mass is inside the sphere. If it determines the mass is within the sphere, it projects the position of the mass onto the surface of the sphere, and applies force to the mass in the direction of the normal on that point on the surface. Friction is applied by multiplying the mass velocity by a fixed constant if collision is detected. Restitution is implemented by updating the spring's resting length with a value that is linearly interpolated between the resting length and the current distance between the masses.
+I then implemented additional physics interactions, such as collision with a sphere, friction, and a constant for restitution or 'recovery'. Collisions with the sphere are handled in the 'external forces', and uses signed distance to determine whether a mass is inside the sphere. If it determines the mass is within the sphere, it projects the position of the mass onto the surface of the sphere, and applies force to the mass in the direction of the normal on that point on the surface. Friction is applied by multiplying the mass velocity by a fixed constant if collision is detected. Restitution is implemented by updating the spring's resting length with a value that is linearly interpolated between the resting length and the current distance between the masses. In reading an article explaining the use of restitution coefficients in mass-spring systems \cite{restitution}, I realised that this method does not account for the transfer of kinetic energy, so will likely result in inaccurate behaviour.
 
-One of the features I had planned initially was the ability to choose between RK4, RK2, and Euler integration. As I had already implemented RK4, it was relatively simple to implement RK2 and Euler methods, though I referred to tutorial material \cite{TODO} to ensure my calculations were correct.
+One of the features I had planned initially was the ability to choose between RK4, RK2, and Euler integration. As I had already implemented RK4, it was relatively simple to implement RK2 and Euler methods, though I referred to example implementations \cite{integrators} to ensure my calculations were correct.
 
 \section{Research Report} \label{sec:report}
 
-Overall I was quite impressed by the performance I was able to gain by offloading the physics calculations for my system onto the GPU, however there are a number of problems within my calculations that reduce the overal quality of my simulation.
+\subsection{Results}
 
-One thing I have noticed is that, although I have implemented the option to switch between different integration schemes, the difference between them is negligible. I suspect this is because I am using very small timestep, and have also implemented 'sub steps', which performs the physics calculations multiple times per frame at even smaller timestep values.
-[TODO] notes that the error present in Euler integration can be reduced by running the integration multiple times at smaller time steps, which would seem to confirm this.
+Overall I was quite impressed by the performance I was able to gain by offloading the physics calculations for my system onto the GPU. I am able to maintain interactive framerates with all of the aforementioned physics calculations being performed 10 times a frame, on an object with 1000 masses and 9960 springs. GPU memory usage is also remarkably low at just 70MiB.
+
+Whilst my implementation may not be physically accurate, the performance results are comparable to other GPU Mass Spring System implementations, such as those described in \textit{Mass-Spring Systems on the GPU} \cite{massSpringGPU}.
+
+\subsection{Improvements}
+
+Whilst I am pleased with the performance of my implemetation, there are however a number of problems within my physics calculations that reduce the overal quality of my simulation.
+
+One thing I have noticed is that, although I have implemented the option to switch between different integration schemes, the difference between them is negligible. I suspect this is because I am using very small timestep, and have also implemented 'sub steps', which performs the physics calculations multiple times per frame at even smaller timestep values. An article \cite{integrators} I looked at whilst researching integrators notes that the error present in Euler integration can be reduced by running the integration multiple times at smaller time steps, which would seem to confirm this.
 
 In my final implementation there are sometimes errors in which the collision detection doesn't evaluate correctly, and the sphere is able to pass through the object. I believe this is due to the fact that numerical integration is only performed in the spring calculation pass, and not in the external forces pass. Therefore it only evalutes the forces from the springs within the integrator, and not the forces applied by gravity or collisions. Fixing this would require heavy restructuring of my implementation, though it would be necessary for a more accurate implementation.
-
 
 \bibliographystyle{acmsiggraph}
 \bibliography{references}
