@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex simulations_report_joe_withers"] 1516327857 "simulations_report_joe_withers.aux" "simulations_report_joe_withers.bbl" "simulations_report_joe_withers" 1516327857
+["bibtex simulations_report_joe_withers"] 1516329519 "simulations_report_joe_withers.aux" "simulations_report_joe_withers.bbl" "simulations_report_joe_withers" 1516329519
   "./acmsiggraph.bst" 1516306734 23357 eedf7aa63e6f1eb845ecfa55cfd9d383 ""
-  "references.bib" 1516327851 1914 f4ef0d4673d9d8ccd3269d8727873dd8 ""
-  "simulations_report_joe_withers.aux" 1516327857 3086 9fae4e8a82fba1fc597dd7837f10e3b9 ""
+  "references.bib" 1516328692 2333 ce7f712927f39c6e726d4d28cf0e1aa0 ""
+  "simulations_report_joe_withers.aux" 1516329519 3296 b52b7db938bdeb64d6348142d1d47da6 ""
   (generated)
   "simulations_report_joe_withers.blg"
   "simulations_report_joe_withers.bbl"
-["pdflatex"] 1516327857 "simulations_report_joe_withers.tex" "simulations_report_joe_withers.pdf" "simulations_report_joe_withers" 1516327857
+["pdflatex"] 1516329519 "simulations_report_joe_withers.tex" "simulations_report_joe_withers.pdf" "simulations_report_joe_withers" 1516329519
   "/home/jw0z/.cache/texlive/texmf-var/web2c/pdftex/pdflatex.fmt" 1510180580 719143 88d356959a00881ccb18a2c476271507 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1463015741 1888031 5317a64a246c13fa560847c387843238 ""
@@ -115,10 +115,10 @@
   "lineno.sty" 1516306734 151736 f1e4ea1a3da2e056656e97ed78d62374 ""
   "lipsum.sty" 1516306734 103491 f3a8d28ba533bcdb24167b15de14ff22 ""
   "rmlst.sty" 1516306734 1694 ff842d461cee624f8b73af44ce065702 ""
-  "simulations_report_joe_withers.aux" 1516327857 3086 9fae4e8a82fba1fc597dd7837f10e3b9 ""
-  "simulations_report_joe_withers.bbl" 1516327857 1599 96cef84a87dcca66c24e307bf14648e7 "bibtex simulations_report_joe_withers"
-  "simulations_report_joe_withers.tex" 1516327738 14292 6fb99f6c6126a051edfc2729fdf0c495 ""
+  "simulations_report_joe_withers.aux" 1516329519 3296 b52b7db938bdeb64d6348142d1d47da6 ""
+  "simulations_report_joe_withers.bbl" 1516329519 1812 7a3dfa6e80e10c571a3544003a06ac99 "bibtex simulations_report_joe_withers"
+  "simulations_report_joe_withers.tex" 1516329516 15030 000a8d00dcc4c2d089a3926725027ea1 ""
   (generated)
-  "simulations_report_joe_withers.pdf"
   "simulations_report_joe_withers.log"
+  "simulations_report_joe_withers.pdf"
   "simulations_report_joe_withers.aux"

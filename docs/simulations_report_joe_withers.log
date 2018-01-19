@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.11.8)  19 JAN 2018 02:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.11.8)  19 JAN 2018 02:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -501,20 +501,20 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <12> not available
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
 (Font)              scaled to size 11.03998pt on input line 85.
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 93.
+(Font)              scaled to size 9.19998pt on input line 94.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 93.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 94.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 9.19998pt on input line 93.
+(Font)              scaled to size 9.19998pt on input line 94.
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 101.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 101.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 108.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 108.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \hbox (badness 2119) in paragraph at lines 134--135
+Underfull \hbox (badness 2119) in paragraph at lines 141--142
 []\OT1/ptm/m/n/9 Spring ve-loc-ity - [][][][][][][][][][][][][][], Size = Num-b
 er of
  []
@@ -525,31 +525,31 @@ Missing character: There is no ˜ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
-<images/structural.png, id=9, 401.5pt x 642.4pt>
+<images/structural.png, id=11, 401.5pt x 642.4pt>
 File: images/structural.png Graphic file (type png)
  <use images/structural.png>
-Package pdftex.def Info: images/structural.png used on input line 144.
+Package pdftex.def Info: images/structural.png used on input line 151.
 (pdftex.def)             Requested size: 75.8804pt x 121.41032pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 144.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 151.
 
-<images/shear.png, id=11, 401.5pt x 642.4pt>
+<images/shear.png, id=13, 401.5pt x 642.4pt>
 File: images/shear.png Graphic file (type png)
  <use images/shear.png>
-Package pdftex.def Info: images/shear.png used on input line 145.
+Package pdftex.def Info: images/shear.png used on input line 152.
 (pdftex.def)             Requested size: 75.8804pt x 121.41032pt.
 
-<images/bend.png, id=12, 401.5pt x 642.4pt>
+<images/bend.png, id=14, 401.5pt x 642.4pt>
 File: images/bend.png Graphic file (type png)
  <use images/bend.png>
-Package pdftex.def Info: images/bend.png used on input line 146.
+Package pdftex.def Info: images/bend.png used on input line 153.
 (pdftex.def)             Requested size: 75.8804pt x 121.41032pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 147.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 154.
  [1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
 
 
- <./images/structural.png> <./images/shear.png> <./images/bend.png>]
+] [2 <./images/structural.png> <./images/shear.png> <./images/bend.png>]
 (./simulations_report_joe_withers.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 4--8
 []\OT1/ptm/m/sc/9 Boesch, F.\OT1/ptm/m/n/9 , 2010.  In-te-gra-tion by ex-am-ple
@@ -585,22 +585,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--24
 /pcr/m/n/9 https :
  []
 
-[2])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 188.
+Missing character: There is no Ã in font ptmrc7t!
+Missing character: There is no ¸ in font ptmrc7t!
+)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 195.
  [3
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 188.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 195.
  (./simulations_report_joe_withers.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 188.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 188.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 188.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 195.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 195.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 195.
  ) 
 Here is how much of TeX's memory you used:
- 9786 strings out of 494946
- 144939 string characters out of 6180981
- 355054 words of memory out of 5000000
- 12904 multiletter control sequences out of 15000+600000
+ 9789 strings out of 494946
+ 144976 string characters out of 6180981
+ 356114 words of memory out of 5000000
+ 12905 multiletter control sequences out of 15000+600000
  30378 words of font info for 61 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  43i,13n,49p,1065b,971s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -614,10 +616,10 @@ ic/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier
 </usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on simulations_report_joe_withers.pdf (3 pages, 184608 bytes).
+Output written on simulations_report_joe_withers.pdf (3 pages, 185715 bytes).
 PDF statistics:
- 120 PDF objects out of 1000 (max. 8388607)
- 97 compressed objects within 1 object stream
- 27 named destinations out of 1000 (max. 500000)
+ 125 PDF objects out of 1000 (max. 8388607)
+ 101 compressed objects within 2 object streams
+ 29 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

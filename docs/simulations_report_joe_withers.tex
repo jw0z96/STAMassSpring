@@ -88,14 +88,21 @@ During this project I explored the feasibility of offloading computation onto th
 %\keywordlist
 %\TOGlinkslist
 
+
 \section{Implementation} \label{sec:implementation}
 
+\subsection{Introduction}
+
+Mass spring Systems are a method of approximating deformation by discretizing the the geometry into a series of masses, that are connected by deformable springs. Masses in these systems are commonly arranged in a cartesian axis aligned grid, as shown in Figure~\ref{fig:springs}. Varying the dimensions of the grid allows the system to approximate different objects, such as hair strands (1 dimensional), sections of cloth (2 dimensional), or soft body 'jello' cubes (3 dimensional).
+
+Aside from hair and cloth simulations, mass-spring systems are also used for medical purposes, such as in surgical simulations \cite{surgical}. For my implementation I have focused on the 3 dimensional case, a 'jello' cube.
+
 \subsection{Resources}
-I used C++ and OpenGL to develop my implementation, utilising the NCCA Graphics Library NGL \cite{ngl} to interact with OpenGL, and Qt5 to create the user interface. I based my implementation around a demo of a Mass Spring System using RK4 (Runge-Kutta 4th Order) integration \cite{nglMassSpring}, that uses NGL and Qt5 for it's user interface. I was able to use many aspects this implementation as 'boilerplate code', such as the camera movement and passing of basic geometry to OpenGL, which saved me a lot of time and allowed me to focus on developing the simulation itself. This implementation also provided an example of RK4 integration and calculations of spring forces according to Hooke's law, though these needed to be altered to make them suitable for use with GPU computation.
+I used C++ and OpenGL to develop my implementation, utilising the NCCA Graphics Library NGL \cite{ngl} to interact with OpenGL, and Qt5 to create the user interface. I based my implementation around a demo of a Mass-spring System using RK4 (Runge-Kutta 4th Order) integration \cite{nglMassSpring}, that uses NGL and Qt5 for it's user interface. I was able to use many aspects this implementation as 'boilerplate code', such as the camera movement and passing of basic geometry to OpenGL, which saved me a lot of time and allowed me to focus on developing the simulation itself. This implementation also provided an example of RK4 integration and calculations of spring forces according to Hooke's law, though these needed to be altered to make them suitable for use with GPU computation.
 
 \subsection{Data Structures}
 
-Before starting to implement the system on the GPU, I first had to establish what the data structures for the Mass-spring system would be, and to do this I looked at tutorial material covering game physics systems \cite{gafferPhys} hosted by Gaffer On Games. This provided me with an understanding of the necessary data I would need to store for each mass object in the system. I determined that each mass object would be a struct of two vectors:
+Before starting to implement the system on the GPU, I first had to establish what the data structures for the mass-spring system would be, and to do this I looked at tutorial material covering game physics systems \cite{gafferPhys} hosted by Gaffer On Games. This provided me with an understanding of the necessary data I would need to store for each mass object in the system. I determined that each mass object would be a struct of two vectors:
 
 \begin{itemize}
 	\item \lstinline{Vec3} Position - This stores the position of the mass in world space coordinates.

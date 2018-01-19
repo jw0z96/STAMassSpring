@@ -1,4 +1,4 @@
-\begin{thebibliography}{\protect\citename{Georgii and Westermann }2005}
+\begin{thebibliography}{\protect\citename{Mosegaard et~al\mbox{.} }2005}
 
 \bibitem[\protect\citename{Boesch }2010]{integrators}
 {\sc Boesch, F.}, 2010.
@@ -42,5 +42,10 @@
 {\sc Macey, J.}, 2015.
 \newblock Mass spring system using rk 4 integration.
 \newblock \url{https://github.com/NCCA/MassSpring}.
+
+\bibitem[\protect\citename{Mosegaard et~al\mbox{.} }2005]{surgical}
+{\sc Mosegaard, J., Herborg, P., and Sørensen, T.~S.}
+\newblock 2005.
+\newblock A gpu accelerated spring mass system for surgical simulation.
 
 \end{thebibliography}
